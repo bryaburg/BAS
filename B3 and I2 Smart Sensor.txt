@@ -1,0 +1,246 @@
+'These programs will display room temperature, outside air temperature, VAV box
+'cfm and the time when the DISPLAY button is press and in that orderafter. The
+'fan , cool and degree symbol icons are displayed with the room temperature to
+'indicate for demonstration purposes the fan is on and the you are in the
+'cooling mode. When the outside air temperature is display the OA icon is
+'displayed with the Degree symbol icon. When the VAV box cfm is displayed the
+'fan status, cool and cfm icons are displayed.
+'If you press the OVERRIDE button the screen will display the SETPOINT and SP
+'icons with the value of 0001 or 0002 or 0003 or 0004. Each number is
+'associated with a point to be adjusted. 0001 = Heating Setpoint, 0002 =
+'Maximum CFM, 0003 = Minimum CFM, and 0004 = Kv factor. To view the setpoint
+'press the SELECT button and the appropriate value will be displayed. To
+'display the next setpoint press the OVERRIDE button and then the SELECT
+'button. To adjust the setpoint you have to press DISPLAY, UP ARROW, and ENTER
+'simultaneously. This is the password into the balancing and setpoint
+'adjustment routines. You can now adjust the 4 setpoints . Press the OVERRIDE
+'key until you reach the setpoint that you need to adjust then press SELECT and
+'the UP & DOWN arrows to adjust the setpoint. Press ENTER to exit the
+'adjustment mode. The room temperature will then be displayed. To adjust the
+'next setpoint press the OVERRIDE key and repeat the above. The password will
+'time out after a certain amount of time. Note that you can activate the
+'password at any time.
+'************************Display Button Program****************
+wait:
+If (ButtonLCD = 4) then 'Select button is pressed
+LCDcount = 0
+Goto Display
+Endif
+If ButtonLCD = 1 then Goto wait1 'Override button is pressed
+If PasswdLCD = ON and TM > 1 then PasswdLCD = OFF 'This is the password timeout
+
+Display:
+If (ButtonLCD = 4 and LCDcount = 0) then 'Select button is pressed once
+ButtonLCD = 0
+Goto Display1
+Endif
+If (ButtonLCD = 4 and LCDcount = 1) then 'Select button is pressed twice
+ButtonLCD = 0
+Goto Display2
+Endif
+If (ButtonLCD = 4 and LCDcount = 2) then 'Select button is pressed three times
+ButtonLCD = 0
+Goto Display3
+Endif
+If (ButtonLCD = 4 and LCDcount = 3) then 'Select button is pressed four times
+ButtonLCD = 0
+Goto Display4
+Endif
+If (ButtonLCD = 4 and LCDcount = 4) then Goto wait
+
+Display1:
+lcddisplay[1] = temp
+lcddisplay[2] = 12 'Display format ##.##
+lcddisplay[7] = 5121 'Icons cool,degrees,fan are turned on
+If ButtonLCD = 4 then Goto lcdcount
+If ButtonLCD = 1 then Goto wait
+
+Display2:
+lcddisplay[1] = outside
+lcddisplay[2] = 11 'Display format ###.#
+lcddisplay[7] = 1026 'Icons degrees and OA are turned on
+If ButtonLCD = 4 then Goto lcdcount
+If ButtonLCD = 1 then Goto wait
+
+Display3:
+lcddisplay[1] = flow
+lcddisplay[2] = 1 'Displays flow in inter format
+lcddisplay[7] = 20481 'Icons cfm, cool and fan are turned on
+If ButtonLCD = 4 then Goto lcdcount
+If ButtonLCD = 1 then Goto wait
+Display4:
+lcddisplay[1] = Tod
+lcddisplay[2] = 2 'Displays Tod in time format
+lcddisplay[7] = 0
+If ButtonLCD = 4 then Goto lcdcount
+If ButtonLCD = 1 then Goto wait
+lcdcount:
+LCDcount = LCDcount + 1
+Goto Display
+'****************************************Override Button Program************
+
+wait1:
+If (ButtonLCD = 1 and Lcdcount1 = 1) then Goto line1 'Override is pressed 1x
+If (ButtonLCD = 1 and Lcdcount1 = 2) then Goto line2 'Override is pressed 2x
+If (ButtonLCD = 1 and Lcdcount1 = 3) then Goto line3 'Override is pressed 3x
+If (ButtonLCD = 1 and Lcdcount1 = 4) then Goto line4 'Override is pressed 4x
+If (Lcdcount1 = 2 and ButtonLCD = 3) then Goto SP1DISPLAY 'room temp
+If (Lcdcount1 = 3 and ButtonLCD = 3) then Goto SP2DISPLAY 'max cfm
+If (Lcdcount1 = 4 and ButtonLCD = 3) then Goto SP3DISPLAY 'min cfm
+If (Lcdcount1 = 1 and ButtonLCD = 3) then Goto SP4DISPLAY 'kv cfm
+If ButtonLCD = 4 then Goto wait
+If PasswdLCD = ON and TM > 1 then PasswdLCD = OFF
+
+line1: 'Display SP 0001
+lcddisplay[2] = 3
+lcddisplay[3] = 1
+lcddisplay[7] = 11264 'Icons heat, setpoint, degrees are turned on
+Goto Lcdcount1
+
+line2: 'Display SP 0002
+lcddisplay[2] = 3
+lcddisplay[3] = 2
+lcddisplay[7] = 18436 'Icons cfm ,sp ,setpoint are turned on
+Goto Lcdcount1
+
+line3: 'Display SP 0003
+lcddisplay[2] = 3
+lcddisplay[3] = 3
+lcddisplay[7] = 18436 'Icons cfm ,sp ,setpoint are turned on
+Goto Lcdcount1
+
+line4: 'Display SP 0004
+lcddisplay[2] = 3
+lcddisplay[3] = 4
+lcddisplay[7] = 2052 'Icon setpoint, SP are turned on
+Goto Lcdcount1
+
+Lcdcount1:
+If Lcdcount1 < 5 then Lcdcount1 = Lcdcount1 + 1
+If Lcdcount1 = 5 then Lcdcount1 = 1
+ButtonLCD = 0
+Goto wait1
+
+SP1DISPLAY:
+lcddisplay[1] = RMSETPT
+lcddisplay[2] = 12 'Display format ##.##
+lcddisplay[7] = 11264 'Icons heat, setpoint, degrees are turned on
+If PasswdLCD = ON then Goto SP1ADJ
+If PasswdLCD = OFF then Goto wait1
+
+SP2DISPLAY:
+lcddisplay[1] = MaxfloSPT
+lcddisplay[2] = 1 'Displays flow in inter format
+lcddisplay[7] = 18432 'Icons cfm ,setpoint are turned on
+If PasswdLCD = ON then Goto SP2ADJ
+If PasswdLCD = OFF then Goto wait1
+
+SP3DISPLAY:
+lcddisplay[1] = MinfloSPT
+lcddisplay[2] = 1 'Displays flow in inter format
+lcddisplay[7] = 18432 'Icons cfm ,sp ,setpoint are turned on
+If PasswdLCD = ON then Goto SP3ADJ
+If PasswdLCD = OFF then Goto wait1
+
+SP4DISPLAY:
+lcddisplay[1] = Kv
+lcddisplay[2] = 11 'Display format ###.#
+lcddisplay[7] = 18432 'Icons cfm ,sp ,setpoint are turned on
+If PasswdLCD = ON then Goto SP4ADJ
+If PasswdLCD = OFF then Goto wait1
+
+SP1ADJ:
+If (lcddisplay[0] = 2) then Goto SP1ADJinc 'up arrow pressed
+If (lcddisplay[0] = 5) then Goto SP1ADJdec 'down arrow pressed
+If ButtonLCD = 6 then 'enter is pressed
+lcddisplay[1] = temp
+lcddisplay[2] = 12 'Display format ##.##
+lcddisplay[7] = 1024 'Icon degrees is turned on
+Goto wait1
+Endif
+
+SP1ADJinc:
+RMSETPT = RMSETPT + 0.5
+lcddisplay[1] = RMSETPT
+lcddisplay[2] = 12 'Display format ##.##
+lcddisplay[7] = 11264 'Icons heat, setpoint, degrees are turned on
+Goto SP1ADJ
+
+SP1ADJdec:
+RMSETPT = RMSETPT - 0.5
+lcddisplay[1] = RMSETPT
+lcddisplay[2] = 12 'Display format ##.##
+lcddisplay[7] = 11264 'Icons heat, setpoint, degrees are turned on
+Goto SP1ADJ
+
+SP2ADJ:
+If (lcddisplay[0] = 2) then Goto SP2ADJinc
+If (lcddisplay[0] = 5) then Goto SP2ADJdec
+If ButtonLCD = 6 then 'enter is pressed
+lcddisplay[1] = temp
+lcddisplay[2] = 12 'Display format ##.##
+lcddisplay[7] = 1024 'Icon degrees is turned on
+Goto wait1
+Endif
+
+SP2ADJinc:
+If MaxfloSPT < 1600 then MaxfloSPT = MaxfloSPT + 50
+lcddisplay[1] = MaxfloSPT
+lcddisplay[2] = 1 'Displays flow in inter format
+lcddisplay[7] = 18432 'Icons cfm ,sp ,setpoint are turned on
+Goto SP2ADJ
+
+SP2ADJdec:
+If MaxfloSPT >= MinfloSPT then MaxfloSPT = MaxfloSPT - 50
+lcddisplay[1] = MaxfloSPT
+lcddisplay[2] = 1 'Displays flow in inter format
+lcddisplay[7] = 18432 'Icons cfm ,sp ,setpoint are turned on
+Goto SP2ADJ
+
+SP3ADJ:
+If (lcddisplay[0] = 2) then Goto SP3ADJinc
+If (lcddisplay[0] = 5) then Goto SP3ADJdec
+If ButtonLCD = 6 then' enter is pressed
+lcddisplay[1] = temp
+lcddisplay[2] = 12 'Display format ##.##
+lcddisplay[7] = 1024 'Icon degrees is turned on
+Goto wait1
+Endif
+
+SP3ADJinc:
+MinfloSPT = MinfloSPT + 50
+lcddisplay[1] = MinfloSPT
+lcddisplay[2] = 1 'Displays flow in inter format
+lcddisplay[7] = 18432 'Icons cfm ,sp ,setpoint are turned on
+Goto SP3ADJ
+
+SP3ADJdec:
+MinfloSPT = MinfloSPT - 50
+lcddisplay[1] = MinfloSPT
+lcddisplay[2] = 1 'Displays flow in inter format
+lcddisplay[7] = 18432 'Icons cfm ,sp ,setpoint are turned on
+Goto SP3ADJ
+
+SP4ADJ:
+If (lcddisplay[0] = 2) then Goto SP4ADJinc
+If (lcddisplay[0] = 5) then Goto SP4ADJdec
+If ButtonLCD = 6 then 'enter is pressed
+lcddisplay[1] = temp
+lcddisplay[2] = 12 'Display format ##.##
+lcddisplay[7] = 1024 'Icon degrees is turned on
+Goto wait1
+Endif
+
+SP4ADJinc:
+Kv = Kv + 0.1
+lcddisplay[1] = Kv
+lcddisplay[2] = 11 'Display format ###.#
+lcddisplay[7] = 2048 'Icon setpoint is turned on
+Goto SP4ADJ
+
+SP4ADJdec:
+Kv = Kv - 0.1
+lcddisplay[1] = Kv
+lcddisplay[2] = 11 'Display format ###.#
+lcddisplay[7] = 2048 'Icon setpoint is turned on
+Goto SP4ADJ

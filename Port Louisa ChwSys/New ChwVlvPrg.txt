@@ -1,0 +1,19 @@
+﻿'ClgCtl Program
+'Built by Barbeau
+'Version 2023-10-30 1331
+'Modulates the chilled water valve based upon circulation requirements
+
+Numeric Input SaFlowSts, SaTmp, SaTmpSpt, MechClgEna
+Numeric Output ChwVlvPos
+
+ValveClosed:
+ChwVlvPos = 0.0
+If SaFlowSts is On and MechClgEna = On and Then goto ValveOpen
+
+ValveOpen:
+ChwVlvPos = 100
+If SaFlowSts is Off or MechClgEna = Off then Goto DelayOff
+
+DelayOff:
+If SaFlowSts is On and MechClgEna = On and Then goto ValveOpen
+If TS > 900 and (SaFlowSts is Off or MechClgEna = Off) then Goto ValveClosed

@@ -1,0 +1,3 @@
+The code for HvacSts in sHvacMd99/Programs was the only thing changed.
+The code needs updated for each box, and vi_RudHvacSts needs to be an Int
+An input binding was added, vi_RudHvacSts, which needs bound to ../../../../../IO Resources/Sensor Bus/Room Unit Device/Display/HVACMode.

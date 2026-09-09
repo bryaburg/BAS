@@ -1,0 +1,16 @@
+'Fails chiller on high water temp
+'Bind to BACnet points for water temp and water temp setpoint (if available)
+
+Numeric Input ChwSTmp, ChwSTmpSpt, ChlrCmd
+Numeric Output ChlrFalm
+
+AlarmOff:
+  ChlrFalm = On
+  If ChwSTmp > (ChwSTmpSpt + 5) Then Goto Monitoring
+
+Monitoring:
+  If ChwStmp < (ChwSTmpSpt + 3) Then Goto AlarmOff
+  If ChwSTmp > (ChwSTmpSpt + 5) and TS > 1200 Then Goto AlarmOn
+
+AlarmOn:
+  If ChwStmp < (ChwSTmpSpt + 3) Then Goto AlarmOff

@@ -1,0 +1,30 @@
+Numeric Kp, Ki, Kd, Bias, Lerr, Intg
+Numeric Input SaFanSts, RmTmp, RmTmpStpt, UnitMode, OaDmpError
+Numeric Output HwVlvPosOut, BypDprPosOut
+Function PidLoop
+
+Heating_Off:
+	HwVlvPosOut = 0
+	BypDprPosOut = 0
+	Kp = 0.05
+	Ki = 0.0005
+	Kd = 0
+	Bias = 50
+	Goto CheckError
+
+Heating_On:
+	HwVlvPosOut = 100
+	BypDprPosOut = PidLoop(RmTmp, RmTmpStpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg)
+	Goto CheckError
+
+CheckError:
+	If SaFanSts = 0 Then Goto Heating_Off
+	If UnitMode <> 1 or UnitMode <> 3 Then Goto Heating_Off
+	If OaDmpError = 1 Then Goto OaDmprError
+	If abs(RmTmp - RmTmpStpt) >= 0.5 and TS >= 30 then Goto Heating_On
+	Goto Heating_On
+
+OaDmprError:
+	HwVlvPosOut = 100
+	BypDprPosOut = 100
+	If OaDmpError = 0 and TS > 30 Then Goto Heating_Off

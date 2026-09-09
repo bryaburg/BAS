@@ -1,0 +1,52 @@
+'Blr01CmdPrg
+'Built by Barbeau
+'Version 2022-07-14 1456
+'This program controls Boiler Start/Stop Command.
+
+Numeric Input Blr01Md, BlrLd, BlrLg, LdBlrEna, LgBlrEna, BlrSpdSig, Blr01Falm, MinSpdSpt
+Numeric Output Blr01Cmd, Blr01Spd
+Numeric RmpUp, RmpTm, StgDnSpd
+
+Init:
+RmpUp = 5
+RmpTm = 20
+Goto CheckStatus
+
+CheckStatus:
+If Blr01Cmd = On and Blr01Spd > 0 and Blr01Falm = Off and (Blr01Md = 1 or Blr01Md = 3) Then Goto Modulating
+Goto BoilerOff
+
+BoilerOff:
+Blr01Spd = 0
+Blr01Cmd = Off
+If BlrLd = 1 and LdBlrEna = On and Blr01Falm = Off and Blr01Md = 3 Then Goto Ramp
+If BlrLg = 1 and LgBlrEna = On and Blr01Falm = Off and Blr01Md = 3 Then Goto Ramp
+If Blr01Md = 1 Then Goto Ramp
+
+Ramp:
+Blr01Cmd = On
+Blr01Spd = Minimum(Maximum(MinSpdSpt,TS),BlrSpdSig)
+StgDnSpd = BlrSpdSig
+If Blr01Falm = On or Blr01Md = 2 Then Goto BoilerOff
+If BlrLd = 1 and LdBlrEna = Off and Blr01Md <> 1 Then Goto DelayOff
+If BlrLg = 1 and LgBlrEna = Off and Blr01Md <> 1 Then Goto DelayOff
+If TS > 100 Then Goto Modulating
+
+Modulating:
+Blr01Cmd = On
+Blr01Spd = BlrSpdSig
+StgDnSpd = BlrSpdSig
+If Blr01Falm = On or Blr01Md = 2 Then Goto BoilerOff
+If BlrLd = 1 and LdBlrEna = Off and Blr01Md <> 1 Then Goto DelayOff
+If BlrLg = 1 and LgBlrEna = Off and Blr01Md <> 1 Then Goto DelayOff
+
+DelayOff:
+Blr01Cmd = On
+Blr01Spd = Maximum((StgDnSpd - TS), MinSpdSpt)
+If Blr01Falm = On or Blr01Md = 2 Then Goto BoilerOff
+If BlrLd = 1 and LdBlrEna = On and (Blr01Md = 1 or Blr01Md = 3) Then Goto Modulating
+If BlrLg = 1 and LgBlrEna = On and (Blr01Md = 1 or Blr01Md = 3) Then Goto Modulating
+If TS > 20 Then Goto BoilerOff
+
+E:
+If TS > 10 Then Goto BoilerOff

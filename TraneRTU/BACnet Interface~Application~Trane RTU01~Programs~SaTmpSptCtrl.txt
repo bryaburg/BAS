@@ -1,0 +1,21 @@
+﻿'SaTmpSptCtrl
+'Built by Barbeau
+'Version 2019-04-26 1305
+' Resets supply air temperature setpoint based upon terminal load
+
+Numeric Input Tl_Avg, SaTmpMaxSpt, SaTmpMinSpt
+Numeric Output SaTmpSpt
+Numeric TlHigh, TlLow
+Function ResetFct
+
+Init:
+TlHigh = 100
+TlLow = -100
+Goto Hold
+
+Hold:
+If TS > 5 Then Goto Calculating
+
+Calculating:
+SaTmpSpt = ResetFct(SaTmpMaxSpt, SaTmpMinSpt, TlHigh, TlLow, 0, Tl_Avg)
+Goto Hold

@@ -1,0 +1,18 @@
+Numeric Input OaTmp               ' Outside air temperature
+Numeric Input OaTmpMax            ' Outdoor temp high limit
+Numeric Input OaTmpMin            ' Outdoor temp low limit
+Numeric Input OaTmpShutdown       ' Outdoor temp for complete shutdown
+Numeric Input SupplyTemp          ' System supply water temperature
+Numeric Input SupplyTempMax       ' Supply temp high limit
+Numeric Input SupplyTempMin       ' Supply temp low limit
+
+Numeric Output BlrStpt            ' Boiler setpoint
+Numeric Output SupplyTempStpt     ' Supply temperature setpoint
+
+Check_Wait:
+	If OaTmp < OaTmpShutdown and TS > 30 Then Goto Calc
+
+Calc:
+	If OaTmp > OaTmpMax Then SupplyTempStpt = SupplyTempMin Else SupplyTempStpt = SupplyTempMax
+	BlrStpt = SupplyTempStpt
+	Goto Check_Wait

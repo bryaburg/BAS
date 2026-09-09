@@ -1,0 +1,26 @@
+'SaTmpSptCtrl
+'Built by Barbeau
+'Version 2021-10-19 1035
+'Provides setpoint reset
+
+Numeric Input SaClgMinSpt, SaClgMaxSpt, SaHtgMinSpt, SaHtgMaxSpt
+Numeric Input OaClgMinSpt, OaClgMaxSpt, OaHtgMinSpt, OaHtgMaxSpt
+Numeric Input SaFanSts, SaTmp, OaTmp, HtgEna ClgEna
+Numeric Output SaTmpSpt
+Function ResetFct
+
+Shutdown:
+  SaTmpSpt = SaTmp
+  If SaFanSts = On and HtgEna = On Then Goto HeatingControl
+  If SaFanSts = On and ClgEna = On Then Goto CoolingControl
+  
+HeatingControl:
+  SaTmpSpt = ResetFct(SaHtgMaxSpt, SaHtgMinSpt, OaHtgMaxSpt, OaHtgMinSpt, 0, OaTmp)
+  If ClgEna = On and HtgEna = Off Then Goto CoolingControl
+  If SaFanSts = Off Then Goto Shutdown
+    
+CoolingControl:
+  SaTmpSpt = ResetFct(SaHtgMaxSpt, SaHtgMinSpt, OaClgMaxSpt, OaClgMinSpt, 1, OaTmp)
+  If ClgEna = Off and HtgEna = On Then Goto HeatingControl
+  If SaFanSts = Off Then Goto Shutdown
+  

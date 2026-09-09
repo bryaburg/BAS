@@ -1,0 +1,37 @@
+﻿'CfmSptCalcs
+'Built by Barbeau
+'Version 2023-06-06 1735
+'Calculates setpoint based upon mode
+'Heat Cool Demand must go below HtgBias to enter heating ramp
+'Heat Cool Demand must go above ClgBias to enter cooling ramp
+
+Numeric Input VAVMd, EaClgMaxCFM, EaClgMinCFM, EaHtgMaxCFM , EaHtgMinCFM, HtgBias, ClgBias
+Numeric Input HtgClgDmd
+Numeric Output CfmSpt, CfmPct
+Function ResetFct
+
+CalcOff:
+  CfmSpt = EaClgMinCFM
+  CfmPct = 0
+  If VAVMd <> 4 Then Goto ZeroBand
+
+ZeroBand:
+  CfmSpt = EaClgMinCFM
+  CfmPct = 0
+  If VAVMd = 1 or VAVMd = 5 Then Goto ClgBias
+  If VAVMd = 2 or VAVMd = 6 Then Goto HtgBias
+  If VAVMd = 4 Then Goto CalcOff
+
+HtgBias:
+  CfmSpt = ResetFct(EaHtgMaxCFM, EaHtgMinCFM, HtgBias, 0, 0, HtgClgDmd)
+  CfmPct = EaHtgMaxCFM / CfmSpt * 100
+  If VAVMd = 1 or VAVMd = 5 Then Goto ClgBias
+  If VAVMd = 2 or VAVMd = 6 Then Goto HtgBias
+  If VAVMd = 4 Then Goto CalcOff
+
+ClgBias:
+  CfmSpt = ResetFct(EaClgMaxCFM, EaClgMinCFM, 100, ClgBias, 1, HtgClgDmd)
+  CfmPct = EaClgMaxCFM / CfmSpt * 100
+  If VAVMd = 1 or VAVMd = 5 Then Goto ClgBias
+  If VAVMd = 2 or VAVMd = 6 Then Goto HtgBias
+  If VAVMd = 4 Then Goto CalcOff

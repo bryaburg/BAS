@@ -1,0 +1,22 @@
+'  Reset Function Control
+' This function requires six arguments that provide a reset setpoint range (High and Low)
+' and the controlling value range (High and Low) of the value that is determining the reset.
+' A fifth argument provides the direction of reset (Direct or Reverse) for the SP. The sixth           
+' argument is the current value of the controlling variable that causes the reset.
+
+Arg 1 HighResetValue 'The high value of the SP that is being reset.
+Arg 2 LowResetValue 'The low value of the SP that is being reset.
+Arg 3 HighCntrlValue 'The high value of the controlling device causing the reset.
+Arg 4 LowCntrlValue 'The low value of the controlling device causing the reset.
+Arg 5 Action 'Direct or Reverse Reset. (1=Direct;0=Reverse)
+Arg 6 ResetVarValue 'The current value of the variable causing the reset.
+
+Numeric ResetValue 'The value returned by this function to the calling program.
+Numeric ResetRatio 'The multiplier for the reset ramp.
+
+ResetRatio = (HighResetValue - LowResetValue) / (HighCntrlValue - LowCntrlValue)
+If Action = 0 then ResetValue = LowResetValue + ((HighCntrlValue - ResetVarValue) * ResetRatio)
+If Action = 1 then ResetValue = HighResetValue - ((HighCntrlValue - ResetVarValue) * ResetRatio)
+If ResetValue >= HighResetValue then ResetValue = HighResetValue
+If ResetValue <= LowResetValue then ResetValue = LowResetValue
+Return ResetValue

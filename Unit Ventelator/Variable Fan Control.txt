@@ -1,0 +1,47 @@
+Numeric Input RmTmp, RmTmpStpt, SaFanSts, UnitMode
+Numeric Output SaFanSpd
+Function PIDLoopFct
+Numeric Kp, Ki, Kd, Lerr, Bias, Intg, PIDOutput, Resptime, FanRampup, Ramptime, LoopResult
+Numeric SaFanSpdMax, SaFanSpdMin
+
+FanOff:
+  SaFanSpdMax = 100
+  SaFanSpdMin = 20
+  SaFanSpd = 0
+  Resptime = 3
+  Ramptime = 15
+  FanRampup = 5
+  Intg = 0
+  Lerr = 0
+  If UnitMode > 0 and TS > 20 then Goto Startup
+
+Startup:
+  SaFanSpd = SaFanSpdMin
+  If SaFanSts = 1 and TS >= Ramptime then Goto Biasup
+  If (TS >= (Ramptime + 60)) Or (SaFanSts = 0) then Goto FanOff
+
+Biasup:
+  SaFanSpd = (SaFanSpd + FanRampup)
+  Goto Delayup
+
+Delayup:
+  If SaFanSts = 0 then Goto Startup
+  If TS >= Ramptime then Goto Biasup
+  If RmTmp >= (RmTmpStpt * 0.9) then Goto Setbias
+  If SaFanSpd >= SaFanSpdMax - 5 then Goto Setbias
+
+Setbias:
+  Bias = SaFanSpd
+  Goto Temppid
+
+Temppid:
+  Kp = 25
+  Ki = (Kp / 100) * Resptime
+  Kd = Ki / 8
+  LoopResult = Maximum(SaFanSpdMin, PIDLoopFct(RmTmp, RmTmpStpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg))
+  SaFanSpd = Minimum(SaFanSpdMax, LoopResult)
+  Goto Checkerror
+
+Checkerror:
+  If SaFanSts = 0 then Goto Startup
+  If abs(RmTmp - RmTmpStpt) >= 0.5 and TS >= Resptime then Goto Temppid

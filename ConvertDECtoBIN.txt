@@ -1,0 +1,56 @@
+﻿'ConvertDECtoBIN
+'Built by Barbeau
+'Version 2022-08-27 0715
+'Converts a decimal number into individual bits
+
+Numeric Input DecInput
+
+Numeric i, BitArray[16]
+
+Numeric Public Factor
+
+Numeric Output Bit01
+Numeric Output Bit02
+Numeric Output Bit03
+Numeric Output Bit04
+Numeric Output Bit05
+Numeric Output Bit06
+Numeric Output Bit07
+Numeric Output Bit08
+Numeric Output Bit09
+Numeric Output Bit10
+Numeric Output Bit11
+Numeric Output Bit12
+Numeric Output Bit13
+Numeric Output Bit14
+Numeric Output Bit15
+Numeric Output Bit16
+
+Calculating:
+For i = 1 to 16
+  BitArray[i] = 0
+Next i
+
+Factor = 2
+
+For i = 1 to 16
+  If DecInput Mod Factor > (Factor / 2) - 1 Then BitArray[i] = 1
+  Factor = Factor * 2
+Next i
+
+Bit01 = BitArray[1]
+Bit02 = BitArray[2]
+Bit03 = BitArray[3]
+Bit04 = BitArray[4]
+Bit05 = BitArray[5]
+Bit06 = BitArray[6]
+Bit07 = BitArray[7]
+Bit08 = BitArray[8]
+Bit09 = BitArray[9]
+Bit10 = BitArray[10]
+Bit11 = BitArray[11]
+Bit12 = BitArray[12]
+Bit13 = BitArray[13]
+Bit14 = BitArray[14]
+Bit15 = BitArray[15]
+Bit16 = BitArray[16]

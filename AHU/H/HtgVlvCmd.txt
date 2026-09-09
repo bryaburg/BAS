@@ -1,0 +1,51 @@
+' =============================================================================
+' Heating Hot Water Valve Command
+' PID-modulates the HW valve to maintain supply air temperature at setpoint
+' (occupied setpoint, or an unoccupied setback setpoint) whenever the zone is
+' in a heating call and the SA fan is proven on.
+' =============================================================================
+
+Numeric Kp, Ki, Kd, Bias, Lerr, Intg
+Numeric Input UnitState, SaTmp, SaTmpStpt, Occ, SaFanSts
+Numeric Output HwVlvPosOut
+Numeric Input UnOccHeatStpt
+Numeric TempStpt
+Function PidLoop
+
+' --- Idle: valve closed, PID terms reset. Waits for a heating call (UnitState = 1)
+'     with the SA fan proven on. ---
+Heating_Off:
+    HwVlvPosOut = 0
+    ' REVIEW: Kp/Ki here are far smaller than the pattern used in the other PID loops
+    ' in this project (e.g. MaDmpr.txt / Calcs.txt use Ki = (Kp/100) * RespTime, giving
+    ' Ki roughly 1/400th of Kp). Here Ki is 1/100th of Kp instead of the usual ~1/400th,
+    ' and Kp itself (0.05) is two orders of magnitude below the other loops' Kp (5).
+    ' A 10F error would only produce ~0.5% valve movement off bias - confirm this is the
+    ' intended tuning and not a decimal/scaling typo (e.g. meant Kp=5, Ki=0.05).
+    Kp = 0.05
+    Ki = 0.0005
+    Kd = 0
+    Bias = 0
+    Lerr = 0
+    Intg = 0
+    If SaFanSts = 0 Then Goto Heating_Off
+    If UnitState = 1 Then Goto Heating_On
+
+' --- Active heating: choose occupied vs. unoccupied SA temp target, then run the
+'     PID loop each scan to position the valve. ---
+Heating_On:
+    If SaFanSts = 0 Then Goto Heating_Off
+    If Occ = 0 Then
+        TempStpt = UnOccHeatStpt
+    Else
+        TempStpt = SaTmpStpt
+    Endif
+    HwVlvPosOut = PidLoop(SaTmp, TempStpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg)
+    Goto ErrorCheck
+
+' --- Re-runs PID on an error/time basis; drops to Heating_Off if fan is lost or
+'     the zone is no longer calling for heat. ---
+ErrorCheck:
+    If SaFanSts = 0 Then Goto Heating_Off
+    If (Abs(SaTmp - TempStpt) >= 0.5 and TS > 5) Then Goto Heating_On
+    If UnitState <> 1 Then Goto Heating_Off

@@ -1,0 +1,20 @@
+﻿'MirrorPull
+'Built by Barbeau
+'Version 2019-04-25 1527
+'Pulls in values
+
+Numeric Input SaFanSts, SaFanSpd, SaTmp, MaTmp, SaStPr, CoolingCapacityStatus, OaDprFbk
+Numeric Output SaFanSts_RTU, SaFanSpd_RTU, SaTmp_RTU, MaTmp_RTU, SaStPr_RTU, ClgPct_RTU, DprPos_RTU
+
+Hold:
+If TS > 5 Then Goto ValueTransfer
+
+ValueTransfer:
+If SaFanSts = 2 Then SaFanSts_RTU = On Else SaFanSts_RTU = Off
+SaFanSpd_RTU = SaFanSpd
+SaTmp_RTU = SaTmp
+MaTmp_RTU = MaTmp
+SaStPr_RTU = SaStPr
+ClgPct_RTU = CoolingCapacityStatus
+DprPos_RTU = OaDprFbk
+Goto Hold

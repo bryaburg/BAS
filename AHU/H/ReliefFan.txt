@@ -1,0 +1,53 @@
+' =============================================================================
+' Relief/Return Fan Control
+' Tracks outside air flow (OaFl) to a CFM setpoint via a PID-driven relief fan,
+' enabled whenever the supply air fan is proven on. Debug variables expose the
+' PID's internal error/proportional/integral terms for trending.
+' =============================================================================
+
+Numeric Input OaFl
+Numeric Input CFMSTPT
+Numeric Input SaFanSts
+
+Numeric Output RaFanCmd, RaFanSpd
+
+Numeric DbgPidOut
+Numeric DbgError
+Numeric DbgIntgTerm
+Numeric DbgPterm
+
+Function PidLoop
+Numeric Kp, Ki, Kd, Lerr, Bias, Intg
+
+' --- Fan off / idle: speed and command zeroed, PID gains (re)initialized, and
+'     integral/last-error cleared so the loop doesn't carry over stale state
+'     into the next run. Waits for the SA fan to prove on. ---
+Fan_Off:
+	RaFanCmd = 0
+	RaFanSpd = 0
+	Kp = 0.1
+	Ki = 0.05
+	Kd = 0
+	Bias = 25
+	Lerr = 0
+	Intg = 0
+	If SaFanSts = 1 Then Goto Fan_On
+
+' --- Fan on: PID modulates relief fan speed to track the OA CFM setpoint.
+'     Debug variables are recomputed each scan for trending/troubleshooting. ---
+Fan_On:
+	RaFanCmd = 1
+	RaFanSpd = PIDLoop(OaFl, CFMSTPT, Kp, Ki, Kd, Bias, 1, Lerr, Intg)
+
+	' Match the PID function's direct-action error: measured flow minus setpoint.
+	DbgError = OaFl - CFMSTPT
+	DbgPterm = DbgError * Kp
+	DbgIntgTerm = Intg
+	DbgPidOut = RaFanSpd
+	Goto ErrorCheck
+
+' --- Re-runs PID once CFM error exceeds 5 and at least 30 sec have passed since
+'     the last run; drops back to Fan_Off if the SA fan is no longer proven on. ---
+ErrorCheck:
+	If SaFanSts = 0 Then Goto Fan_Off
+	If (abs(OaFl - CFMSTPT) >= 5) And TS >= 30 Then Goto Fan_On

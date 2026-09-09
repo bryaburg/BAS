@@ -1,0 +1,224 @@
+﻿'AlarmDisplayControl
+'Built by Barbeau
+'Version 2020-06-20 1750
+'Set string values based upon alarms
+
+Numeric Input Alarm_Present
+Numeric Input At_Speed_Input_Opened_Chiller
+Numeric Input At_Speed_Input_Shorted_Chiller
+Numeric Input Comm_Loss_Cond_High_Pressure_Cutout_Chiller
+Numeric Input Comm_Loss_Cond_Refrigerant_Pressure_Chiller
+Numeric Input Comm_Loss_Cond_Saturated_Rfgt_Temp_Chiller
+Numeric Input Comm_Loss_Condenser_Entering_Water_Temp_Chiller
+Numeric Input Comm_Loss_Condenser_Leaving_Water_Temp_Chiller
+Numeric Input Comm_Loss_Condenser_Water_Flow_Switch_Chiller
+Numeric Input Comm_Loss_Cprsr_Discharge_Rfgt_Temp_Chiller
+Numeric Input Comm_Loss_Emergency_Stop_Chiller
+Numeric Input Comm_Loss_Evap_Entering_Water_Temp_Chiller
+Numeric Input Comm_Loss_Evap_Leaving_Water_Temp_Chiller
+Numeric Input Comm_Loss_Evap_Saturated_Rfgt_Temp_Chiller
+Numeric Input Comm_Loss_Evaporator_Water_Flow_Switch_Chiller
+Numeric Input Comm_Loss_External_Auto2FStop_Chiller
+Numeric Input Comm_Loss_IGV_First_Stage_Actuator_Chiller
+Numeric Input Comm_Loss_Inboard_Bearing_Temperature_Chiller
+Numeric Input Comm_Loss_Motor_Winding_Temperature_1_Chiller
+Numeric Input Comm_Loss_Motor_Winding_Temperature_2_Chiller
+Numeric Input Comm_Loss_Motor_Winding_Temperature_3_Chiller
+Numeric Input Comm_Loss_Oil_Pump_Discharge_Pressure_Chiller
+Numeric Input Comm_Loss_Oil_Tank_Heater_Relay_Chiller
+Numeric Input Comm_Loss_Oil_Tank_Pressure_Chiller
+Numeric Input Comm_Loss_Oil_Tank_Temperature_Chiller
+Numeric Input Comm_Loss_Oil2FRefrigerant_Pump_Relay_Chiller
+Numeric Input Comm_Loss_Outboard_Bearing_Temperature_Chiller
+Numeric Input Comm_Loss_Programmable_Relay_Board_1_Chiller
+Numeric Input Comm_Loss_Programmable_Relay_Board_2_Chiller
+Numeric Input Comm_Loss_Purge_Alarm_Relay_Purge
+Numeric Input Comm_Loss_Purge_Carbon_Tank_Heater_Rly_Purge
+Numeric Input Comm_Loss_Purge_Carbon_Tank_Temperature_Purge
+Numeric Input Comm_Loss_Purge_Condensing_Unit_Relay_Purge
+Numeric Input Comm_Loss_Purge_Cprsr_Suction_Rfgt_Temp_Purge
+Numeric Input Comm_Loss_Purge_Exhaust_Solenoid_Output_Purge
+Numeric Input Comm_Loss_Purge_Liquid_Level_Switch_Purge
+Numeric Input Comm_Loss_Purge_Pumpout_Relay_Purge
+Numeric Input Comm_Loss_Purge_Pumpout_Solenoid_Output_Purge
+Numeric Input Comm_Loss_Purge_Regen_Solenoid_Relay_Purge
+Numeric Input Comm_Loss_Starter_Chiller
+Numeric Input Comm_Loss_Starter_Fault_Chiller
+Numeric Input Compressor_Did_Not_Accelerate_Shutdown_Chiller
+Numeric Input Condenser_Water_Flow_Lost_Chiller
+Numeric Input Condenser_Water_Flow_Overdue_Chiller
+Numeric Input Cprsr_Did_Not_Accelerate_Transition_Chiller
+Numeric Input Differential_Oil_Pressure_Overdue_Chiller
+Numeric Input Emergency_Stop_Chiller
+Numeric Input Evaporator_Water_Flow_Lost_Chiller
+Numeric Input Evaporator_Water_Flow_Overdue_Chiller
+Numeric Input Excessive_Loss_of_Communication_Chiller
+Numeric Input Extended_Compressor_Surge_Chiller
+Numeric Input High_Oil_Temperature_Chiller
+Numeric Input High_Outboard_Bearing_Temp_Chiller
+Numeric Input High_Vacuum_Lockout_Chiller
+Numeric Input Momentary_Power_Loss_Chiller
+Numeric Input Motor_Current_Overload_Chiller
+Numeric Input MP_Invalid_Configuration_Platform
+Numeric Input MP_Reset_Has_Occurred_Platform
+Numeric Input Over_Voltage_Chiller
+Numeric Input Phase_Loss_Chiller
+Numeric Input Phase_Reversal_Chiller
+Numeric Input Power_Loss_Chiller
+Numeric Input Purge_Daily_Pumpout_Limit_Exceeded_Purge
+Numeric Input Purge_Liquid_Level_Too_High_Continuously_Purge
+Numeric Input Purge_Liquid_Level_Too_High_Warning_Purge
+Numeric Input Severe_Current_Unbalance_Chiller
+Numeric Input Software_Error_1001_Call_Trane_Service_Chiller
+Numeric Input Software_Error_1004_Call_Trane_Service_Chiller
+Numeric Input Starter_Comm_Loss_Main_Processor_Chiller
+Numeric Input Starter_Contactor_Interrupt_Failure_Chiller
+Numeric Input Starter_Did_Not_Fully_Accelerate_Chiller
+Numeric Input Starter_Did_Not_Transition_Chiller
+Numeric Input Starter_Failed_to_Arm2FStart_Chiller
+Numeric Input Starter_Fault_Chiller
+Numeric Input Starter_Fault_Type_I_Chiller
+Numeric Input Starter_Fault_Type_II_Chiller
+Numeric Input Starter_Fault_Type_III_Chiller
+Numeric Input Starter_Interlock_Failed_to_Close_Chiller
+Numeric Input Starter_Interlock_Failed_to_Open_Chiller
+Numeric Input Starter_Interlock_Unexpectedly_Closed_Chiller
+Numeric Input Starter_Interlock_Unexpectedly_Open_Chiller
+Numeric Input Starter_Module_Memory_Error_Type_1_Chiller
+Numeric Input Starter_Module_Memory_Error_Type_2_Chiller
+Numeric Input Transition_Complete_Input_Opened_Chiller
+Numeric Input Transition_Complete_Input_Shorted_Chiller
+Numeric Input Unexpected_Differential_Oil_Pressure_Chiller
+Numeric Input Unexpected_Starter_Shutdown_Chiller
+
+String Output LastAlarm1
+Datetime Output LastAlarm1Stamp
+String Output LastAlarm2
+Datetime Output LastAlarm2Stamp
+String Output LastAlarm3
+Datetime Output LastAlarm3Stamp
+String Output LastAlarm4
+Datetime Output LastAlarm4Stamp
+String Output LastAlarm5
+Datetime Output LastAlarm5Stamp
+
+Init:
+LastAlarm1 = "No Alarms"
+LastAlarm2 = "No Alarms"
+LastAlarm3 = "No Alarms"
+LastAlarm4 = "No Alarms"
+LastAlarm5 = "No Alarms"
+LastAlarm1Stamp = Date
+LastAlarm2Stamp = Date
+LastAlarm3Stamp = Date
+LastAlarm4Stamp = Date
+LastAlarm5Stamp = Date
+Goto Monitoring
+
+Monitoring:
+If Alarm_Present = On Then Goto CaptureData
+
+CaptureData:
+LastAlarm5Stamp = LastAlarm4Stamp
+LastAlarm4Stamp = LastAlarm3Stamp
+LastAlarm3Stamp = LastAlarm2Stamp
+LastAlarm2Stamp = LastAlarm1Stamp
+LastAlarm1Stamp = Date
+LastAlarm5 = LastAlarm4
+LastAlarm4 = LastAlarm3
+LastAlarm3 = LastAlarm2
+LastAlarm2 = LastAlarm1
+If Alarm_Present = On Then LastAlarm1 = "Alarm_Present"
+If At_Speed_Input_Opened_Chiller = On Then LastAlarm1 = "At_Speed_Input_Opened_Chiller"
+If At_Speed_Input_Shorted_Chiller = On Then LastAlarm1 = "At_Speed_Input_Shorted_Chiller"
+If Comm_Loss_Cond_High_Pressure_Cutout_Chiller = On Then LastAlarm1 = "Comm_Loss_Cond_High_Pressure_Cutout_Chiller"
+If Comm_Loss_Cond_Refrigerant_Pressure_Chiller = On Then LastAlarm1 = "Comm_Loss_Cond_Refrigerant_Pressure_Chiller"
+If Comm_Loss_Cond_Saturated_Rfgt_Temp_Chiller = On Then LastAlarm1 = "Comm_Loss_Cond_Saturated_Rfgt_Temp_Chiller"
+If Comm_Loss_Condenser_Entering_Water_Temp_Chiller = On Then LastAlarm1 = "Comm_Loss_Condenser_Entering_Water_Temp_Chiller"
+If Comm_Loss_Condenser_Leaving_Water_Temp_Chiller = On Then LastAlarm1 = "Comm_Loss_Condenser_Leaving_Water_Temp_Chiller"
+If Comm_Loss_Condenser_Water_Flow_Switch_Chiller = On Then LastAlarm1 = "Comm_Loss_Condenser_Water_Flow_Switch_Chiller"
+If Comm_Loss_Cprsr_Discharge_Rfgt_Temp_Chiller = On Then LastAlarm1 = "Comm_Loss_Cprsr_Discharge_Rfgt_Temp_Chiller"
+If Comm_Loss_Emergency_Stop_Chiller = On Then LastAlarm1 = "Comm_Loss_Emergency_Stop_Chiller"
+If Comm_Loss_Evap_Entering_Water_Temp_Chiller = On Then LastAlarm1 = "Comm_Loss_Evap_Entering_Water_Temp_Chiller"
+If Comm_Loss_Evap_Leaving_Water_Temp_Chiller = On Then LastAlarm1 = "Comm_Loss_Evap_Leaving_Water_Temp_Chiller"
+If Comm_Loss_Evap_Saturated_Rfgt_Temp_Chiller = On Then LastAlarm1 = "Comm_Loss_Evap_Saturated_Rfgt_Temp_Chiller"
+If Comm_Loss_Evaporator_Water_Flow_Switch_Chiller = On Then LastAlarm1 = "Comm_Loss_Evaporator_Water_Flow_Switch_Chiller"
+If Comm_Loss_External_Auto2FStop_Chiller = On Then LastAlarm1 = "Comm_Loss_External_Auto2FStop_Chiller"
+If Comm_Loss_IGV_First_Stage_Actuator_Chiller = On Then LastAlarm1 = "Comm_Loss_IGV_First_Stage_Actuator_Chiller"
+If Comm_Loss_Inboard_Bearing_Temperature_Chiller = On Then LastAlarm1 = "Comm_Loss_Inboard_Bearing_Temperature_Chiller"
+If Comm_Loss_Motor_Winding_Temperature_1_Chiller = On Then LastAlarm1 = "Comm_Loss_Motor_Winding_Temperature_1_Chiller"
+If Comm_Loss_Motor_Winding_Temperature_2_Chiller = On Then LastAlarm1 = "Comm_Loss_Motor_Winding_Temperature_2_Chiller"
+If Comm_Loss_Motor_Winding_Temperature_3_Chiller = On Then LastAlarm1 = "Comm_Loss_Motor_Winding_Temperature_3_Chiller"
+If Comm_Loss_Oil_Pump_Discharge_Pressure_Chiller = On Then LastAlarm1 = "Comm_Loss_Oil_Pump_Discharge_Pressure_Chiller"
+If Comm_Loss_Oil_Tank_Heater_Relay_Chiller = On Then LastAlarm1 = "Comm_Loss_Oil_Tank_Heater_Relay_Chiller"
+If Comm_Loss_Oil_Tank_Pressure_Chiller = On Then LastAlarm1 = "Comm_Loss_Oil_Tank_Pressure_Chiller"
+If Comm_Loss_Oil_Tank_Temperature_Chiller = On Then LastAlarm1 = "Comm_Loss_Oil_Tank_Temperature_Chiller"
+If Comm_Loss_Oil2FRefrigerant_Pump_Relay_Chiller = On Then LastAlarm1 = "Comm_Loss_Oil2FRefrigerant_Pump_Relay_Chiller"
+If Comm_Loss_Outboard_Bearing_Temperature_Chiller = On Then LastAlarm1 = "Comm_Loss_Outboard_Bearing_Temperature_Chiller"
+If Comm_Loss_Programmable_Relay_Board_1_Chiller = On Then LastAlarm1 = "Comm_Loss_Programmable_Relay_Board_1_Chiller"
+If Comm_Loss_Programmable_Relay_Board_2_Chiller = On Then LastAlarm1 = "Comm_Loss_Programmable_Relay_Board_2_Chiller"
+If Comm_Loss_Purge_Alarm_Relay_Purge = On Then LastAlarm1 = "Comm_Loss_Purge_Alarm_Relay_Purge"
+If Comm_Loss_Purge_Carbon_Tank_Heater_Rly_Purge = On Then LastAlarm1 = "Comm_Loss_Purge_Carbon_Tank_Heater_Rly_Purge"
+If Comm_Loss_Purge_Carbon_Tank_Temperature_Purge = On Then LastAlarm1 = "Comm_Loss_Purge_Carbon_Tank_Temperature_Purge"
+If Comm_Loss_Purge_Condensing_Unit_Relay_Purge = On Then LastAlarm1 = "Comm_Loss_Purge_Condensing_Unit_Relay_Purge"
+If Comm_Loss_Purge_Cprsr_Suction_Rfgt_Temp_Purge = On Then LastAlarm1 = "Comm_Loss_Purge_Cprsr_Suction_Rfgt_Temp_Purge"
+If Comm_Loss_Purge_Exhaust_Solenoid_Output_Purge = On Then LastAlarm1 = "Comm_Loss_Purge_Exhaust_Solenoid_Output_Purge"
+If Comm_Loss_Purge_Liquid_Level_Switch_Purge = On Then LastAlarm1 = "Comm_Loss_Purge_Liquid_Level_Switch_Purge"
+If Comm_Loss_Purge_Pumpout_Relay_Purge = On Then LastAlarm1 = "Comm_Loss_Purge_Pumpout_Relay_Purge"
+If Comm_Loss_Purge_Pumpout_Solenoid_Output_Purge = On Then LastAlarm1 = "Comm_Loss_Purge_Pumpout_Solenoid_Output_Purge"
+If Comm_Loss_Purge_Regen_Solenoid_Relay_Purge = On Then LastAlarm1 = "Comm_Loss_Purge_Regen_Solenoid_Relay_Purge"
+If Comm_Loss_Starter_Chiller = On Then LastAlarm1 = "Comm_Loss_Starter_Chiller"
+If Comm_Loss_Starter_Fault_Chiller = On Then LastAlarm1 = "Comm_Loss_Starter_Fault_Chiller"
+If Compressor_Did_Not_Accelerate_Shutdown_Chiller = On Then LastAlarm1 = "Compressor_Did_Not_Accelerate_Shutdown_Chiller"
+If Condenser_Water_Flow_Lost_Chiller = On Then LastAlarm1 = "Condenser_Water_Flow_Lost_Chiller"
+If Condenser_Water_Flow_Overdue_Chiller = On Then LastAlarm1 = "Condenser_Water_Flow_Overdue_Chiller"
+If Cprsr_Did_Not_Accelerate_Transition_Chiller = On Then LastAlarm1 = "Cprsr_Did_Not_Accelerate_Transition_Chiller"
+If Differential_Oil_Pressure_Overdue_Chiller = On Then LastAlarm1 = "Differential_Oil_Pressure_Overdue_Chiller"
+If Emergency_Stop_Chiller = On Then LastAlarm1 = "Emergency_Stop_Chiller"
+If Evaporator_Water_Flow_Lost_Chiller = On Then LastAlarm1 = "Evaporator_Water_Flow_Lost_Chiller"
+If Evaporator_Water_Flow_Overdue_Chiller = On Then LastAlarm1 = "Evaporator_Water_Flow_Overdue_Chiller"
+If Excessive_Loss_of_Communication_Chiller = On Then LastAlarm1 = "Excessive_Loss_of_Communication_Chiller"
+If Extended_Compressor_Surge_Chiller = On Then LastAlarm1 = "Extended_Compressor_Surge_Chiller"
+If High_Oil_Temperature_Chiller = On Then LastAlarm1 = "High_Oil_Temperature_Chiller"
+If High_Outboard_Bearing_Temp_Chiller = On Then LastAlarm1 = "High_Outboard_Bearing_Temp_Chiller"
+If High_Vacuum_Lockout_Chiller = On Then LastAlarm1 = "High_Vacuum_Lockout_Chiller"
+If Momentary_Power_Loss_Chiller = On Then LastAlarm1 = "Momentary_Power_Loss_Chiller"
+If Motor_Current_Overload_Chiller = On Then LastAlarm1 = "Motor_Current_Overload_Chiller"
+If MP_Invalid_Configuration_Platform = On Then LastAlarm1 = "MP_Invalid_Configuration_Platform"
+If MP_Reset_Has_Occurred_Platform = On Then LastAlarm1 = "MP_Reset_Has_Occurred_Platform"
+If Over_Voltage_Chiller = On Then LastAlarm1 = "Over_Voltage_Chiller"
+If Phase_Loss_Chiller = On Then LastAlarm1 = "Phase_Loss_Chiller"
+If Phase_Reversal_Chiller = On Then LastAlarm1 = "Phase_Reversal_Chiller"
+If Power_Loss_Chiller = On Then LastAlarm1 = "Power_Loss_Chiller"
+If Purge_Daily_Pumpout_Limit_Exceeded_Purge = On Then LastAlarm1 = "Purge_Daily_Pumpout_Limit_Exceeded_Purge"
+If Purge_Liquid_Level_Too_High_Continuously_Purge = On Then LastAlarm1 = "Purge_Liquid_Level_Too_High_Continuously_Purge"
+If Purge_Liquid_Level_Too_High_Warning_Purge = On Then LastAlarm1 = "Purge_Liquid_Level_Too_High_Warning_Purge"
+If Severe_Current_Unbalance_Chiller = On Then LastAlarm1 = "Severe_Current_Unbalance_Chiller"
+If Software_Error_1001_Call_Trane_Service_Chiller = On Then LastAlarm1 = "Software_Error_1001_Call_Trane_Service_Chiller"
+If Software_Error_1004_Call_Trane_Service_Chiller = On Then LastAlarm1 = "Software_Error_1004_Call_Trane_Service_Chiller"
+If Starter_Comm_Loss_Main_Processor_Chiller = On Then LastAlarm1 = "Starter_Comm_Loss_Main_Processor_Chiller"
+If Starter_Contactor_Interrupt_Failure_Chiller = On Then LastAlarm1 = "Starter_Contactor_Interrupt_Failure_Chiller"
+If Starter_Did_Not_Fully_Accelerate_Chiller = On Then LastAlarm1 = "Starter_Did_Not_Fully_Accelerate_Chiller"
+If Starter_Did_Not_Transition_Chiller = On Then LastAlarm1 = "Starter_Did_Not_Transition_Chiller"
+If Starter_Failed_to_Arm2FStart_Chiller = On Then LastAlarm1 = "Starter_Failed_to_Arm2FStart_Chiller"
+If Starter_Fault_Chiller = On Then LastAlarm1 = "Starter_Fault_Chiller"
+If Starter_Fault_Type_I_Chiller = On Then LastAlarm1 = "Starter_Fault_Type_I_Chiller"
+If Starter_Fault_Type_II_Chiller = On Then LastAlarm1 = "Starter_Fault_Type_II_Chiller"
+If Starter_Fault_Type_III_Chiller = On Then LastAlarm1 = "Starter_Fault_Type_III_Chiller"
+If Starter_Interlock_Failed_to_Close_Chiller = On Then LastAlarm1 = "Starter_Interlock_Failed_to_Close_Chiller"
+If Starter_Interlock_Failed_to_Open_Chiller = On Then LastAlarm1 = "Starter_Interlock_Failed_to_Open_Chiller"
+If Starter_Interlock_Unexpectedly_Closed_Chiller = On Then LastAlarm1 = "Starter_Interlock_Unexpectedly_Closed_Chiller"
+If Starter_Interlock_Unexpectedly_Open_Chiller = On Then LastAlarm1 = "Starter_Interlock_Unexpectedly_Open_Chiller"
+If Starter_Module_Memory_Error_Type_1_Chiller = On Then LastAlarm1 = "Starter_Module_Memory_Error_Type_1_Chiller"
+If Starter_Module_Memory_Error_Type_2_Chiller = On Then LastAlarm1 = "Starter_Module_Memory_Error_Type_2_Chiller"
+If Transition_Complete_Input_Opened_Chiller = On Then LastAlarm1 = "Transition_Complete_Input_Opened_Chiller"
+If Transition_Complete_Input_Shorted_Chiller = On Then LastAlarm1 = "Transition_Complete_Input_Shorted_Chiller"
+If Unexpected_Differential_Oil_Pressure_Chiller = On Then LastAlarm1 = "Unexpected_Differential_Oil_Pressure_Chiller"
+If Unexpected_Starter_Shutdown_Chiller = On Then LastAlarm1 = "Unexpected_Starter_Shutdown_Chiller"
+Goto ResetDelay
+
+ResetDelay:
+If Alarm_Present = Off Then Goto Monitoring
+
+E:
+If TS > 30 Then Goto Monitoring

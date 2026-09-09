@@ -1,0 +1,25 @@
+﻿Numeric Input ChwSysCmd, ChwPmpLd, ChwPmpLg, ChwPmpLdEna, ChwPmpLgEna, ChwPmp02Falm, MechClgEna
+Numeric Output ChwPmp02Cmd
+
+Init:
+ ChwPmp02Cmd = Off
+ If TS > 5 and ChwSysCmd = On and MechClgEna = On Then Goto CheckStatus
+ 
+CheckStatus:
+ If ChwSysCmd = Off or MechClgEna = Off Then Goto Init
+ Goto PumpOff
+ 
+PumpOff:
+ ChwPmp02Cmd = Off
+ If ChwSysCmd = Off Then Goto Init
+ If MechClgEna = Off Then Goto Init
+ If ChwPmpLd = 2 and ChwPmpLdEna = On Then Goto PumpOn
+ If ChwPmpLg = 2 and ChwPmpLgEna = On Then Goto PumpOn
+ 
+PumpOn:
+ ChwPmp02Cmd = On
+ If ChwSysCmd = Off Then Goto Init
+ If MechClgEna = Off Then Goto Init
+ If ChwPmp02Falm = On Then Goto PumpOff
+ If ChwPmpLd = 2 and ChwPmpLdEna = Off Then Goto PumpOff
+ If ChwPmpLg = 2 and ChwPmpLgEna = Off Then Goto PumpOff

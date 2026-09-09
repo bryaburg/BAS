@@ -1,0 +1,83 @@
+'Description: Hvac Status Program
+'Flow Type: Looping
+'Triggers: none
+'This program manages the Hvac status based on occupancy, setup/setback, Hvac mode and SmartX stat override
+'Modified on 08/15/19 by Brent Yazel
+
+'HvacSts Modes
+'1 Occupied Cooling
+'2 Occupied Heating
+'3 Standby Cooling
+'4 Standby Heating
+'5 Setup
+'6 Setback
+'7 Off
+'8 Fire
+
+Numeric Input vi_OccSts, vi_RmTmpCspt, vi_RmTmpHspt, vi_HvacMd, vi_AhuSaTmp, vi_RudHvacSts
+Numeric Input par_RmTmpSuSpt, par_RmTmpSbSpt
+Numeric Input pi_RmTmp
+Numeric Output vo_HvacSts
+Numeric Public RmTmpSuDif, RmTmpSbDif, WarmupDif
+
+Initialize:
+vo_HvacSts = 5
+RmTmpSuDif = 4
+RmTmpSbDif = 4
+WarmUpDif = 3'degF
+If vi_OccSts <> 2 then 
+    If vi_OccSts = 4 then vo_HvacSts = 3 else vo_HvacSts = 1
+  goto UnitOn
+Else
+  goto UnitOff
+Endif
+
+UnitOn:
+If vi_HvacMd <> 1 then goto ModeOverride
+If vi_OccSts = 2 then goto UnitOff
+'If the smart stat is not overriding or room temp is outside setup or setback values,
+'then choose mode based on AHU Hvac mode and room temp
+If (vi_RudHvacSts <> 2 And vi_RudHvacSts <> 3) Or (pi_RmTmp >= par_RmTmpSuSpt or pi_RmTmp <= par_RmTmpSbSpt) Then
+	If vi_AhuSaTmp >= (pi_RmTmp + WarmUpDif) Then
+	  If vi_OccSts = 4 then vo_HvacSts = 4 else vo_HvacSts = 2 
+	Else
+	  If pi_RmTmp >= vi_RmTmpCspt then
+	    If vi_OccSts = 4 then vo_HvacSts = 3 else vo_HvacSts = 1
+	  Else
+	    If pi_RmTmp <= vi_RmTmpHspt Then
+	     If vi_OccSts = 4 then vo_HvacSts = 4 else vo_HvacSts = 2
+	    Endif
+	  Endif
+	Endif
+Else
+	'Overriden on SmartX stat and room temp is within normal range, set appropriate Hvac status
+	If vi_RudHvacSts = 2 Then 
+		vo_HvacSts = 2 
+	Else 
+		If vi_RudHvacSts = 3 Then 
+			vo_HvacSts = 1
+		Endif
+	Endif
+Endif
+
+UnitOff:
+If vi_HvacMd <> 1 then goto ModeOverride
+If vi_OccSts <> 2 then
+ vo_HvacSts = 1
+ goto UnitOn
+Endif
+If pi_RmTmp <= (par_RmTmpSbSpt - RmTmpSbDif/2) or pi_RmTmp >= (par_RmTmpSuSpt + RmTmpSuDif/2) Then goto UnoccupiedOvrd
+vo_HvacSts = 7
+
+UnoccupiedOvrd:
+If vi_HvacMd <> 1 then goto ModeOverride
+If vi_OccSts <> 2 or (pi_RmTmp <= (par_RmTmpSuSpt - RmTmpSuDif/2) and pi_RmTmp >= (par_RmTmpSbSpt + RmTmpSbDif/2)) then goto UnitOn
+If pi_RmTmp <= (par_RmTmpSbSpt - RmTmpSbDif/2) then vo_HvacSts = 6
+If pi_RmTmp >= (par_RmTmpSuSpt + RmTmpSuDif/2) Then vo_HvacSts = 5
+
+
+ModeOverride:
+If vi_HvacMd = 1 then goto UnitOff
+If vi_HvacMd = 3 then vo_HvacSts = 2
+If vi_HvacMd = 7 then vo_HvacSts = 7
+If vi_HvacMd = 8 then vo_HvacSts = 8

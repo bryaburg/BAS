@@ -1,0 +1,20 @@
+﻿Numeric Input ChwSysCmd, ChwPmpLdFalm, ChwPmpLgFalm, MechClg
+Numeric Output ChwPmpLdEna, ChwPmpLgEna
+
+ShutDown:
+ ChwPmpLdEna = Off
+ ChwPmpLgEna = Off
+ If ChwSysCmd = On and MechClg = On Then Goto LeadOn
+ 
+LeadOn:
+ ChwPmpLdEna = On
+ ChwPmpLgEna = Off
+ If ChwSysCmd = Off or MechClg = Off Then Goto Shutdown
+ If TS > 30 and ChwPmpLdFalm = On Then Goto LagOn
+ 
+LagOn:
+ ChwPmpLdEna = Off
+ ChwPmpLgEna = On
+ If ChwSysCmd = Off or MechClg = Off Then Goto Shutdown
+ If TS > 30 and ChwPmpLdFalm = Off Then Goto LeadOn
+ 

@@ -1,0 +1,27 @@
+'ChangeLeads 
+'Built by Barbeau
+'Version 2020-09-29 1055
+'Changes leads based upon input  
+
+Numeric Input ChgLd, ChwP01RnTm, ChwP02RnTm, Btn12, Btn21
+Numeric Output ChwPmpLd, ChwPmpLg, Seq, Sts12, Sts21
+
+Run12:
+Sts12 = On
+Sts21 = Off
+If Btn21 = On Then Goto Run21
+ChwPmpLd = 1
+ChwPmpLg = 2
+Seq = 12
+If TS > 30 and ChgLd = On and ChwP01RnTm < ChwP02RnTm Then Goto Run12
+If TS > 30 and ChgLd = On and ChwP02RnTm < ChwP01RnTm Then Goto Run21
+
+Run21:
+Sts12 = Off
+Sts21 = On
+If Btn12 = On Then Goto Run12
+ChwPmpLd = 2
+ChwPmpLg = 1
+Seq = 21
+If TS > 30 and ChgLd = On and ChwP01RnTm < ChwP02RnTm Then Goto Run12
+If TS > 30 and ChgLd = On and ChwP02RnTm < ChwP01RnTm Then Goto Run21

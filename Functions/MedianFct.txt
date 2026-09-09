@@ -1,0 +1,35 @@
+' Function: CalculateMedian
+' Inputs: Numeric Array Values[], Numeric Count
+Arg 1 Values
+Arg 2 Count
+
+Numeric i, j, temp, MidVal
+Numeric Result
+Numeric LocalArr[100] ' Local writeable array to allow sorting
+
+' Step 1: Copy incoming Arg array to local array
+For i = 1 To Count
+  LocalArr[i] = Values[i]
+Next i
+
+' Step 2: Sort the local elements (Bubble Sort)
+For i = 1 To Count - 1
+  For j = i + 1 To Count
+    If LocalArr[i] > LocalArr[j] Then
+      temp = LocalArr[i]
+      LocalArr[i] = LocalArr[j]
+      LocalArr[j] = temp
+    EndIf
+  Next j
+Next i
+
+' Step 3: Determine Median based on Even or Odd Count
+If (Count Mod 2) = 1 Then
+  MidVal = (Count + 1) / 2
+  Result = LocalArr[MidVal]
+Else
+  MidVal = Count / 2
+  Result = (LocalArr[MidVal] + LocalArr[MidVal + 1]) / 2
+EndIf
+
+Return Result

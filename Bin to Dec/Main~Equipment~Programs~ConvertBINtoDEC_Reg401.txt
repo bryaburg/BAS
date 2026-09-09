@@ -1,0 +1,44 @@
+﻿'ConvertBINtoDEC
+'Built by Barbeau
+'Version 2022-08-27 1131
+'Converts Binary to Decimal
+
+Numeric Input R401_B1_FSCSCommFault
+Numeric Input R401_B2_FSCSCommFault
+Numeric Input R401_B3_SystemCommFault
+Numeric Input R401_B4_SystemCommFault
+Numeric Input R401_B5_CommFailSonalert
+Numeric Input R401_B6_CommFailSonalert
+Numeric Input R401_B7_AddressableSonalert
+Numeric Input R401_B8_AddressableSonalert
+Numeric Input R401_B9_EastStairPressFanOn
+Numeric Input R401_B10_EastStairPressFanOn
+Numeric Input R401_B11_EastStairPressFanNorm
+Numeric Input R401_B12_EastStairPressFanNorm
+Numeric Input R401_B13_EastStairPressFanOff
+Numeric Input R401_B14_EastStairPressFanOff
+Numeric Input R401_B15_EastStairPressFanFault
+Numeric Input R401_B16_EastStairPressFanFault
+Numeric Output ASP_Reg401
+Numeric B1, B2, B3, B4, B5, B6, B7, B8
+Numeric B9, B10, B11, B12, B13, B14, B15, B16
+
+Calculating:
+B1 = R401_B1_FSCSCommFault
+B2 = R401_B2_FSCSCommFault
+B3 = R401_B3_SystemCommFault
+B4 = R401_B4_SystemCommFault
+B5 = R401_B5_CommFailSonalert
+B6 = R401_B6_CommFailSonalert
+B7 = R401_B7_AddressableSonalert
+B8 = R401_B8_AddressableSonalert
+B9 = R401_B9_EastStairPressFanOn
+B10 = R401_B10_EastStairPressFanOn
+B11 = R401_B11_EastStairPressFanNorm
+B12 = R401_B12_EastStairPressFanNorm
+B13 = R401_B13_EastStairPressFanOff
+B14 = R401_B14_EastStairPressFanOff
+B15 = R401_B15_EastStairPressFanFault
+B16 = R401_B16_EastStairPressFanFault
+
+ASP_Reg401 = (B16*2^15) + (B15*2^14) + (B14*2^13) + (B13*2^12) + (B12*2^11) + (B11*2^10) + (B10*2^9) + (B9*2^8) + (B8*2^7) + (B7*2^6) + (B6*2^5) + (B5*2^4) + (B4*2^3) + (B3*2^2) + (B2*2^1) + (B1*2^0)

@@ -1,0 +1,56 @@
+' ============================================================
+' AHU Discharge Air Temperature Reset / PID Control Program
+' Uses a PID loop on room temperature to calculate a heating/
+' cooling demand signal, then resets the supply air temperature
+' setpoint between a min and max based on that demand.
+' ============================================================
+
+Numeric Input AhuFanSts, RmTmp, RmTmpSpt, RmRh, OaTmp, SaTmp
+Numeric Output SaTmpSpt, HtgClgDmd
+Function PIDfct
+Numeric Kp, Ki, Kd, Lerr, Intg, Bias, ResetRatio, RespTime, SaTmpSpt_Min, SaTmpSpt_Max
+
+' --- State: Fan Off ---
+' When the AHU fan is off, force the SAT setpoint to room temp (no
+' active control) and hold heating/cooling demand at a neutral 50%.
+' If the fan turns on, jump into the PID setup; otherwise stay here
+' and initialize the SAT reset limits for when the fan does start.
+CalculateOff:
+  SaTmpSpt = RmTmp
+  HtgClgDmd = 50
+  If AhuFanSts = On Then Goto SetPID
+	SaTmpSpt_Min = 55
+	SaTmpSpt_Max = 120
+
+' --- State: PID Setup ---
+' Configure PID tuning parameters (response time, bias, and gains)
+' each time the routine (re)enters active control, then proceed to
+' run the PID calculation.
+SetPID:
+  RespTime = 3
+  Bias = 50
+  Kp = 5
+  Ki = (Kp / 100) * RespTime
+  Kd = Ki / 8
+  Goto CalculateOn
+
+' --- State: PID Calculation (Fan On) ---
+' Run the PID function against room temp vs. room temp setpoint to
+' produce the heating/cooling demand (0-100%), then move on to
+' update the SAT setpoint.
+CalculateOn:
+  HtgClgDmd = PIDfct(RmTmp,RmTmpSpt,kp,ki,kd,Bias,1,Lerr,Intg)
+  Goto UpdateStats
+
+' --- State: Update Setpoint ---
+' Calculate the SAT reset ratio and use it to translate heating/
+' cooling demand into a supply air temperature setpoint between
+' the min and max limits (higher demand -> lower SAT setpoint).
+' Then decide where to go next: keep re-running PID if it's time
+' for another sample and room temp is still off setpoint, or drop
+' back to the fan-off state if the fan has stopped.
+UpdateStats:
+  ResetRatio = (SaTmpSpt_Max-SaTmpSpt_Min)/100
+  SaTmpSpt = SaTmpSpt_Max -( ResetRatio * HtgClgDmd)
+  If TS > RespTime and abs(RmTmp-RmTmpSpt) > 0.1 then Goto CalculateOn
+  If AhuFanSts = Off Then Goto CalculateOff

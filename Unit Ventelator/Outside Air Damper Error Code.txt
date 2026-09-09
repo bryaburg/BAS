@@ -1,0 +1,6 @@
+Numeric Input OaDprPosOut, OaDprPosFbk
+Numeric Output OaDmpError
+
+
+CheckPosition:
+	If Abs(OaDprPosOut - OaDprPosFbk) <= 5 and TS > 30  Then OaDmpError = 1 Else OaDmpError = 0

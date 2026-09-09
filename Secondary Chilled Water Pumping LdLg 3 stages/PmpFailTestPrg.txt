@@ -1,0 +1,38 @@
+'PmpFailTestPrg
+'Built by Barbeau
+'Version 2020-09-29 1055
+'Th= program checks failure alarms and sets the correct failure flag.
+
+Numeric Input SecChwP01Falm, SecChwP02Falm, SecChwP03Falm, SecChwPmpLd, SecChwPmpLg1, SecChwPmpLg2
+Numeric Output LdPmpFalm, Lg1PmpFalm, Lg2PmpFalm, FalmQty
+
+Hold:
+If TS > 2 Then Goto FailCheck
+
+FailCheck:
+If SecChwPmpLd = 1 and SecChwP01Falm = On Then LdPmpFalm = On
+If SecChwPmpLd = 1 and SecChwP01Falm = Off Then LdPmpFalm = Off
+If SecChwPmpLd = 2 and SecChwP02Falm = On Then LdPmpFalm = On
+If SecChwPmpLd = 2 and SecChwP02Falm = Off Then LdPmpFalm = Off
+If SecChwPmpLd = 3 and SecChwP03Falm = On Then LdPmpFalm = On
+If SecChwPmpLd = 3 and SecChwP03Falm = Off Then LdPmpFalm = Off
+
+If SecChwPmpLg1 = 1 and SecChwP01Falm = On Then Lg1PmpFalm = On
+If SecChwPmpLg1 = 1 and SecChwP01Falm = Off Then Lg1PmpFalm = Off
+If SecChwPmpLg1 = 2 and SecChwP02Falm = On Then Lg1PmpFalm = On
+If SecChwPmpLg1 = 2 and SecChwP02Falm = Off Then Lg1PmpFalm = Off
+If SecChwPmpLg1 = 3 and SecChwP03Falm = On Then Lg1PmpFalm = On
+If SecChwPmpLg1 = 3 and SecChwP03Falm = Off Then Lg1PmpFalm = Off
+
+If SecChwPmpLg2 = 1 and SecChwP01Falm = On Then Lg2PmpFalm = On
+If SecChwPmpLg2 = 1 and SecChwP01Falm = Off Then Lg2PmpFalm = Off
+If SecChwPmpLg2 = 2 and SecChwP02Falm = On Then Lg2PmpFalm = On
+If SecChwPmpLg2 = 2 and SecChwP02Falm = Off Then Lg2PmpFalm = Off
+If SecChwPmpLg2 = 3 and SecChwP03Falm = On Then Lg2PmpFalm = On
+If SecChwPmpLg2 = 3 and SecChwP03Falm = Off Then Lg2PmpFalm = Off
+
+FalmQty = LdPmpFalm + Lg1PmpFalm + Lg2PmpFalm
+Goto Hold
+
+E:
+If TS > 30 Then Goto Hold

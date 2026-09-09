@@ -1,0 +1,26 @@
+Numeric Input LocalOAT,HWSTemp,HWSSP,SFanStatus,HWPump1Status,LoLimit
+Numeric Output HtgVlv
+Function PidLoop
+Numeric Kp,Ki,Kd,Bias,Lerr,Intg,Resptime
+
+Line ValveClosed
+  Set HtgVlv to 0.0
+  Set Intg to 0
+  Set Lerr to 0
+  Set RespTime to 3
+  If HWPump1Status is On or LoLimit is On then Goto PidSetup
+
+Line PIDSetup
+  Set Kp to 50/50 '50 degrees is the proportional range
+  Set Ki to Kp/100 * Resptime
+  Set Kd to Ki/8
+  Set Bias to 40 'Nominal valve position with no error 
+  Goto Modulating
+
+Line Modulating
+  Set HtgVlv to PIDLoop(HWSTemp,HWSSP,Kp,Ki,Kd,Bias,0,Lerr,Intg)
+  Goto CheckError
+
+Line CheckError
+  If HWPump1Status is Off and LoLimit is Off then Goto ValveClosed
+  If abs(HWSTemp - HWSSP)>=0.1 and TS>=RespTime then Goto Modulating

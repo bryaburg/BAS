@@ -1,0 +1,64 @@
+'FanSpdSigCtrl
+'Built by Barbeau
+'Version 2023-08-06 1007
+'Controls fan speed on pressure
+
+Numeric Kp, Ki, Kd, Bias, Intg, Lerr, RespTime, PIDOutput, Ramptime, FanRampup, SaFanMaxSpd, SaFanMinSpd
+Numeric Input SaFanEna, SaStPr, SaStPrSpt, SaFanSts
+Numeric Output FanSpdSig
+Function PidLoop
+
+Shutdown:
+  SaFanMinSpd = 20
+  SaFanMaxSpd = 100
+  FanSpdSig = 0
+  Resptime = 3
+  Ramptime = 25
+  FanRampup = 5
+  Intg = 0
+  Lerr = 0
+  If TS > 20 and SaFanEna = On Then Goto Startup
+
+Startup:
+  FanSpdSig = SaFanMinSpd
+  If SaFanEna = Off Then Goto Shutdown
+  If SaFanSts = On and TS>=Ramptime Then Goto Biasup
+
+Biasup:
+  FanSpdSig = (FanSpdSig + FanRampup)
+  Goto Delayup
+
+Delayup:
+  If SaFanSts = Off Then Goto Startup
+  If TS>=Ramptime Then Goto Biasup
+  If SaStPr > (SaStPrSpt * 0.9)Then Goto Setbias
+  If FanSpdSig >= SaFanMaxSpd - 5 Then Goto Setbias
+
+Setbias:
+  Bias = FanSpdSig
+  Goto Staticpid
+
+Staticpid:
+  Kp = 20
+  Ki = (Kp/100) * Resptime
+  Kd = Ki/8
+  PIDOutput = PidLoop(SaStPr, SaStPrSpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg)
+  FanSpdSig = Minimum(SaFanMaxSpd, Maximum(PIDOutput,SaFanMinSpd))
+  Goto Checkerror
+
+Checkerror:
+  If SaFanSts = Off Then Goto Startup
+  If SaFanEna = Off Then Goto Shutdown
+  If abs(SaStPr - SaStPrSpt) = 0.01 and TS>=Resptime Then Goto Staticpid
+  If SaStPr > (SaStPrSpt + .05) Then Goto Biasdn
+  If SaStPr < (SaStPrSpt - .05) Then Goto Biasup
+
+Biasdn:
+  FanSpdSig = (FanSpdSig - FanRampup)
+  Goto Delaydn
+
+Delaydn:
+  If SaFanSts = Off Then Goto Startup
+  If TS>=Ramptime Then Goto Biasdn
+  If SaStPr < (SaStPrSpt + .03) Then Goto Setbias
+  If FanSpdSig <= SaFanMinSpd + 5 Then Goto Setbias

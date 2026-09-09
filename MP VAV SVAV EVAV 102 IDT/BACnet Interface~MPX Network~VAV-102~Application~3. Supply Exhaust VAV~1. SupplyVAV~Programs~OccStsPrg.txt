@@ -1,0 +1,21 @@
+﻿'OccStsPrg
+'Built by Barbeau
+'Version 2023-08-18 1249
+'Sets occupancy status based upon multiple occupancy sources
+
+Numeric Input OccBMS, OccLocal, OccTemp, RmTmp, RmTmpSpt, Unocc_RmTmpDiff
+Numeric Output OccSts
+
+Unocc:
+  OccSts = Off
+  If (OccBMS = On or OccLocal = On or OccTemp = On) Then Goto Occ
+  If (Abs(RmTmp-RmTmpSpt) > Unocc_RmTmpDiff) Then Goto NightCycle
+
+Occ:
+	OccSts = On
+  If TS > 600 and (OccBMS = Off and OccLocal = Off and OccTemp = Off)Then Goto Unocc
+
+NightCycle:
+ OccSts = On
+ If (Abs(RmTmp-RmTmpSpt) < Unocc_RmTmpDiff - 2) Then Goto Unocc
+ If (OccBMS = On or OccLocal = On or OccTemp = On) Then Goto Occ

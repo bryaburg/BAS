@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectSet ExportMode="Special" Note="TypesFirst" SemanticsFilter="Special" Version="7.0.3.142">
+  <MetaInformation>
+    <ExportMode Value="Special"/>
+    <SemanticsFilter Value="None"/>
+    <RuntimeVersion Value="7.0.3.142"/>
+    <SourceVersion Value="7.0.3.142"/>
+    <ServerFullPath Value="/Server 1"/>
+  </MetaInformation>
+  <Types>
+    <ObjectType Name            = "udt.i2wcjnudpvpubf4rvh7g3i3jai.wj3w6t3v5qpxr24ttdg43dmftitofuui"
+                DisplayName     = ""
+                Description     = ""
+                Base            = "bacnet.mpx.program.script.Program"
+                Icon            = ""
+                Abstract        = "0"
+                Implements      = ""
+                DefaultProperty = ""
+                Version         = "1"
+                >
+      <PropertyTab Name = "BASIC">
+        <PropertyGroup Name = "StatusInformation">
+          <Parameter Name                  = "Complete"
+                     DisplayName           = "Compilation valid"
+                     Description           = "Tells if the program is complete and that it can be run by the device"
+                     Visibility            = "Summary"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.Boolean"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Value="1"/>
+          </Parameter>
+          <Parameter Name                  = "CompilerVersion"
+                     DisplayName           = "Compiler version"
+                     Description           = "Compiler version"
+                     Visibility            = "Normal"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.String"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Value="1"/>
+          </Parameter>
+        </PropertyGroup>
+        <PropertyGroup Name = "CONFIGURATION">
+          <Parameter Name                  = "CodeFile"
+                     DisplayName           = "Code file"
+                     Description           = "Code file"
+                     Visibility            = "Hidden"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.File"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Null="0">
+              <FileContents Size="2096"><![CDATA[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]]>
+              </FileContents>
+            </InitValue>
+          </Parameter>
+        </PropertyGroup>
+      </PropertyTab>
+      <PropertyTab Name = "InVarTab">
+        <PropertyGroup Name = "InVarGroup">
+          <Variable Name                  = "UnitState"
+                    DisplayName           = "UnitState"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "FlowSwitch"
+                    DisplayName           = "FlowSwitch"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "Lead_Boiler"
+                    DisplayName           = "Lead_Boiler"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "OaTmp"
+                    DisplayName           = "OaTmp"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "BlrAlm1"
+                    DisplayName           = "BlrAlm1"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "BlrAlm2"
+                    DisplayName           = "BlrAlm2"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "OaTmpShutdown"
+                    DisplayName           = "OaTmpShutdown"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+        </PropertyGroup>
+      </PropertyTab>
+      <PropertyTab Name = "OutVarTab">
+        <PropertyGroup Name = "OutVarGroup">
+          <Variable Name                  = "BlrEna1"
+                    DisplayName           = "BlrEna1"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "No"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "1"/>
+                <RetainLevel Configurable = "No" Value = "ColdStart"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "BlrEna2"
+                    DisplayName           = "BlrEna2"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "No"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "1"/>
+                <RetainLevel Configurable = "No" Value = "ColdStart"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+        </PropertyGroup>
+      </PropertyTab>
+
+
+    </ObjectType>
+    <ObjectType Name            = "udt.yb6v7wptnwfefoxbxyajp7d6je.q4aftst3iadl62ltzs6bzxqyo6zi3y46"
+                DisplayName     = ""
+                Description     = ""
+                Base            = "bacnet.mpx.program.script.Program"
+                Icon            = ""
+                Abstract        = "0"
+                Implements      = ""
+                DefaultProperty = ""
+                Version         = "1"
+                >
+      <PropertyTab Name = "BASIC">
+        <PropertyGroup Name = "StatusInformation">
+          <Parameter Name                  = "Complete"
+                     DisplayName           = "Compilation valid"
+                     Description           = "Tells if the program is complete and that it can be run by the device"
+                     Visibility            = "Summary"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.Boolean"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Value="1"/>
+          </Parameter>
+          <Parameter Name                  = "CompilerVersion"
+                     DisplayName           = "Compiler version"
+                     Description           = "Compiler version"
+                     Visibility            = "Normal"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.String"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Value="1"/>
+          </Parameter>
+        </PropertyGroup>
+        <PropertyGroup Name = "CONFIGURATION">
+          <Parameter Name                  = "CodeFile"
+                     DisplayName           = "Code file"
+                     Description           = "Code file"
+                     Visibility            = "Hidden"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.File"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Null="0">
+              <FileContents Size="1440"><![CDATA[H4sIAAAAAAAEAKVW2W7iSBR9bqT8A/LrSIMXILEELXnBxgQcbMA2fom8FIVD2Wa8JJivn1u4kxBa6ow0PFDbqXvuOVV1YbScPIUvKKq6Sp4eExJUSZ6t6ihCZTlmqqJGTFcNKqTsgwyjeMzw/SHH37N/C7zQ5wR2yPeZ7jzJkFmnISpUFJGguAQpJxnA79vVZZHjIkgnWVU0Y4Zlul8nOIHprqIiOVZtFqhwUFFCEFh6X2nTXDdHNGZEpnsF+Nn5MVLyGHXp1ySLiuZY0VR3ASnRV+Sska3Y5d6M6ew11jU2cMXa0M3XMLObkH/DoS5mgbsYGhNSB5593LqnI0qdszGNj7GO8WbqVJEine46hq6dDf1Etq5VGlM7990+3noOG/LcPtbJC+wskcU+AmMTCjbM0Sj2q6HJXOhJeJHIJE6d5q6DVrIZ8oPD1jtABAubL/nbQpHl9Upmw0ZOINI+TE0COXOQ5zF0NzjmnX2UyInv2YLvOrUxlbm7TujJ5zm+cM5gRxm7NokaeW+o27e5Z5ItL9a+Ih98iAisez+Ddchj65r5tSNU3Yz4qdj4K7nxPZMLXVL7jXwGRO3rswFlUa3jE3hJopS8UFXb9HTcNvLCd7WDx85eA/dE7jpRi/S2LoHYg8wT7FePa7n8dW4qmMz8RPZAReHr2sBQWeoNKLawo5PK34ipDfOQE10BJeDNJtBB8ySGKA94k4rsFs4q5PsQjX28Gg9VK5+t3C1e687e10Ql5El51/E9Ay9X0snQ2nOjKGVDz9LeWal4DHWnafOQaH5aOAX3JfZRscitukQSDXXSolL76AO/srnNa7CzdaeE873J72N+eNd5z9TRFniZSPytSofX4AbCKXAiG3Liqr1Tm/GoR289fQJyA8+UPoPrC798KZPlUFqy+cGU4MMWrE7bHW9pZ0lWaN/SLY21Ln3XXhinCy4/tG3Rt2kLpql/YZU1JMmQeuw/cbuTzolzSbVgYD5mFpYkrD70cqm3eovnSiBd5me/WlHGNJKk9wWQKVF0NJkr7e75etR7l0DlzPMoIE5QlPCs66y6VI0rZb2L5CSLkwx/g1rWIUmiaxB3Wz+uQF2pKIJmlZzRJZiSkzrN2uoG4CGdSUlbhnima0Cd6bMsAOcow9UeRtf1cMwMmK4ZpACeoyB+lnNa3KCkVQXkfbVlVYdtTAEGbW8AVW6TJZDucDAQ7tvBskC75PRVJn9R8GNkwHpCPSM1ujXhx6j3oZB68jkq6VCrs4gW7W+c9FJiwvF8g2or9TegeRAi8gEQfj+QC+DW/tZw7qvF9+8WuwEYkOHnKn+28wp+tZju025XIiBQqedBVZcXrtbg37P6Iyv/lZVj32kvXBDlk03g/j+dcEP3cEv3rCISNJ+kw4f/RDrqtdbT7rpIMEYFiv94WHBZfv1J+Nn5F+GMmtEwCAAA]]>
+              </FileContents>
+            </InitValue>
+          </Parameter>
+        </PropertyGroup>
+      </PropertyTab>
+      <PropertyTab Name = "InVarTab">
+        <PropertyGroup Name = "InVarGroup">
+        </PropertyGroup>
+      </PropertyTab>
+      <PropertyTab Name = "OutVarTab">
+        <PropertyGroup Name = "OutVarGroup">
+        </PropertyGroup>
+      </PropertyTab>
+      <PropertyTab Name = "PublicVarTab">
+        <PropertyGroup Name = "PublicVarGroup">
+          <Variable Name                  = "Lead_Boiler"
+                    DisplayName           = "Lead_Boiler"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "No"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "ColdStart"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+        </PropertyGroup>
+      </PropertyTab>
+
+
+    </ObjectType>
+    <ObjectType Name            = "udt.r7taaznwd7tuzlsxgjoymouvsy.vh24lj2anmcjsxztu56bu272pya3mplh"
+                DisplayName     = ""
+                Description     = ""
+                Base            = "bacnet.mpx.program.script.Program"
+                Icon            = ""
+                Abstract        = "0"
+                Implements      = ""
+                DefaultProperty = ""
+                Version         = "1"
+                >
+      <PropertyTab Name = "BASIC">
+        <PropertyGroup Name = "StatusInformation">
+          <Parameter Name                  = "Complete"
+                     DisplayName           = "Compilation valid"
+                     Description           = "Tells if the program is complete and that it can be run by the device"
+                     Visibility            = "Summary"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.Boolean"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Value="1"/>
+          </Parameter>
+          <Parameter Name                  = "CompilerVersion"
+                     DisplayName           = "Compiler version"
+                     Description           = "Compiler version"
+                     Visibility            = "Normal"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.String"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Value="1"/>
+          </Parameter>
+        </PropertyGroup>
+        <PropertyGroup Name = "CONFIGURATION">
+          <Parameter Name                  = "CodeFile"
+                     DisplayName           = "Code file"
+                     Description           = "Code file"
+                     Visibility            = "Hidden"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.File"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Null="0">
+              <FileContents Size="1652"><![CDATA[H4sIAAAAAAAEAN1Y23KqSBR9Plb5D5avVg03NVplThUXL5iEeEFAX6ag6SCxuQyXKPn62UDMQaPJeZiHOXlIpN0ra++1erMbMpgNH61njJKGGHihS8zEDfxlihCO49tmEqW42ZDMBItb03ewfdtk212GvWH+Yuh+t0uzvWbj3vWxknoWjiSMiBkVFPHQBzDDluFZFDiR6Q39JMpum3SzcfpFt99sLFHkhklZBI40HMXAAgzHSFmlmoX4tgnwCuBn7cdADGzcyH8NfRRlYZJX+mSSGJ8iVV9LNsY0XGfC1PIFxhaF2VpbJEjkHfnDD3JUTqMRS3abpbA1Ddmxx1qCxlpWr62NBYO8lSLuOoyla5mpPzhLvbO3jbmjsqOVZQjK2nDOWX152Gfs8eLF4kq2eg2JQmDqdiCPD6GlE1qah4+2zhDkkWd5SFI00Wj4q602ZvaqTtLzOqeZMLONxa5es9h+Jk8WxDJ4xxr3ud9hXLHboh6bbb8z1mtHzirjxoPrsfICyuKNsSDyRAkKDGenFzOMFAbUTYQYayXDWdUqNhR6o9MO4rQ9Gh868sTegidvGQVgG9G2MSU5e712if8X+6nbObttCHtrsiv3rOIx+HTNkzNGU29/xhgDE4fAaZKYxlwRHfqu0l+5f0U3zL1DtuLg+kJ/zb1+aBX9BG4SeyK8mHrnrDbol0nRqW/5yWqjw75VGKu1gU9vPfrWoQ5ioYfHkMcva5yzW7JmkyeNHYW2FMB3ZLpx3++D3rEz6rVqb6z1zk4eLVRZajsPr/zbuuoX78wu1iis6jVzrKXy0H6xxz1nzo7i9Z6+A5XSWj88P0JN4op4x7x5huodpI23xHJLZnD8VH//0p4t9MMr3LGX/HrH12uVvsk9EK3JVAWnaVmindVbR2q5lyOFRpPcOzKxuMWLPFSCja5EBmPDTJjfDqh87uRDSMhgTuaDqDpyZs+xM+vyM/q5fSNLra3Ul1uPGU8FDrUsYw/H2O4YC+fH2LqMqS2/XiujQ+ofnlq6qxXP89LyZb6GT4F6YndUwPeoYN9PFWah8kOZ52eCYKrA+toKpN50D0CeDgiYWFxF9EP+aT23HEBspS6iQqcH7C1KyLF3sJ73imxhzvDa8qX+vbiYQ0y5VwfUUW4u/T5AJtHMKIYhnPpJMeMrLlCFPa5vu75TRX0Y5FVUg48iM1u6r7igEwOSen550AC6k3/jkfJAgGNGhonfpmkA3mPfSbawqh5NxUmimB6AH03VC+FYSSLIUwEvU6tk44CuvOpAgSvfhUq7nQ53Uy5mEX5yD6cS2aL4HwMZ4m7uBElP24AeUNVYIZX6pfW/kM5clc6eSH8wD99QPXtVPXeq3vW/oXruqvr2ifrlNk3sYP8dLWhftaBztGCZhiHJVPwtb//OVf3dj/q/5wzoXrXg5oIFf/Yg6F624OaqBf2jBQKJlkmYfCqe+yPF964f/vTHBvh/mlBdxvl6llrERV88W41SH+Wv3V/ADI/ASxv+AlW+an8BujctTN4B7McHuQJwvnHlVjFnm/P+fCJuMdr9rZsubMzj01OMgbrdyTfJTNK4OMrLHflY0KcJ2bOE7yeCaBL0K9UN/VupBlQpPr9UI9dxcITtT+0aUMd/s/ys/QsjBEQHchEAAA==]]>
+              </FileContents>
+            </InitValue>
+          </Parameter>
+        </PropertyGroup>
+      </PropertyTab>
+      <PropertyTab Name = "InVarTab">
+        <PropertyGroup Name = "InVarGroup">
+          <Variable Name                  = "OaTmp"
+                    DisplayName           = "OaTmp"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "OaTmpMax"
+                    DisplayName           = "OaTmpMax"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "OaTmpMin"
+                    DisplayName           = "OaTmpMin"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "OaTmpShutdown"
+                    DisplayName           = "OaTmpShutdown"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "SupplyTemp"
+                    DisplayName           = "SupplyTemp"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "SupplyTempMax"
+                    DisplayName           = "SupplyTempMax"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "SupplyTempMin"
+                    DisplayName           = "SupplyTempMin"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "Application"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "0"/>
+                <RetainLevel Configurable = "No" Value = "No"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+        </PropertyGroup>
+      </PropertyTab>
+      <PropertyTab Name = "OutVarTab">
+        <PropertyGroup Name = "OutVarGroup">
+          <Variable Name                  = "BlrStpt"
+                    DisplayName           = "BlrStpt"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "No"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "1"/>
+                <RetainLevel Configurable = "No" Value = "ColdStart"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+          <Variable Name                  = "SupplyTempStpt"
+                    DisplayName           = "SupplyTempStpt"
+                    Description           = ""
+                    Visibility            = "Normal"
+                    Optional              = "0"
+                    VariableReference     = "No"
+                    ReadOnly              = "0"
+                    Static                = "0"
+                    Scope                 = "Dev"
+                    Copy                  = "1"
+                    Nullable              = "1"
+                    ObjectFilter          = "bacnet.ObjectProxy"
+                    >
+              <Type Configurable = "No" Value = "system.pt.Float"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitReference/>
+              <Runtime Nullable = "1">
+                <ReadOnly    Configurable = "No" Value = "1"/>
+                <RetainLevel Configurable = "No" Value = "ColdStart"/>
+                <Forceable   Configurable = "No" Value = "1"/>
+                <InitValue Null="1"/>
+              </Runtime>
+          </Variable>
+        </PropertyGroup>
+      </PropertyTab>
+
+
+    </ObjectType>
+
+  </Types>
+<ExportedObjects>
+  <OI NAME="Boiler Control" TYPE="system.base.Folder">
+    <OI NAME="Start_Stop" TYPE="udt.i2wcjnudpvpubf4rvh7g3i3jai.wj3w6t3v5qpxr24ttdg43dmftitofuui">
+      <PI Name="AlarmMessage" Value=""/>
+      <PI Name="BACnetTags" Null="1"/>
+      <PI Name="EventDetectionEnable" Value="1"/>
+      <PI Name="EventEnable" Value="0"/>
+      <PI Name="FaultMessage" Value=""/>
+      <PI Name="ForeignAddress" Value="&lt;program,      72&gt;"/>
+      <PI Name="NotifyType" Value="0"/>
+      <PI Name="ProfileLocation" Value=""/>
+      <PI Name="ReliabilityEvaluationInhibit" Value="0"/>
+      <PI Name="ResetMessage" Value=""/>
+    </OI>
+    <OI NAME="Rotation" TYPE="udt.yb6v7wptnwfefoxbxyajp7d6je.q4aftst3iadl62ltzs6bzxqyo6zi3y46">
+      <PI Name="AlarmMessage" Value=""/>
+      <PI Name="BACnetTags" Null="1"/>
+      <PI Name="EventDetectionEnable" Value="1"/>
+      <PI Name="EventEnable" Value="0"/>
+      <PI Name="FaultMessage" Value=""/>
+      <PI Name="ForeignAddress" Value="&lt;program,      73&gt;"/>
+      <PI Name="NotifyType" Value="0"/>
+      <PI Name="ProfileLocation" Value=""/>
+      <PI Name="ReliabilityEvaluationInhibit" Value="0"/>
+      <PI Name="ResetMessage" Value=""/>
+    </OI>
+    <OI NAME="Setpoint" TYPE="udt.r7taaznwd7tuzlsxgjoymouvsy.vh24lj2anmcjsxztu56bu272pya3mplh">
+      <PI Name="AlarmMessage" Value=""/>
+      <PI Name="BACnetTags" Null="1"/>
+      <PI Name="EventDetectionEnable" Value="1"/>
+      <PI Name="EventEnable" Value="0"/>
+      <PI Name="FaultMessage" Value=""/>
+      <PI Name="ForeignAddress" Value="&lt;program,      74&gt;"/>
+      <PI Name="NotifyType" Value="0"/>
+      <PI Name="ProfileLocation" Value=""/>
+      <PI Name="ReliabilityEvaluationInhibit" Value="0"/>
+      <PI Name="ResetMessage" Value=""/>
+    </OI>
+  </OI>
+</ExportedObjects>
+
+</ObjectSet>

@@ -1,0 +1,82 @@
+' Mixed-Air Damper Position Control
+' --------------------------------
+' Selects the outside-air damper position from unit state, mixed-air
+' temperature, and room CO2. The damper is limited to the configured minimum
+' and maximum positions.
+'
+' Inputs:
+'   UnitState    - AHU operating state; 0 = off, 4 = economizer
+'   MaTmp        - Mixed-air temperature
+'   MaTmpSpt     - Mixed-air temperature setpoint
+'   MinDprPosSpt - Minimum outside-air damper position
+'   MaxDprPosSpt - Maximum outside-air damper position
+'   RmC02        - Room CO2 concentration; 1000/1200 are the low/high
+'                  transition thresholds
+'
+' Output:
+'   MaDprPos     - Commanded outside-air damper position
+'
+' Control modes:
+'   Shutdown     - Closes the damper when the unit is off or mixed air is low
+'   MinPosition  - Holds minimum ventilation position
+'   MaxDprPosition - Holds maximum position while CO2 is high
+'   TempPID      - Modulates position for economizer temperature control
+'
+' Review note: Shutdown clears Lerr and Intg, and sets MaDprPos to zero on
+' every entry. If this program starts at Shutdown each scan, the PID's stored
+' derivative/integral state and its bias cannot persist between scans.
+
+Numeric Input UnitState, MaTmp, MaTmpSpt
+Numeric Input MinDprPosSpt, MaxDprPosSpt
+Numeric Input RmC02
+Numeric Output MaDprPos
+Function PidFct
+Numeric Kp, Ki, Kd, Lerr, Bias, Intg, PIDOutput, Resptime, PIDResult, DampStep, DampRampTime
+
+Shutdown:
+  ' Establish the fail-safe off position and reset PID state.
+  MaDprPos = 0
+  Resptime = 5
+  Lerr = 0
+  Intg = 0
+  ' Economizer control is only available while the unit is running and mixed
+  ' air is above its setpoint.
+  If UnitState <> 0 and MaTmp > MaTmpSpt Then Goto PIDSetup
+
+MinPosition:
+  ' Normal ventilation position unless CO2 requires more outside air.
+  MaDprPos = MinDprPosSpt
+  If RmC02 > 1200 Then Goto MaxDprPosition
+  If UnitState = 4 and MaTmp > MaTmpSpt Then Goto TempPID
+  If UnitState = 0 or MaTmp < (MaTmpSpt - 10) Then Goto Shutdown
+
+MaxDprPosition:
+  ' Hold maximum outside air until CO2 has returned below the low threshold.
+  MaDprPos = MaxDprPosSpt
+  If RmC02 < 1000 Then Goto MinPosition
+  If UnitState = 0 Then Goto Shutdown
+
+PIDSetup:
+  ' Tune the mixed-air PID and use the current damper command as its bias.
+  Kp = 5.0
+  Ki = KP/100 * Resptime
+  Kd = Ki/8
+  Bias = MaDprPos
+Goto MinPosition
+
+TempPID:
+  ' Direct action: a mixed-air temperature above setpoint increases damper
+  ' position, subject to the configured minimum and maximum limits.
+  If RmC02 > 1200 Then Goto MaxDprPosition
+  If UnitState <> 4 Then Goto MinPosition
+  PIDResult = PidFct(MaTmp, MaTmpSpt, Kp, Ki, Kd, Bias, 1, Lerr, Intg)
+  MaDprPos = Minimum(Maximum(PIDResult, MinDprPosSpt), MaxDprPosSpt)
+  Goto Checkerror
+
+Checkerror:
+  ' Recalculate only after the response interval and while the economizer
+  ' remains active; the other conditions return to the appropriate mode.
+  If RmC02 > 1200 Then Goto MaxDprPosition
+  If UnitState = 0 or MaTmp < (MaTmpSpt - 10) Then Goto Shutdown
+  If UnitState <> 4 Then Goto MinPosition
+  If (abs(MaTmp - MaTmpSpt) >= 0.5) And TS >= Resptime Then Goto TempPID

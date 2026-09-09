@@ -1,0 +1,5 @@
+' Supply fan proof is true when either redundant fan status input is true.
+Numeric Input SaFanSts1, SaFanSts2
+Numeric Output SaFanSts
+
+SaFanSts = SaFanSts1 or SaFanSts2

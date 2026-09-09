@@ -1,0 +1,15 @@
+﻿'VelPrAvgPrg
+'Built by Barbeau
+'Version 2023-08-12 1106
+'Averages Velocity Pressure
+
+Numeric Input EaVelPr
+Numeric Output EaVelPr_Avg
+Function InputFilterFct
+
+Hold:
+  If TS > 2 Then Goto Calculating
+
+Calculating:
+  EaVelPr_Avg = InputFilterFct(EaVelPr, EaVelPr_Avg, .25)
+  Goto Hold

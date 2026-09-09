@@ -1,0 +1,8 @@
+' Return-air damper complement logic: as the mixed-air/outside-air damper
+' opens, the return-air damper closes and the exhaust-air damper opens.
+Numeric Input MaDprPos
+
+Numeric Output RaDprPosOut, EaDprPosOut
+
+RaDprPosOut = (100 - MaDprPos)
+EaDprPosOut = MaDprPos

@@ -1,0 +1,24 @@
+﻿'This program monitors the Override button on the Stat controlling the Vav Box and starts
+'the Ahu if the unit is not running on schedule. The Override time is another adjustable
+'setpoint in each Vav box.
+
+Numeric Input RmTemp,OverrideTime
+Numeric Output VavOverride
+
+Line CheckStatus
+  WriteProperty(VavOverride,Off,16)
+  Goto OverrideOff
+
+Line OverrideOff
+  If RmTemp>150 then Goto OverrideOn
+
+Line OverrideOn
+  WriteProperty(VavOverride,On,16)
+  If TM>=OverrideTime then Goto OverrideReset
+
+Line OverrideReset
+  WriteProperty(VavOverride,Off,16)
+  Goto OverrideOff
+
+Line E
+  If TS>=10 then Goto CheckStatus

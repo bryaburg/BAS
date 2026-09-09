@@ -1,0 +1,56 @@
+﻿'VAV Mode Program
+'Built by JMartinez
+'Version 2023-07-05
+'Sets the VAV mode based on room temp
+
+Numeric Input HtgClgDmd, HtgBias,ClgBias, RmTmp, RmTmpSpt, Unocc_RmTmpDiff
+Numeric Input OccCmd, OvrCmd
+Numeric Output VAVMd
+Numeric BiasDiff
+
+'1 Cooling
+'2 Heating
+'3 Maintaining
+'4 Unoccupied
+'5 Cooling Unoccupied
+'6 Heating Unoccupied
+
+Init:
+  BiasDiff = .1
+	If OccCmd = On And HtgClgDmd > (ClgBias + BiasDiff) Then Goto Cooling
+	If OccCmd = On And HtgClgDmd < (HtgBias - BiasDiff) Then Goto Heating
+  If OvrCmd = On And HtgClgDmd > (ClgBias + BiasDiff) Then Goto Cooling
+	If OvrCmd = On And HtgClgDmd < (HtgBias - BiasDiff) Then Goto Heating
+	If OccCmd = Off And RmTmp > (RmTmpSpt + Unocc_RmTmpDiff) Then Goto Unocc_Cooling
+	If OccCmd = Off And RmTmp < (RmTmpSpt - Unocc_RmTmpDiff) Then Goto Unocc_Heating
+  If OccCmd = On Then Goto Maintaining Else Goto Unoccupied
+
+Cooling:
+	VAVMd = 1
+	If OccCmd = Off or HtgClgDmd < (ClgBias - BiasDiff) Then Goto Init
+
+Heating:
+	VAVMd = 2
+	If OccCmd = Off or HtgClgDmd > (HtgBias + BiasDiff) Then Goto Init
+
+Maintaining:
+	VAVMd = 3
+	If OccCmd = On And HtgClgDmd > (ClgBias + BiasDiff) Then Goto Init
+	If OccCmd = On And HtgClgDmd < (HtgBias - BiasDiff) Then Goto Init
+  If OccCmd = Off Then Goto Unoccupied
+
+Unoccupied:
+	VAVMd = 4
+	If OccCmd = Off And RmTmp > (RmTmpSpt + Unocc_RmTmpDiff) Then Goto Unocc_Cooling
+	If OccCmd = Off And RmTmp < (RmTmpSpt - Unocc_RmTmpDiff) Then Goto Unocc_Heating
+  If OccCmd = On Then Goto Init
+	
+Unocc_Cooling:
+	VAVMd = 5
+	If OccCmd = Off And RmTmp < (RmTmpSpt + Unocc_RmTmpDiff - .5) Then Goto Unoccupied
+  If OccCmd = On Then Goto Init
+
+Unocc_Heating:
+	VAVMd = 6
+	If OccCmd = Off And RmTmp > (RmTmpSpt - Unocc_RmTmpDiff + .5) Then Goto Unoccupied
+  If OccCmd = On Then Goto Init

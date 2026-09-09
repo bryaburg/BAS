@@ -1,0 +1,213 @@
+'ChangeLeads 
+'Built by Barbeau
+'Version 2020-09-29 1055
+'Changes leads based upon input 
+
+Numeric Input ChgLd, SecChwP01RnTm, SecChwP02RnTm, SecChwP03RnTm
+Numeric Output SecChwPmpLd, SecChwPmpLg1, SecChwPmpLg2, Seq
+Numeric Output Sts123, Sts132, Sts213, Sts231, Sts312, Sts321
+Numeric Public Btn123, Btn132, Btn213, Btn231, Btn312, Btn321
+
+Run123:
+Sts123 = On
+Sts132 = Off
+Sts213 = Off
+Sts231 = Off
+Sts312 = Off
+Sts321 = Off
+If Btn123 = On Then Goto Set123
+If Btn132 = On Then Goto Set132
+If Btn213 = On Then Goto Set213
+If Btn231 = On Then Goto Set231
+If Btn312 = On Then Goto Set312
+If Btn321 = On Then Goto Set321
+SecChwPmpLd = 1
+SecChwPmpLg1 = 2
+SecChwPmpLg2 = 3
+Seq = 123
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP03RnTm Then Goto Set123
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP02RnTm Then Goto Set132
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP03RnTm Then Goto Set213
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP01RnTm Then Goto Set231
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP02RnTm Then Goto Set312
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP01RnTm Then Goto Set321
+
+
+
+Run132:
+Sts123 = Off
+Sts132 = On
+Sts213 = Off
+Sts231 = Off
+Sts312 = Off
+Sts321 = Off
+If Btn123 = On Then Goto Set123
+If Btn132 = On Then Goto Set132
+If Btn213 = On Then Goto Set213
+If Btn231 = On Then Goto Set231
+If Btn312 = On Then Goto Set312
+If Btn321 = On Then Goto Set321
+SecChwPmpLd = 1
+SecChwPmpLg1 = 3
+SecChwPmpLg2 = 2
+Seq = 132
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP03RnTm Then Goto Set123
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP02RnTm Then Goto Set132
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP03RnTm Then Goto Set213
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP01RnTm Then Goto Set231
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP02RnTm Then Goto Set312
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP01RnTm Then Goto Set321
+
+
+Run213:
+Sts123 = Off
+Sts132 = Off
+Sts213 = On
+Sts231 = Off
+Sts312 = Off
+Sts321 = Off
+If Btn123 = On Then Goto Set123
+If Btn132 = On Then Goto Set132
+If Btn213 = On Then Goto Set213
+If Btn231 = On Then Goto Set231
+If Btn312 = On Then Goto Set312
+If Btn321 = On Then Goto Set321
+SecChwPmpLd = 2
+SecChwPmpLg1 = 1
+SecChwPmpLg2 = 3
+Seq = 213
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP03RnTm Then Goto Set123
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP02RnTm Then Goto Set132
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP03RnTm Then Goto Set213
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP01RnTm Then Goto Set231
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP02RnTm Then Goto Set312
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP01RnTm Then Goto Set321
+
+
+Run231:
+Sts123 = Off
+Sts132 = Off
+Sts213 = Off
+Sts231 = On
+Sts312 = Off
+Sts321 = Off
+If Btn123 = On Then Goto Set123
+If Btn132 = On Then Goto Set132
+If Btn213 = On Then Goto Set213
+If Btn231 = On Then Goto Set231
+If Btn312 = On Then Goto Set312
+If Btn321 = On Then Goto Set321
+SecChwPmpLd = 2
+SecChwPmpLg1 = 3
+SecChwPmpLg2 = 1
+Seq = 231
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP03RnTm Then Goto Set123
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP02RnTm Then Goto Set132
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP03RnTm Then Goto Set213
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP01RnTm Then Goto Set231
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP02RnTm Then Goto Set312
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP01RnTm Then Goto Set321
+
+
+Run312:
+Sts123 = Off
+Sts132 = Off
+Sts213 = Off
+Sts231 = Off
+Sts312 = On
+Sts321 = Off
+If Btn123 = On Then Goto Set123
+If Btn132 = On Then Goto Set132
+If Btn213 = On Then Goto Set213
+If Btn231 = On Then Goto Set231
+If Btn312 = On Then Goto Set312
+If Btn321 = On Then Goto Set321
+SecChwPmpLd = 3
+SecChwPmpLg1 = 1
+SecChwPmpLg2 = 2
+Seq = 312
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP03RnTm Then Goto Set123
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP02RnTm Then Goto Set132
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP03RnTm Then Goto Set213
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP01RnTm Then Goto Set231
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP02RnTm Then Goto Set312
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP01RnTm Then Goto Set321
+
+
+Run321:
+Sts123 = Off
+Sts132 = Off
+Sts213 = Off
+Sts231 = Off
+Sts312 = Off
+Sts321 = On
+If Btn123 = On Then Goto Set123
+If Btn132 = On Then Goto Set132
+If Btn213 = On Then Goto Set213
+If Btn231 = On Then Goto Set231
+If Btn312 = On Then Goto Set312
+If Btn321 = On Then Goto Set321
+SecChwPmpLd = 3
+SecChwPmpLg1 = 2
+SecChwPmpLg2 = 1
+Seq = 321
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP03RnTm Then Goto Set123
+If TS > 30 and ChgLd = On and SecChwP01RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP02RnTm Then Goto Set132
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP03RnTm Then Goto Set213
+If TS > 30 and ChgLd = On and SecChwP02RnTm < SecChwP03RnTm and SecChwP03RnTm < SecChwP01RnTm Then Goto Set231
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP01RnTm and SecChwP01RnTm < SecChwP02RnTm Then Goto Set312
+If TS > 30 and ChgLd = On and SecChwP03RnTm < SecChwP02RnTm and SecChwP02RnTm < SecChwP01RnTm Then Goto Set321
+
+Set123:
+Btn123 = Off
+Btn132 = Off
+Btn213 = Off
+Btn231 = Off
+Btn312 = Off
+Btn321 = Off
+Goto Run123
+
+Set132:
+Btn123 = Off
+Btn132 = Off
+Btn213 = Off
+Btn231 = Off
+Btn312 = Off
+Btn321 = Off
+Goto Run132
+
+Set213:
+Btn123 = Off
+Btn132 = Off
+Btn213 = Off
+Btn231 = Off
+Btn312 = Off
+Btn321 = Off
+Goto Run213
+
+Set231:
+Btn123 = Off
+Btn132 = Off
+Btn213 = Off
+Btn231 = Off
+Btn312 = Off
+Btn321 = Off
+Goto Run231
+
+Set312:
+Btn123 = Off
+Btn132 = Off
+Btn213 = Off
+Btn231 = Off
+Btn312 = Off
+Btn321 = Off
+Goto Run312
+
+Set321:
+Btn123 = Off
+Btn132 = Off
+Btn213 = Off
+Btn231 = Off
+Btn312 = Off
+Btn321 = Off
+Goto Run321

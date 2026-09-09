@@ -1,0 +1,32 @@
+'ChwVlvCtrl
+'Built by Barbeau
+'Version 2020-12-30 1223
+'Controls valve on supply temp setpoint
+
+Numeric Input ClgEna, SaTmp, SaTmpSpt, SaFanSts
+Numeric Output ChwVlv
+Function PidFct
+Numeric Kp,Ki,Kd,Bias,Lerr,Intg,Resptime
+
+Shutdown:
+  ChwVlv = 0.0
+  Intg = 0
+  Lerr = 0
+  RespTime = 3
+  If ClgEna = On and SaTmp > SaTmpSpt then Goto PidSetup
+
+PIDSetup:
+  Kp = 5
+  Ki = Kp/100 * Resptime
+  Kd = Ki/8
+  Bias = 50
+  Goto Modulating
+
+Modulating:
+  ChwVlv = PIDFct(SaTmp,SaTmpSpt,Kp,Ki,Kd,Bias,1,Lerr,Intg)
+  Goto CheckError
+
+CheckError:
+  If ClgEna = Off or SaTmp < (SaTmpSpt - 10) then Goto Shutdown
+  If abs(SaTmp - SaTmpSpt)>=0.1 and TS>=RespTime then Goto Modulating
+  

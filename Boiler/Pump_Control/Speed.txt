@@ -1,0 +1,31 @@
+Numeric Input P1Sts, P2Sts,DifPr, DifPrSP, MaxPumpTime
+Numeric Output P1Spd, P2Spd, PumpMaxAlarm
+
+Function Pid_Loop
+Numeric Kp, Ki, Kd, Bias, Lerr, Intg, PSpd
+
+Initialize:
+	Kp = 0.5
+	Ki = 0.1
+	Kd = 0.02
+	Bias = 30
+	GoTo Pump_Off
+
+Pump_Off:
+	Lerr = 0
+	Intg = 0
+	P1Spd = 0
+	P2Spd = 0
+	PSpd = 0
+	If P1Sts = 1 or P2Sts = 1 Then Goto Modulating
+
+Modulating:
+	PSpd = Pid_Loop(DifPr, DifPrSP, Kp, Ki, Kd, Bias, 1, Lerr, Intg)
+  Goto Wait_Check
+
+Line Wait_Check 
+	If P1Sts = 1 Then P1Spd = PSpd Else P1Spd = 0
+	If P2Sts = 1 Then P2Spd = PSpd Else P2Spd = 0
+	If TS > 4 and Abs(DifPr - DifPrSP ) >= 0.1  Then Goto Modulating
+	If PSpd >= 99.0 and TM > MaxPumpTime and DifPr < DifPrSP Then PumpMaxAlarm = 1 Else PumpMaxAlarm = 0
+	If P1Sts = 0 and P2Sts = 0 Then Goto Pump_Off

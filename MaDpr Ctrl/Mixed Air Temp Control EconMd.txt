@@ -1,0 +1,49 @@
+'Mixed Air Control 
+'Built by Barbeau
+'Version 2023-11-02 0750
+'Controls Mixed air temperature signal 
+
+Numeric Input SaFanSts, MaTmp, MaTmpSpt, EconMd
+Numeric Input MinDprPosSpt, MaxDprPosSpt
+Numeric Output MaDprPos
+Function PidFct
+
+Numeric Kp, Ki, Kd, Lerr, Bias, Intg, PIDOutput, Resptime, PIDResult, DampStep, DampRampTime
+
+Shutdown:
+  MaDprPos = 0.0
+  Resptime = 3
+  DampStep = 10.0
+  DampRampTime = 40
+  Intg = 0
+  If SaFanSts = On and MaTmp > MaTmpSpt Then Goto MinPosition
+
+MinPosition:
+  MaDprPos = MinDprPosSpt
+  If EconMd = On and MaTmp > MaTmpSpt Then goto DampStep
+  If SaFanSts = Off or MaTmp < (MaTmpSpt - 10) Then Goto Shutdown
+
+DampStep:
+  MaDprPos = (MaDprPos + DampStep)
+  Goto DampRampWait
+
+DampRampWait:
+  If TS >= DampRampTime Then goto DampStep
+  If SaFanSts = Off or EconMd = Off Then goto Shutdown
+  If MaTmp <= MaTmpSpt Or MaDprPos >= 90 Then goto PIDSetup
+
+PIDSetup:
+  Kp = 5.0
+  Ki = KP/100 * Resptime
+  Kd = Ki/8
+  Bias = MaDprPos
+Goto TempPID
+  
+TempPID:
+  PIDResult = PidFct(MaTmp, MaTmpSpt, Kp, Ki, Kd, Bias, 1, Lerr, Intg)
+  MaDprPos = Minimum(Maximum(PIDResult,MinDprPosSpt),MaxDprPosSpt)
+  Goto Checkerror
+
+Checkerror:
+  If SaFanSts = Off or EconMd = Off or MaTmp < (MaTmpSpt - 10) Then Goto Shutdown
+  If (abs(MaTmp - MaTmpSpt) >= 0.5) And TS >= Resptime Then Goto TempPID

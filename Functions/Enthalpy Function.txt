@@ -1,0 +1,14 @@
+Arg 1 DryBulbTemp
+Arg 2 RelHumidity
+
+Numeric X, OAEnthalpy
+
+X = 273.16 / ((DryBulbTemp - 32) / 1.8 + 273.16)
+X = -10.7959 * (1 - X) - (2.1836 * ln(X)) + 2.2196
+X = 29.92 * (1 / exp(2.3026 * X))
+X = RelHumidity * X / 100
+X = 0.622 * X / (29.92 - X)
+
+OAEnthalpy = (0.24 + (0.444 * X)) * DryBulbTemp + (1061 * X)
+
+Return OAEnthalpy

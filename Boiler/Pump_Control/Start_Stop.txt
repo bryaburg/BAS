@@ -1,0 +1,7 @@
+Numeric Input P1Alm, P2Alm, Lead_Pump
+Numeric Output P1Ena, P2Ena
+
+
+Pump_Running:
+	If (Lead_Pump = 1 and P1Alm = 0) or (P2Alm = 1) Then P1Ena = 1 Else P1Ena = 0
+	If (Lead_Pump = 2 and P2Alm = 0) or (P1Alm = 1) Then P2Ena = 1 Else P2Ena = 0

@@ -1,0 +1,35 @@
+'CfmSptCalcs
+'Built by Barbeau
+'Version 2023-06-06 1735
+'Calculates setpoint based upon mode
+'Heat Cool Demand must go below HtgBias to enter heating ramp
+'Heat Cool Demand must go above ClgBias to enter cooling ramp
+
+Numeric Input ClgMaxCFM, ClgMinCFM, HtgMaxCFM ,HtgMinCFM, HwAvail, HtgBias, ClgBias
+Numeric Input HtgClgDmd, AhuSts, Occupancy
+Numeric Output CfmSpt, CfmPct
+Function ResetFct
+
+CalcOff:
+  CfmSpt = ClgMinCFM
+  CfmPct = 0
+  If AhuSts = On and Occupancy = On Then Goto ZeroBand
+
+ZeroBand:
+  CfmSpt = ClgMinCFM
+  CfmPct = 0
+  If HtgClgDmd > ClgBias Then Goto ClgBias
+  If HtgClgDmd < HtgBias Then Goto HtgBias
+  If AhuSts = Off or Occupancy = Off Then Goto CalcOff
+
+HtgBias:
+  If HwAvail = On Then CfmSpt = ResetFct(HtgMaxCFM, HtgMinCFM, HtgBias, 0, 0, HtgClgDmd) Else CfmSpt = HtgMinCFM
+  CfmPct = HtgMaxCFM / CfmSpt * 100
+  If HtgClgDmd > HtgBias Then Goto ZeroBand
+  If AhuSts = Off or Occupancy = Off Then Goto CalcOff
+
+ClgBias:
+  CfmSpt = ResetFct(ClgMaxCFM, ClgMinCFM, 100, ClgBias, 1, HtgClgDmd)
+  CfmPct = ClgMaxCFM / CfmSpt * 100
+  If HtgClgDmd < ClgBias Then Goto ZeroBand
+  If AhuSts = Off or Occupancy = Off Then Goto CalcOff

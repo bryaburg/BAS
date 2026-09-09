@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectSet ExportMode="Standard" Note="TypesFirst" SemanticsFilter="Standard" Version="6.0.3.112">
+  <MetaInformation>
+    <ExportMode Value="Standard"/>
+    <SemanticsFilter Value="None"/>
+    <RuntimeVersion Value="6.0.3.112"/>
+    <SourceVersion Value="6.0.3.112"/>
+    <ServerFullPath Value="/DTO-ES"/>
+  </MetaInformation>
+  <Types>
+    <ObjectType Name            = "udt.6jgfvqjegiveti4jehwvc4mt44.e33ummqoxbug4abt5p5iqm472k4k6rae"
+                DisplayName     = ""
+                Description     = ""
+                Base            = "script.Function"
+                Icon            = ""
+                Abstract        = "0"
+                Implements      = ""
+                DefaultProperty = ""
+                Version         = "1"
+                >
+      <PropertyTab Name = "BASIC">
+        <PropertyGroup Name = "StatusInformation">
+          <Parameter Name                  = "File"
+                     DisplayName           = "File"
+                     Description           = "Script Function file"
+                     Visibility            = "Hidden"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.String"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Value="&lt;PEObject CompilationSuccess=&quot;true&quot; DateChanged=&quot;2461209.370743906&quot; LineNumberDeclarationsEnd=&quot;11&quot; LineProgramEntry=&quot;0&quot; ProgramEntry=&quot;38&quot; ScriptCompilerVersion=&quot;1&quot; ScriptObjectType=&quot;2&quot; Version=&quot;1&quot;&gt;&#xA; &lt;Code CodeEncrypted=&quot;false&quot; Version=&quot;1&quot;&gt;JyBGdW5jdGlvbjogQ2FsY3VsYXRlTWVkaWFuDQonIElucHV0czogTnVtZXJpYyBBcnJheSBW&#xD;&#xA;YWx1ZXNbXSwgTnVtZXJpYyBDb3VudA0KQXJnIDEgVmFsdWVzDQpBcmcgMiBDb3VudA0KDQpO&#xD;&#xA;dW1lcmljIGksIGosIHRlbXAsIE1pZFZhbA0KTnVtZXJpYyBSZXN1bHQNCk51bWVyaWMgTG9j&#xD;&#xA;YWxBcnJbMTAwXSAnIExvY2FsIHdyaXRlYWJsZSBhcnJheSB0byBhbGxvdyBzb3J0aW5nDQoN&#xD;&#xA;CicgU3RlcCAxOiBDb3B5IGluY29taW5nIEFyZyBhcnJheSB0byBsb2NhbCBhcnJheQ0KRm9y&#xD;&#xA;IGkgPSAxIFRvIENvdW50DQogIExvY2FsQXJyW2ldID0gVmFsdWVzW2ldDQpOZXh0IGkNCg0K&#xD;&#xA;JyBTdGVwIDI6IFNvcnQgdGhlIGxvY2FsIGVsZW1lbnRzIChCdWJibGUgU29ydCkNCkZvciBp&#xD;&#xA;ID0gMSBUbyBDb3VudCAtIDENCiAgRm9yIGogPSBpICsgMSBUbyBDb3VudA0KICAgIElmIExv&#xD;&#xA;Y2FsQXJyW2ldID4gTG9jYWxBcnJbal0gVGhlbg0KICAgICAgdGVtcCA9IExvY2FsQXJyW2ld&#xD;&#xA;DQogICAgICBMb2NhbEFycltpXSA9IExvY2FsQXJyW2pdDQogICAgICBMb2NhbEFycltqXSA9&#xD;&#xA;IHRlbXANCiAgICBFbmRJZg0KICBOZXh0IGoNCk5leHQgaQ0KDQonIFN0ZXAgMzogRGV0ZXJt&#xD;&#xA;aW5lIE1lZGlhbiBiYXNlZCBvbiBFdmVuIG9yIE9kZCBDb3VudA0KSWYgKENvdW50IE1vZCAy&#xD;&#xA;KSA9IDEgVGhlbg0KICBNaWRWYWwgPSAoQ291bnQgKyAxKSAvIDINCiAgUmVzdWx0ID0gTG9j&#xD;&#xA;YWxBcnJbTWlkVmFsXQ0KRWxzZQ0KICBNaWRWYWwgPSBDb3VudCAvIDINCiAgUmVzdWx0ID0g&#xD;&#xA;KExvY2FsQXJyW01pZFZhbF0gKyBMb2NhbEFycltNaWRWYWwgKyAxXSkgLyAyDQpFbmRJZg0K&#xD;&#xA;DQpSZXR1cm4gUmVzdWx0&lt;/Code&gt;&#xA; &lt;ByteCode Version=&quot;1&quot;&gt;SgHSSgLSPjs/AAA/AQA/AgA/AwDSPjs/BADSPjtBBQBCAADIQtK1PwAAQgAAgD9MArfSp01M&#xD;&#xA;AT8AAEEFAD8AANK4EwAAAAQAAAA/AADStT8AAEIAAIA/VkwCQgAAgD+30rU/AQBUPwAAQgAA&#xD;&#xA;gD9MArfSvicAAABuQQUAPwAAQQUAPwEA0qdBBQA/AAA/AgDSp0EFAD8BAEEFAD8AANKnPwIA&#xD;&#xA;QQUAPwEA0sHSuD4AAAAEAAAAPwEA0rhcAAAABAAAAD8AANK+JgAAAGRQX0wCQgAAAEBCAACA&#xD;&#xA;P9KnXFBUTAJCAACAP0IAAABAPwMA0qdBBQA/AwA/BADSwC8AAADSp1xMAkIAAABAPwMA0qdc&#xD;&#xA;UFRBBQA/AwBBBQBUPwMAQgAAgD9CAAAAQD8EANLB0qA/BADS0w==&lt;/ByteCode&gt;&#xA; &lt;LocalVars Count=&quot;6&quot; Version=&quot;1&quot;&gt;&#xA;  &lt;LocalVar ArraySize=&quot;0&quot; ColumnNumber=&quot;9&quot; Id=&quot;0&quot; Length=&quot;4&quot; LineNumber=&quot;6&quot; Name=&quot;i&quot; StringLength=&quot;4&quot; SubType=&quot;0&quot; Type=&quot;59&quot; Version=&quot;1&quot;/&gt;&#xA;  &lt;LocalVar ArraySize=&quot;0&quot; ColumnNumber=&quot;12&quot; Id=&quot;1&quot; Length=&quot;4&quot; LineNumber=&quot;6&quot; Name=&quot;j&quot; StringLength=&quot;4&quot; SubType=&quot;0&quot; Type=&quot;59&quot; Version=&quot;1&quot;/&gt;&#xA;  &lt;LocalVar ArraySize=&quot;0&quot; ColumnNumber=&quot;15&quot; Id=&quot;2&quot; Length=&quot;4&quot; LineNumber=&quot;6&quot; Name=&quot;temp&quot; StringLength=&quot;4&quot; SubType=&quot;0&quot; Type=&quot;59&quot; Version=&quot;1&quot;/&gt;&#xA;  &lt;LocalVar ArraySize=&quot;0&quot; ColumnNumber=&quot;21&quot; Id=&quot;3&quot; Length=&quot;4&quot; LineNumber=&quot;6&quot; Name=&quot;MidVal&quot; StringLength=&quot;4&quot; SubType=&quot;0&quot; Type=&quot;59&quot; Version=&quot;1&quot;/&gt;&#xA;  &lt;LocalVar ArraySize=&quot;0&quot; ColumnNumber=&quot;9&quot; Id=&quot;4&quot; Length=&quot;4&quot; LineNumber=&quot;7&quot; Name=&quot;Result&quot; StringLength=&quot;4&quot; SubType=&quot;0&quot; Type=&quot;59&quot; Version=&quot;1&quot;/&gt;&#xA;  &lt;LocalVar ArraySize=&quot;100&quot; ColumnNumber=&quot;9&quot; Id=&quot;5&quot; Length=&quot;4&quot; LineNumber=&quot;8&quot; Name=&quot;LocalArr&quot; StringLength=&quot;4&quot; SubType=&quot;0&quot; Type=&quot;59&quot; Version=&quot;1&quot;/&gt;&#xA; &lt;/LocalVars&gt;&#xA; &lt;BindingVars Count=&quot;0&quot; Version=&quot;1&quot;/&gt;&#xA; &lt;PublicVars Count=&quot;0&quot; Version=&quot;1&quot;/&gt;&#xA; &lt;FunctionVars Count=&quot;0&quot; Version=&quot;1&quot;/&gt;&#xA; &lt;XmlNodeVars Count=&quot;0&quot; Version=&quot;1&quot;/&gt;&#xA; &lt;ObjectVars Count=&quot;0&quot; Version=&quot;1&quot;/&gt;&#xA; &lt;FunctionArgs Count=&quot;2&quot; Version=&quot;1&quot;&gt;&#xA;  &lt;FunctionArg ColumnNumber=&quot;7&quot; Id=&quot;1&quot; LineNumber=&quot;3&quot; Name=&quot;Values&quot; Type=&quot;0&quot; Version=&quot;1&quot;/&gt;&#xA;  &lt;FunctionArg ColumnNumber=&quot;7&quot; Id=&quot;2&quot; LineNumber=&quot;4&quot; Name=&quot;Count&quot; Type=&quot;0&quot; Version=&quot;1&quot;/&gt;&#xA; &lt;/FunctionArgs&gt;&#xA;&lt;/PEObject&gt;&#xA;"/>
+          </Parameter>
+          <Parameter Name                  = "Complete"
+                     DisplayName           = "Compilation valid"
+                     Description           = "Tells if the function is complete and that it can be run by the server"
+                     Visibility            = "Summary"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.Boolean"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Value="1"/>
+          </Parameter>
+          <Parameter Name                  = "CompilerVersion"
+                     DisplayName           = "Compiler version"
+                     Description           = "Compiler version"
+                     Visibility            = "Normal"
+                     Optional              = "0"
+                     ReadOnly              = "1"
+                     Static                = "1"
+                     RTWriteable           = "0"
+                     Unique                = "No"
+                     Copy                  = "0"
+                     Nullable              = "0"
+                     >
+              <Type Configurable = "No" Value = "system.pt.String"/>
+              <Unit Configurable = "No" Value = "0x10001"/>
+              <InitValue Value="1"/>
+          </Parameter>
+        </PropertyGroup>
+      </PropertyTab>
+
+
+    </ObjectType>
+
+  </Types>
+<ExportedObjects>
+  <OI NAME="MedianFct" TYPE="udt.6jgfvqjegiveti4jehwvc4mt44.e33ummqoxbug4abt5p5iqm472k4k6rae"/>
+</ExportedObjects>
+
+</ObjectSet>

@@ -1,0 +1,46 @@
+'C1trols Mixed air temperature signal 
+
+Numeric Input SaFanSts, MaTmp, MaTmpSpt, UnitMode
+Numeric Input MinDprPosSpt, MaxDprPosSpt
+Numeric Output MaDprPos
+Function PidFct
+
+Numeric Kp, Ki, Kd, Lerr, Bias, Intg, PIDOutput, Resptime, PIDResult, DampStep, DampRampTime
+
+Shutdown:
+  MaDprPos = 0.0
+  Resptime = 3
+  DampStep = 10.0
+  DampRampTime = 40
+  Intg = 0
+  If SaFanSts = 1 and MaTmp > MaTmpSpt Then Goto MinPositi1
+
+MinPositi1:
+  MaDprPos = MinDprPosSpt
+  If UnitMode = 4 and MaTmp > MaTmpSpt Then goto DampStep
+  If SaFanSts = 0 or MaTmp < (MaTmpSpt - 10) Then Goto Shutdown
+
+DampStep:
+  MaDprPos = (MaDprPos + DampStep)
+  Goto DampRampWait
+
+DampRampWait:
+  If TS >= DampRampTime Then goto DampStep
+  If SaFanSts = 0 or UnitMode <> 4 Then goto Shutdown
+  If MaTmp <= MaTmpSpt Or MaDprPos >= 90 Then goto PIDSetup
+
+PIDSetup:
+  Kp = 5.0
+  Ki = KP/100 * Resptime
+  Kd = Ki/8
+  Bias = MaDprPos
+Goto TempPID
+  
+TempPID:
+  PIDResult = PidFct(MaTmp, MaTmpSpt, Kp, Ki, Kd, Bias, 1, Lerr, Intg)
+  MaDprPos = Minimum(Maximum(PIDResult,MinDprPosSpt),MaxDprPosSpt)
+  Goto Checkerror
+
+Checkerror:
+  If SaFanSts = 0 or UnitMode <> 4 or MaTmp < (MaTmpSpt - 10) Then Goto Shutdown
+  If (abs(MaTmp - MaTmpSpt) >= 0.5) And TS >= Resptime Then Goto TempPID

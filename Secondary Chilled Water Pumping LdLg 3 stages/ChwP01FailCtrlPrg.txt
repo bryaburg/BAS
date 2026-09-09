@@ -1,0 +1,29 @@
+'SecChwP01FailCtrlPrg
+'Built by Barbeau
+'Version 2020-09-29 1055
+'Pump fail with lockout
+
+Numeric Input SecChwP01Cmd, SecChwP01Sts
+Numeric Output SecChwP01Falm
+Numeric Public GraphicBtn
+
+AlarmOff:
+SecChwP01Falm = Off
+GraphicBtn = Off
+If SecChwP01Cmd = On and SecChwP01Sts = Off Then Goto CheckStatus
+
+CheckStatus:
+GraphicBtn = Off
+If (SecChwP01Cmd = On and SecChwP01Sts = On) or SecChwP01Cmd = Off Then Goto AlarmOff
+If TS > 120 Then Goto AlarmOn
+
+AlarmOn:
+SecChwP01Falm = On
+If GraphicBtn = On Then Goto AlarmReset
+
+AlarmReset:
+If TS > 3 Then GraphicBtn = Off
+If TS > 6 Then Goto AlarmOff
+
+E:
+If TS > 30 Then Goto AlarmOff

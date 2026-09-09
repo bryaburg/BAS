@@ -1,0 +1,22 @@
+﻿'OccCtrl
+'Built by Barbeau
+'Version 2020-02-19 0745
+'Sets occupancy on OSS and also occupies the site if there is an Unoccupied VAV request.
+'The Trane RTU can't handle low airflow situations without tripping high duct static.
+'Therefore, we occupy the entire site when the unit needs to run.
+
+Numeric Input UnoOvd, OPTValue
+Numeric Output OssCmd
+
+CommandOff:
+OssCmd = Off
+If TS > 300 and UnoOvd = On or OPTValue = On Then Goto CommandOn
+
+CommandOn:
+OssCmd = On
+If TS > 300 and UnoOvd = Off and OPTValue = Off Then Goto CommandCheck
+
+CommandCheck:
+OssCmd = On
+If UnoOvd = On or OPTValue = On Then Goto CommandOn
+If TS > 300 and UnoOvd = Off and OPTValue = Off Then Goto CommandOff

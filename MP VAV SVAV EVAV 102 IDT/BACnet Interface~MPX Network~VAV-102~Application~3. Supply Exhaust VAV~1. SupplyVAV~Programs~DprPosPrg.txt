@@ -1,0 +1,36 @@
+﻿'Damper Position Program
+'Built by Barbeau
+'Version 2023-08-12 1122
+'Controls damper position based on air flow setpoint
+
+Numeric Input AirFl, AirFlSpt, DprPosMin, DprPosMax, VAVMd
+Numeric Output DprPos
+Function PIDFct
+Numeric Kp, Ki, Kd, Bias, Lerr, PIDOutput, Intg, RespTime, Ramptime, DprRampup
+Numeric Public PIDout
+
+Shutdown:
+  DprPos = 50
+  RespTime = 3
+  Intg = 0
+  Ramptime = 25
+  DprRampup = 5
+  Intg = 0
+  Lerr = 0
+  If VAVMd <> 4 Then Goto Setbias
+
+Setbias:
+  Bias = 50
+  Goto FlowPID
+
+FlowPID:
+  Kp = .01
+  Ki = .01
+  Kd = 0
+  PIDOutput = PIDFct(AirFl, AirFlSpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg)
+  DprPos = Minimum(DprPosMax, Maximum(PIDOutput,DprPosMin))
+  Goto Checkerror
+
+Checkerror:
+  If VAVMd = 4 Then Goto Shutdown
+  If abs(AirFl - AirFlSpt) > (AirflSpt *0.05) and TS > Resptime Then Goto FlowPID  ' Modulate if > 5% error

@@ -1,0 +1,10 @@
+'Function Returns Filtered Value
+
+Arg 1 RawValue ' Raw input value
+Arg 2 FilterValue ' Filtered value
+Arg 3 FilterTime ' Filter Time (minutes)
+
+Numeric Factor
+
+Set Factor to minimum(((4.32/(((maximum(FilterTime, .001))*60)^.99))*Scan), 1)
+Return ((RawValue * Factor)+((1-Factor)*FilterValue))

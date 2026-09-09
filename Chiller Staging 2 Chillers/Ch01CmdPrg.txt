@@ -1,0 +1,65 @@
+﻿'Ch01CmdPrg
+'Built by Barbeau
+'Version 2022-12-20 0933
+'This program controls Chiller Start/Stop Command.
+
+Numeric Input ChlrLd, ChlrLg, ChLdEna, ChLgEna, Ch02Falm, PriChwP02Sts, Ch02Sts, PriChwP02SpdSpt
+Numeric Output PriChwP02Cmd, PriChwP02Spd, Ch02Cmd
+
+Numeric UnitId 'Set Unit ID to the number of the unit you wish to select. Chiller01 then set UnitID = 1 Chiller02 then set UnitID = 2
+
+Init: UnitID = 1
+  Goto CheckStatus
+
+CheckStatus:
+  If PriChwP02Sts = On and Ch02Sts = On and Ch02Falm = Off Then Goto ChillerOn
+  Goto ChillerOff
+
+ChillerOff:
+  Ch02Cmd = Off
+  PriChwP02Cmd = Off
+  PriChwP02Spd = 0.0
+  If ChlrLd = UnitId and ChLdEna = On and Ch02Falm = Off Then Goto WaitForPump
+  If ChlrLg = UnitId and ChLgEna = On and Ch02Falm = Off Then Goto WaitForPump
+
+WaitForPump:
+  Ch02Cmd = Off
+  PriChwP02Cmd = On
+  PriChwP02Spd = PriChwP02SpdSpt
+  If Ch02Falm = On Then Goto ChillerOff
+  If ChlrLd = UnitId and ChLdEna = Off Then Goto DelayOff
+  If ChlrLg = UnitId and ChLgEna = Off Then Goto DelayOff
+  If PriChwP02Sts = On Then Goto PumpDelay
+
+PumpDelay:
+  Ch02Cmd = Off
+  PriChwP02Cmd = On
+  PriChwP02Spd = PriChwP02SpdSpt
+  If Ch02Falm = On Then Goto DelayOff
+  If ChlrLd = UnitId and ChLdEna = Off Then Goto DelayOff
+  If ChlrLg = UnitId and ChLgEna = Off Then Goto DelayOff
+  If PriChwP02Sts = Off Then Goto WaitForPump
+  If TS > 30 Then Goto ChillerOn
+
+ChillerOn:
+  Ch02Cmd = On
+  PriChwP02Cmd = On
+  PriChwP02Spd = PriChwP02SpdSpt
+  If Ch02Falm = On Then Goto DelayOff
+  If ChlrLd = UnitId and ChLdEna = Off Then Goto DelayOff
+  If ChlrLg = UnitId and ChLgEna = Off Then Goto DelayOff
+
+DelayOff:
+  Ch02Cmd = On
+  PriChwP02Cmd = On
+  PriChwP02Spd = PriChwP02SpdSpt
+  If Ch02Falm = On Then Goto PumpStopDelay
+  If ChlrLd = UnitId and ChLdEna = On Then Goto ChillerOn
+  If ChlrLg = UnitId and ChLgEna = On Then Goto ChillerOn
+  If TS > 120 Then Goto PumpStopDelay
+
+PumpStopDelay:
+  Ch02Cmd = Off
+  PriChwP02Cmd = On
+  PriChwP02Spd = PriChwP02SpdSpt
+  If TS > 90 and Ch02Sts = Off Then Goto ChillerOff

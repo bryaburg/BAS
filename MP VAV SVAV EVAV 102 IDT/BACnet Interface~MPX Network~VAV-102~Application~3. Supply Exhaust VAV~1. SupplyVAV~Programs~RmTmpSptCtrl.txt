@@ -1,0 +1,20 @@
+﻿' RmTmpSptCtrl
+' Created by JWeath
+' Version 2023-08-19 1045
+' Program to set Room Temp Spt based on RmSptMode
+
+' RmSptMode = Off - Remote Control, Setpoint set in EBO
+' RmSptMode = On - Local Control, Setpoint set by Room Stat
+
+Numeric Input BMSRmTmpSpt, LocalRmTmpSpt, RmSptMode
+Numeric Output AllowSptChnge, RmTmpSpt
+
+Remote:
+ RmTmpSpt = BMSRmTmpSpt
+ AllowSptChnge = Off
+ If RmSptMode = On Then Goto Local
+
+Local:
+ RmTmpSpt = LocalRmTmpSpt
+ AllowSptChnge = On
+ If RmSptMode = Off Then Goto Remote

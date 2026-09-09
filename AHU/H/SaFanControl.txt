@@ -1,0 +1,77 @@
+Numeric Input RmTmp, RmTmpStpt, SaFanSts, UnitMode
+Numeric Output SaFanSpd, SaFanCmd
+Numeric Input SaFanSpdMax, SaFanSpdMin
+Function PIDLoopFct
+Numeric Kp, Ki, Kd, Lerr, Bias, Intg, PIDOutput, Resptime, FanRampup, Ramptime, LoopResult
+
+' Fan-off state: clear the command, speed, and PID memory before starting a
+' new run. The 20-second delay prevents an immediate restart after enable.
+FanOff:
+  SaFanSpd = 0
+  SaFanCmd = 0
+  Resptime = 3
+  Ramptime = 15
+  FanRampup = 5
+  Intg = 0
+  Lerr = 0
+  If UnitMode > 0 and TS > 20 then Goto Startup
+
+' Start the fan at minimum speed and wait for proof. If proof is not received
+' within Ramptime + 60 seconds, return to the off state.
+Startup:
+  SaFanCmd = 1
+  SaFanSpd = SaFanSpdMin
+  If SaFanSts = 1 and TS >= Ramptime then Goto Biasup
+  If (TS >= (Ramptime + 60)) and (SaFanSts = 0) then Goto FanOff
+
+' Increase the fan bias in fixed increments. Delayup provides the interval
+' between increments and the checks that decide when to enter temperature PID.
+' REVIEW: this assignment is not limited to SaFanSpdMax, so the output can
+' briefly exceed the configured maximum by up to one FanRampup increment.
+Biasup:
+  SaFanCmd = 1
+  SaFanSpd = (SaFanSpd + FanRampup)
+  Goto Delayup
+
+' Hold the current bias until the next ramp interval. Transfer to PID when
+' temperature is close enough to setpoint or the maximum speed is reached.
+Delayup:
+  SaFanCmd = 1
+  If SaFanSts = 0 then Goto Startup
+  If TS >= Ramptime then Goto Biasup
+  ' Transfer to PID when room temperature is within 2 degrees of setpoint.
+  If abs(RmTmp - RmTmpStpt) <= 2 then Goto Setbias
+  If SaFanSpd >= SaFanSpdMax - 5 then Goto Setbias
+
+' Capture the ramped speed as the PID bias so the fan does not step when PID
+' control begins.
+Setbias:
+  SaFanCmd = 1
+  Bias = SaFanSpd
+  Goto Temppid
+
+' Temperature PID uses reverse action (Actn = 0): a room temperature below
+' setpoint produces a higher fan output. Clamp the result to the configured
+' speed range.
+Temppid:
+  SaFanCmd = 1
+  Kp = 25
+  Ki = (Kp / 100) * Resptime
+  Kd = Ki / 8
+  LoopResult = Maximum(SaFanSpdMin, PIDLoopFct(RmTmp, RmTmpStpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg))
+  SaFanSpd = Minimum(SaFanSpdMax, LoopResult)
+  Goto Checkerror
+
+' Re-run PID after a meaningful temperature error and the response interval.
+' Losing fan proof clears the integral state and restarts the proof sequence.
+Checkerror:
+  SaFanCmd = 1
+  ' REVIEW: UnitMode is checked only in FanOff. If the unit is disabled while
+  ' running, this state machine can continue commanding the fan; verify that
+  ' another program forces SaFanCmd/ SaFanSpd off, or add a UnitMode check here.
+  If SaFanSts = 0 then
+    Intg = 0
+    Lerr = 0
+    Goto Startup
+  Endif
+  If abs(RmTmp - RmTmpStpt) >= 0.5 and TS >= Resptime then Goto Temppid

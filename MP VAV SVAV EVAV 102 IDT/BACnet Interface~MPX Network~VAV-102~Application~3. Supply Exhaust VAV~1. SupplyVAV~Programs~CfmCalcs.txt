@@ -1,0 +1,28 @@
+﻿'CfmCalcs
+'Built by Barbeau
+'Version 2023-08-28 2112
+'Sets airflow based on velocity pressure and duct diameter
+
+Numeric Input VelPress, DuctDiameter, Kfactor, SaLoPrSpt
+Numeric Output AirFl_Raw, AirFl_Final
+Numeric Public Vel
+Numeric DiaFt, RadFt, RadSqFt, AreaFt, InArea, InRadious
+
+Shutdown:
+  AirFl_Raw = 0
+  AirFl_Final = 0
+  If VelPress > (SaLoPrSpt + .005) Then Goto Calcs
+
+Hold:
+	If TS > 2 Then Goto Calcs
+
+Calcs:
+  DiaFt = DuctDiameter/12
+	RadFt = DiaFt / 2
+  RadSqFt = RadFt^2
+	AreaFt = 3.14 * RadSqFt
+	Vel = (4005 * Sqrt(Abs(VelPress)))
+	AirFl_Raw = Vel * AreaFt
+  AirFl_Final = AirFl_Raw * Kfactor
+  If VelPress < (SaLoPrSpt - .005) Then Goto Shutdown
+	Goto Hold

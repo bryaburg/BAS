@@ -1,0 +1,16 @@
+﻿'ChWtrEna
+'Built by JMartinez
+'Version 2022-06-30 1104
+'Opens 100% the Chilled Water valve
+
+Numeric Input MechClgEna, AhuEna
+Numeric Output ChWtrVlvPos
+
+VlvClose:
+	ChWtrVlvPos = 0
+	If (MechClgEna = On And AhuEna = On) Then Goto VlvOpen
+
+VlvOpen:
+	ChWtrVlvPos = 100
+	If (MechClgEna = Off or AhuEna = Off) Then Goto VlvClose
+

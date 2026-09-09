@@ -1,0 +1,86 @@
+﻿'MirrorPush
+'Built by Barbeau
+'Version 2019-03-27 1247
+'Transfers values to the Trane Unit
+
+Numeric Input OssCmd, DprPos_Avg, SaFanCmd_RTU
+'Numeric Input In_CoolCapacityEnableSetpoin
+Numeric Input In_DischargeAirCoolingSetpoi
+'Numeric Input In_DischargeAirReheatSetpoin
+Numeric Input In_DuctStaticPressureSetpoin
+Numeric Input In_EconoMinimumPositionSetpo
+Numeric Input In_OutdoorAirHumidityBAS
+'Numeric Input In_OutdoorAirMinimumFlowSetp
+'Numeric Input In_OutdoorAirTemperatureBAS
+'Numeric Input In_PowerExhaustEnableSetpoin
+'Numeric Input In_SpaceCO2ConcentrationBAS
+'Numeric Input In_SpaceCoolingSetpointHighL
+'Numeric Input In_SpaceCoolingSetpointLowLi
+'Numeric Input In_SpaceDehumidificationSetp
+'Numeric Input In_SpaceHeatingSetpointHighL
+'Numeric Input In_SpaceHeatingSetpointLowLi
+'Numeric Input In_SpaceHumidityBAS
+'Numeric Input In_SpaceTemperatureBAS
+'Numeric Input In_SpaceTemperatureSetpointB
+'Numeric Input In_SupplyFanMinimumSpeedBAS
+Numeric Input In_EconomizerAirsideEnableBA
+'Numeric Input In_HeatCoolModeRequestBAS
+'Numeric Input In_EconoMinimumPositionEnabl
+'Numeric Input In_SystemControlCommand
+'Numeric Input In_OccupancyRequest
+
+Numeric Output Out_CoolCapacityEnableSetpoin
+Numeric Output Out_DischargeAirCoolingSetpoi
+Numeric Output Out_DischargeAirReheatSetpoin
+Numeric Output Out_DuctStaticPressureSetpoin
+Numeric Output Out_EconoMinimumPositionSetpo
+Numeric Output Out_OutdoorAirHumidityBAS
+Numeric Output Out_OutdoorAirMinimumFlowSetp
+'Numeric Output Out_OutdoorAirTemperatureBAS
+Numeric Output Out_PowerExhaustEnableSetpoin
+'Numeric Output Out_SpaceCO2ConcentrationBAS
+'Numeric Output Out_SpaceCoolingSetpointHighL
+'Numeric Output Out_SpaceCoolingSetpointLowLi
+Numeric Output Out_SpaceDehumidificationSetp
+'Numeric Output Out_SpaceHeatingSetpointHighL
+'Numeric Output Out_SpaceHeatingSetpointLowLi
+'Numeric Output Out_SpaceHumidityBAS
+'Numeric Output Out_SpaceTemperatureBAS
+Numeric Output Out_SpaceTemperatureSetpointB
+Numeric Output Out_SupplyFanMinimumSpeedBAS
+Numeric Output Out_EconomizerAirsideEnableBA
+'Numeric Output Out_HeatCoolModeRequestBAS
+Numeric Output Out_EconoMinimumPositionEnabl
+Numeric Output Out_SystemControlCommand
+Numeric Output Out_OccupancyRequest
+
+
+Hold:
+If TS > 5 Then Goto Calculating
+
+Calculating:
+Out_CoolCapacityEnableSetpoin = 100
+Out_DischargeAirCoolingSetpoi = In_DischargeAirCoolingSetpoi
+Out_DischargeAirReheatSetpoin = 65
+Out_DuctStaticPressureSetpoin = In_DuctStaticPressureSetpoin
+Out_EconoMinimumPositionSetpo = In_EconoMinimumPositionSetpo
+Out_OutdoorAirHumidityBAS = In_OutdoorAirHumidityBAS
+Out_OutdoorAirMinimumFlowSetp = 1500
+'Out_OutdoorAirTemperatureBAS = 
+Out_PowerExhaustEnableSetpoin = 95
+'Out_SpaceCO2ConcentrationBAS = 
+'Out_SpaceCoolingSetpointHighL = 
+'Out_SpaceCoolingSetpointLowLi = 
+Out_SpaceDehumidificationSetp = 60
+'Out_SpaceHeatingSetpointHighL = 
+'Out_SpaceHeatingSetpointLowLi = 
+'Out_SpaceHumidityBAS = 
+'Out_SpaceTemperatureBAS = 
+Out_SpaceTemperatureSetpointB = 72
+Out_SupplyFanMinimumSpeedBAS = 30
+If In_EconomizerAirsideEnableBA = On Then Out_EconomizerAirsideEnableBA = 2 Else Out_EconomizerAirsideEnableBA = 1
+Out_EconoMinimumPositionEnabl = On
+Out_SystemControlCommand = On
+If SaFanCmd_RTU = On Then Out_OccupancyRequest = 1 Else Out_OccupancyRequest = 2
+'Out_HeatCoolModeRequestBAS = 1
+Goto Hold

@@ -1,0 +1,22 @@
+' ============================================================
+' OA Damper Maximum Position Reset
+' Computes the maximum outside-air damper position from mixed-air
+' temperature to support freeze protection.
+'
+' Inputs:
+Numeric Input MaTmp       : current mixed-air temperature (degF)
+Numeric Input MaDprMinSpt : minimum allowed damper position (0-100%)
+'
+' Output:
+Numeric Output MaDprMaxSpt : maximum allowed damper position (0-100%)
+'
+' ResetFct parameters:
+' - Out_High, Out_Low : output limits
+' - In_High, In_Low   : input range
+' - Action             : 0 = Reverse, 1 = Direct
+' - Input              : value being reset
+'
+' Action = 1 (Direct) is used for freeze protection. As MaTmp falls
+' from 40F toward 35F, the maximum permitted OA damper position falls
+' toward MaDprMinSpt, restricting outside air as mixed air gets colder.
+MaDprMaxSpt = ResetFct(100, MaDprMinSpt, 40, 35, 1, MaTmp)

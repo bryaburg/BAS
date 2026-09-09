@@ -1,0 +1,36 @@
+﻿'ConvertBINtoDEC
+'Built by Barbeau
+'Version 2022-08-27 1131
+'Converts Binary to Decimal
+
+Numeric Input R402_B1_WestStairPressFanOn
+Numeric Input R402_B2_WestStairPressFanOn
+Numeric Input R402_B3_WestStairPressFanNorm
+Numeric Input R402_B4_WestStairPressFanNorm
+Numeric Input R402_B5_WestStairPressFanOff
+Numeric Input R402_B6_WestStairPressFanOff
+Numeric Input R402_B7_WestStairPressFanFault
+Numeric Input R402_B8_WestStairPressFanFault
+Numeric Output ASP_Reg402
+Numeric B1, B2, B3, B4, B5, B6, B7, B8
+Numeric B9, B10, B11, B12, B13, B14, B15, B16
+
+Calculating:
+B1 = R402_B1_WestStairPressFanOn
+B2 = R402_B2_WestStairPressFanOn
+B3 = R402_B3_WestStairPressFanNorm
+B4 = R402_B4_WestStairPressFanNorm
+B5 = R402_B5_WestStairPressFanOff
+B6 = R402_B6_WestStairPressFanOff
+B7 = R402_B7_WestStairPressFanFault
+B8 = R402_B8_WestStairPressFanFault
+B9 = 0
+B10 = 0
+B11 = 0
+B12 = 0
+B13 = 0
+B14 = 0
+B15 = 0
+B16 = 0
+
+ASP_Reg402 = (B16*2^15) + (B15*2^14) + (B14*2^13) + (B13*2^12) + (B12*2^11) + (B11*2^10) + (B10*2^9) + (B9*2^8) + (B8*2^7) + (B7*2^6) + (B6*2^5) + (B5*2^4) + (B4*2^3) + (B3*2^2) + (B2*2^1) + (B1*2^0)

@@ -1,0 +1,22 @@
+﻿' OccCFMPrg
+' Created by JWeath
+' Version 2023-31-08 
+' Program to set Occupied/Unoccupied CFM Min/Max
+
+Numeric Input OccSts, EaOccHtgMaxCFM, EaOccHtgMinCFM, EaUnocHtgMaxCFM, EaUnocHtgMinCFM
+Numeric Input EaOccClgMaxCFM, EaOccClgMinCFM, EaUnocClgMaxCFM, EaUnocClgMinCFM
+Numeric Output EaClgMaxCFM, EaClgMinCFM, EaHtgMaxCFM, EaHtgMinCFM
+
+Occupied:
+ EaClgMaxCFM = EaOccClgMaxCFM
+ EaClgMinCFM = EaOccClgMinCFM
+ EaHtgMaxCFM = EaOccHtgMaxCFM
+ EaHtgMinCFM = EaOccHtgMinCFM
+ If OccSts = Off Then Goto Unoccupied
+
+Unoccupied:
+ EaClgMaxCFM = EaUnocClgMaxCFM
+ EaClgMinCFM = EaUnocClgMinCFM
+ EaHtgMaxCFM = EaUnocHtgMaxCFM
+ EaHtgMinCFM = EaUnocHtgMinCFM
+ If OccSts = On Then Goto Occupied

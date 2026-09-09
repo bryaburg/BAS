@@ -1,0 +1,44 @@
+﻿'HwVlvPosCtrl
+'Built by Barbeau
+'Version 2020-11-10 1031
+'Controls hot water valve on supply temp setpoint
+
+Numeric Input SaFanCmd, SaFanSts, EconoMd
+Numeric Input SaTmp, SaTmpSpt
+Numeric Output HwVlvPos
+Numeric Lerr, Intg, Kp, Ki, Kd, Bias, RespTime, RampTime, PIDOutput
+Function PIDFct
+
+Shutdown:
+  HwVlvPos = 0
+  Bias = 0
+  RampTime = 30
+  RespTime = 3
+  Intg = 0
+  Lerr = 0
+  If TS > 10 and EconoMd = Off and SaFanCmd = On and SaTmp < SaTmpSpt Then Goto StartUp
+
+StartUp:
+  HwVlvPos = 10
+  If SaFanSts = On and TS > 10 Then Goto PIDSetup
+  If SaFanCmd = Off or EconoMd = On or SaTmp > (SaTmpSpt + 10) Then Goto Shutdown
+
+PIDSetup:
+  Kp=5.0
+  Ki=(Kp/100) * RespTime
+  Kd=Ki/8
+  Bias = HwVlvPos
+  Goto Modulating
+
+Modulating:
+  PIDOutput = PidFct(SaTmp, SaTmpSpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg)
+  HwVlvPos = PIDOutput
+  Goto CheckError
+
+CheckError:
+  If SaFanCmd = Off or EconoMd = On or SaTmp > (SaTmpSpt + 10) Then Goto Shutdown
+  If SaFanSts = Off Then Goto StartUp
+  If TS > RespTime and ABS(SaTmp - SaTmpSpt) > 0.1 Then Goto Modulating
+
+E:
+  If TS > 30 Then Goto Shutdown

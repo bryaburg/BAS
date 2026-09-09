@@ -1,0 +1,8 @@
+﻿Numeric Input AhuFanStatus,VelPress,KFactor
+Numeric Output AvgAirflow,AvgVelPress
+
+Function InputFilter
+
+Line Calculate
+Set AvgVelPress to InputFilter(VelPress,AvgVelPress,.5)
+Set AvgAirflow to (AvgVelPress * KFactor) * AhuFanStatus

@@ -1,0 +1,48 @@
+'Mixed Air Control 
+'Built by Barbeau
+'Version 2016-12-01 0804 
+'Controls Mixed air temperature signal 
+
+Numeric Input SaFanSts, MaTmp, MaTmpSpt, EconoMd
+Numeric Output MaTmpSig
+Function PIDLoopFct
+
+Numeric Kp, Ki, Kd, Lerr, Bias, Intg, PIDOutput, Resptime,PIDResult,DampStep,DampRampTime
+
+Shutdown:
+Set MaTmpSig to 0.0
+Set Resptime to 3
+Set DampStep to 2.0
+Set DampRampTime to 20
+Set Intg to 0
+If SaFanSts is On and EconoMd is On then goto DampStep
+
+DampStep:
+Set MaTmpSig to (MaTmpSig + DampStep)
+Goto DampRampWait
+
+DampRampWait:
+If TS >= DampRampTime Then goto DampStep
+If SaFanSts is Off or EconoMd is Off Then goto Shutdown
+If MaTmp <= MaTmpSpt Or MaTmpSig >= 90 Then goto PIDSetup
+
+PIDSetup:
+  Set Kp to 5.0
+  Set Ki to KP/100 * Resptime
+  Set Kd to Ki/8
+  Set Bias to MaTmpSig
+Goto TempPID
+  
+TempPID:
+	Set PIDResult to PIDLoopFct(MaTmp, MaTmpSpt, Kp, Ki, Kd, Bias, 1, Lerr, Intg)
+  Set MaTmpSig to PIDResult
+  Goto Checkerror
+
+Checkerror:
+If SaFanSts is Off Then Goto Shutdown
+If EconoMd is Off  Then Goto EconoDelay
+If (abs(MaTmp - MaTmpSpt) >= 0.5) And TS >= Resptime Then Goto TempPID
+
+EconoDelay:
+Set MaTmpSig to 0.0
+If TS > 600 Then Goto Shutdown

@@ -1,0 +1,22 @@
+'ChwP01FailCtrlPrg
+'Built by Barbeau
+'Version 2020-09-29 1055
+'Pump fail with lockout
+
+Numeric Input ChwP01Cmd, ChwP01Sts, RemReset
+Numeric Output ChwP01Falm
+
+AlarmOff:
+ChwP01Falm = Off
+If ChwP01Cmd = On and ChwP01Sts = Off Then Goto CheckStatus
+
+CheckStatus:
+If (ChwP01Cmd = On and ChwP01Sts = On) or ChwP01Cmd = Off Then Goto AlarmOff
+If TS > 120 Then Goto AlarmOn
+
+AlarmOn:
+ChwP01Falm = On
+If RemReset = On Then Goto AlarmOff
+
+E:
+If TS > 30 Then Goto AlarmOff

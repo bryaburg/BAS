@@ -1,0 +1,15 @@
+﻿'This program monitors the status of the Flash memory on the controller
+'and runs an automatic backup routine if necessary.
+
+'Trigger is Hour
+Numeric Input StatusBackup
+
+Line CheckStatus
+If StatusBackup = BackupNeeded then Goto BackupFlash Else Goto Stopping
+
+Line BackupFlash
+Set StatusBackup to BackupNow
+Goto Stopping
+  
+Line Stopping
+If StatusBackup=BackupDone then Stop

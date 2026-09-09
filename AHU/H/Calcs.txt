@@ -1,0 +1,53 @@
+' ============================================================
+' AHU Discharge Air Temperature Reset / PID Control Program
+' Separated into PID calculation and error checking sections
+' ============================================================
+' Runs a heating/cooling demand PID off room temperature, then uses that demand
+' (0-100%) to reset the supply air temperature setpoint between fixed high/low
+' limits, derives a mixed-air setpoint from it, and separately resets the OA
+' damper's maximum allowed position based on mixed air temperature.
+
+Numeric Input RmTmp, RmTmpSpt, RmRh, OaTmp, MaDprMinSpt, MaTmp
+Numeric Output SaTmpSpt, HtgClgDmd, MaTmpStpt, MaDprMaxSpt
+Function PIDfct, ResetFct
+
+' --- Constants ---
+Numeric Kp, Ki, Kd, Lerr, Intg, Bias, ResetRatio
+Numeric RespTime, SaTmpSpt_Min, SaTmpSpt_Max
+
+' --- One-time setup of PID gains and the SA temperature reset range, then falls
+'     straight through to the control loop. ---
+Initialize:
+    RespTime = 3
+    Bias = 50
+    Kp = 5
+    Ki = (Kp / 100) * RespTime
+    Kd = Ki / 8
+		SaTmpSpt_Min = 50
+		SaTmpSpt_Max = 120
+    Goto CalculatePID
+
+' --- PID Calculation Section ---
+' REVIEW: RmRh (room RH) and OaTmp are declared as inputs but never referenced below.
+' If humidity/OA temp were meant to influence the SA setpoint reset, that logic is
+' missing here. If they're unused by design, consider removing them to avoid confusion.
+CalculatePID:
+    ' Room temp PID produces a 0-100% heating/cooling demand signal (Actn=1: Direct).
+    HtgClgDmd = PIDfct(RmTmp, RmTmpSpt, Kp, Ki, Kd, Bias, 1, Lerr, Intg)
+
+    ' Straight-line reset: demand 0% -> SaTmpSpt_Max (full heat), 100% -> SaTmpSpt_Min (full cool).
+    ResetRatio = (SaTmpSpt_Max - SaTmpSpt_Min) / 100
+    
+    SaTmpSpt = SaTmpSpt_Max - (ResetRatio * HtgClgDmd)
+    
+    Goto ErrorCheck
+
+' --- Error Checking Section ---
+' Re-runs the PID/reset calculation whenever room temp has drifted off setpoint
+' by more than 0.1 degrees, on the RespTime scan interval; otherwise idles here.
+ErrorCheck:
+    If TS > RespTime and abs(RmTmp - RmTmpSpt) > 0.1 Then 
+        Goto CalculatePID
+    Else
+        Goto ErrorCheck
+    Endif

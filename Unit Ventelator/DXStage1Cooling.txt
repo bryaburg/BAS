@@ -1,0 +1,20 @@
+Numeric Input SaFanSts, CondAlm, UnitMode
+Numeric Output DxCmd
+
+Dx_Off:
+	DxCmd = 0
+	Goto CheckError
+
+Dx_On:
+	DxCmd = 1
+	Goto CheckError
+
+CheckError:
+	If SaFanSts = 0 Then Goto Dx_Off
+	If UnitMode = 0 or UnitMode = 1  or UnitMode = 5 Then Goto Dx_Off
+	If CondAlm = 1 Then Goto Shutdown
+	Goto Dx_On
+
+Shutdown:
+	DxCmd = 0
+	If CondAlm = 0 and TS > 30 Then Goto Dx_Off

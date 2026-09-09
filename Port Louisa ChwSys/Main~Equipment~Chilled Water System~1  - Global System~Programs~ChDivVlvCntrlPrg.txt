@@ -1,0 +1,19 @@
+﻿Numeric Input Ahu101Ena, Ahu102Ena
+Numeric Output DivVlv
+
+
+Init:
+ If Ahu101Ena = On Then Goto Ahu101On 
+ If Ahu102Ena = On Then Goto Ahu102On
+ If TS > 5 Then Goto Hold
+
+Ahu101On:
+ DivVlv = False
+ If Ahu101Ena = Off Then Goto Init
+
+Ahu102On:
+ DivVlv = True
+ If Ahu102Ena = Off Then Goto Init
+
+Hold:
+ If TS > 3 Then Goto Init

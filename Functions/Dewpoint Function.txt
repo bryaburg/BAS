@@ -1,0 +1,26 @@
+  ' This function calculates the dewpoint temp, given the drybulb temp
+  ' and the percent RH. It is a trial-and-error loop, which returns the
+  ' dewpoint temp after 5 loops through the function.
+
+  Arg 1 Temp
+  Arg 2 RH
+
+  Numeric X, Y, Z, Count, Dewpoint
+
+  For Count = 1 To 5
+
+    X = 273.16 / ((Temp - 32) / 1.8 + 273.16)
+    X = -10.7959 * (1 - X) - (2.1836 * ln(X)) + 2.2196
+    X = 29.92 * (1 / exp(2.3026 * X))
+    X = RH * X / 100
+    Y = 273.16 / ((Dewpoint - 32) / 1.8 + 273.16)
+    Y = -10.7959 * (1 - Y) - (2.1836 * ln(Y)) + 2.2196
+    Y = 29.92 * (1 / exp(2.3026 * Y))
+    Y = RH * Y / 100
+    If X = 0 Then X = 1
+    Z = Y / X * 100
+    Z = RH - Z
+    Dewpoint = (Z * 0.5) + Dewpoint
+  Next Count
+
+  Return Dewpoint

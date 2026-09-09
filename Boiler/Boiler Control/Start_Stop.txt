@@ -1,0 +1,24 @@
+Numeric Input UnitState           ' System mode: 0=Off, 1=Auto/On
+Numeric Input FlowSwitch          ' Flow switch: 1=Flow detected, 0=No flow
+Numeric Input Lead_Boiler         ' Lead boiler selection: 1=Boiler1 lead, 2=Boiler2 lead
+Numeric Input BlrAlm1             ' Boiler 1 alarm status (0=OK, >0=Alarm)
+Numeric Input BlrAlm2             ' Boiler 2 alarm status (0=OK, >0=Alarm)
+Numeric Input OaTmp               ' Outside air temperature
+Numeric Input OaTmpShutdown
+
+Numeric Output BlrEna1            ' Boiler 1 enable: 1=On, 0=Off
+Numeric Output BlrEna2            ' Boiler 2 enable: 1=On, 0=Off
+
+
+Boiler_Off:
+	BlrEna1 = 0
+	BlrEna2 = 0
+	If UnitState = 1 and (BlrAlm1 = 0 or BlrAlm2 = 0) and (OaTmp > OaTmpShutdown) and FlowSwitch = 1 Then Goto Boiler_Running
+
+Boiler_Running:
+	If Lead_Boiler = 1 or BlrAlm2 = 1 Then BlrEna1 = 1 Else  BlrEna1 = 0
+	If Lead_Boiler = 2 or BlrAlm1 = 1 Then BlrEna2 = 1 Else  BlrEna2 = 0
+	Goto Wait_Check
+
+Wait_Check:
+	If UnitState = 0 or BlrAlm1 = 1 or BlrAlm2 = 1 or OaTmp < OaTmpShutdown Then Goto Boiler_Off

@@ -1,0 +1,21 @@
+﻿'ResetDiag
+'Built by Barbeau
+'Version 2019-05-01 0913
+'Controls the reset diagnostic binary on the Trane Unit
+
+Numeric Public GraphBtn
+Numeric Output ResetDiagnostic
+
+ResetOff:
+ResetDiagnostic = Off
+If GraphBtn = On Then Goto ResetOn
+
+ResetOn:
+ResetDiagnostic = On
+If TS > 2 Then Goto ResetButton
+
+ResetButton:
+ResetDiagnostic = Off
+GraphBtn = Off
+Goto ResetOff
+

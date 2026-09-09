@@ -1,0 +1,650 @@
+﻿'DiagnosticAlertCtrl
+'Built by Barbeau
+'Version 2019-05-01 0823
+'Monitors the diagnostics
+
+Numeric Input CompressorLockoutStatus
+Numeric Input DiagnosticCO2LowLimitSetpointFault
+Numeric Input DiagnosticCO2SensorFailure
+Numeric Input DiagnosticCO2SetpointFailure
+Numeric Input DiagnosticCoilTemperatureSensor1Fail
+Numeric Input DiagnosticCoilTemperatureSensor2Fail
+Numeric Input DiagnosticComp1DisableInputLPC
+Numeric Input DiagnosticComp1ProvingFailAuto
+Numeric Input DiagnosticComp2DisableInputLPC
+Numeric Input DiagnosticComp2ProvingFailAuto
+Numeric Input DiagnosticCompressor1LPCLockout
+Numeric Input DiagnosticCompressor1ProvingFailManual
+Numeric Input DiagnosticCompressor2LPCLockout
+Numeric Input DiagnosticCompressor2ProvingFailManual
+Numeric Input DiagnosticCompressor3LockOut
+Numeric Input DiagnosticCompressor3LPCDisable
+Numeric Input DiagnosticCompressor3ProvingFailManual
+Numeric Input DiagnosticCompressorDriveFault
+Numeric Input DiagnosticDCVMinPositionatMinimumFanSpeedFail
+Numeric Input DiagnosticDCVMinPositionSetpointFailFullFanSpeed
+Numeric Input DiagnosticDefaultDefrostFlageithercircuit
+Numeric Input DiagnosticDefrostDefaultModeCkt1
+Numeric Input DiagnosticDefrostDefaultModeCkt2
+Numeric Input DiagnosticDehumidSetpointFailure
+Numeric Input DiagnosticDemandDefrostFaultAeithercircuit
+Numeric Input DiagnosticDemandDefrostFaultACkt1
+Numeric Input DiagnosticDemandDefrostFaultACkt2
+Numeric Input DiagnosticDemandDefrostFaultBeithercircuit
+Numeric Input DiagnosticDemandDefrostFaultBCkt1
+Numeric Input DiagnosticDemandDefrostFaultBCkt2
+Numeric Input DiagnosticDemandDefrostFaultCeithercircuit
+Numeric Input DiagnosticDemandDefrostFaultCCkt1
+Numeric Input DiagnosticDemandDefrostFaultCCkt2
+Numeric Input DiagnosticDemandDefrostFaultDeithercircuit
+Numeric Input DiagnosticDesignMinPositionatMidpointFanSpeedFail
+Numeric Input DiagnosticDesignMinPositionatMinimumFanSpeedFail
+Numeric Input DiagnosticDesignMinPositionSetpointFailFullFanSpeed
+Numeric Input DiagnosticDirtyFilter
+Numeric Input DiagnosticDischargeAirHeatSetpointFailure
+Numeric Input DiagnosticDrainPanOverflow
+Numeric Input DiagnosticEconomizerActuatorFault
+Numeric Input DiagnosticEnteringEvapTempSensorFail
+Numeric Input DiagnosticEnthalpySetpointFail
+Numeric Input DiagnosticExcessiveOutdoorAir
+Numeric Input DiagnosticExhaustFanProvingFail
+Numeric Input DiagnosticExhaustFanSetpointFailure
+Numeric Input DiagnosticFanFailure
+Numeric Input DiagnosticFlameRolloutSwitchOpen
+Numeric Input DiagnosticFlameSensedw2FGasValveOff
+Numeric Input DiagnosticFreezestatTripped
+Numeric Input DiagnosticFroStatTrip
+Numeric Input DiagnosticGasHeatModuleFailure
+Numeric Input DiagnosticGasHeatSupplyAirflowLimitTrip
+Numeric Input DiagnosticHeatFailure
+Numeric Input DiagnosticHeatingHighTempLimitOpen
+Numeric Input DiagnosticIGN1CommunicationsTimedout
+Numeric Input DiagnosticIGN2CommunicationsTimedout
+Numeric Input DiagnosticInducerProvingSwitchFail
+Numeric Input DiagnosticLocalCoolSetpointFail
+Numeric Input DiagnosticLocalEmergencyStopInitiated
+Numeric Input DiagnosticLocalZoneHeatingSetpointFailed
+Numeric Input DiagnosticMaintenanceRequired
+Numeric Input DiagnosticMinOAFlowSetpointFail
+Numeric Input DiagnosticMixedAirTempLowLimitCycleActive
+Numeric Input DiagnosticMixedAirTempSensorFailure
+Numeric Input DiagnosticModDehumidConfigError
+Numeric Input DiagnosticMorningWarmupSetpointFail
+Numeric Input DiagnosticNoFlameSensedonheatcall
+Numeric Input DiagnosticOutdoorAirDamperNotModulating
+Numeric Input DiagnosticOutdoorAirFlowSensorFail
+Numeric Input DiagnosticOutdoorAirTemperatureSensorFailed
+Numeric Input DiagnosticOutdoorHumiditySensorFailed
+Numeric Input DiagnosticReturnAirHumiditySensorFailed
+Numeric Input DiagnosticReturnAirTempSensorFail
+Numeric Input DiagnosticRTAMCommFail
+Numeric Input DiagnosticRTDMCommFail
+Numeric Input DiagnosticRTEMCommFail
+Numeric Input DiagnosticRTOMCommFail
+Numeric Input DiagnosticRTVMCommFail
+Numeric Input DiagnosticSAHighPressLimit
+Numeric Input DiagnosticSAPressureDeadBandFailure
+Numeric Input DiagnosticSAPressurePWMFault
+Numeric Input DiagnosticSAPressureSensorFailure
+Numeric Input DiagnosticSAPressureSetpointFailure
+Numeric Input DiagnosticSAReheatSetpointFailure
+Numeric Input DiagnosticSAResetAmountFailure
+Numeric Input DiagnosticSAResetSetpointFailure
+Numeric Input DiagnosticSATempCoolSetpointFail
+Numeric Input DiagnosticSATempHeatSetpointFail
+Numeric Input DiagnosticSmokeDetector
+Numeric Input DiagnosticSpaceHumiditySensorFail
+Numeric Input DiagnosticSpacePressDeadbandFail
+Numeric Input DiagnosticSpacePressureSensorFailure
+Numeric Input DiagnosticSpacePressureSetpointFail
+Numeric Input DiagnosticSupplyAirTempSensorFail
+Numeric Input DiagnosticSupplyAirflowSensorFail
+Numeric Input DiagnosticTD5CommFail
+Numeric Input DiagnosticUnitCommunicationsFailure
+Numeric Input DiagnosticUnitEconomizingWhenItShouldNot
+Numeric Input DiagnosticUnitNotEconomizingWhenItShouldbe
+Numeric Input DiagnosticVentOverrideExhaust
+Numeric Input DiagnosticVentOverridePressurize
+Numeric Input DiagnosticVentOverridePurge
+Numeric Input DiagnosticVSMCommFail
+Numeric Input DiagnosticZoneTemperatureSensorFailed
+
+Numeric Output QtyDiagAlerts, DiagnosticAlert, DiagnosticCode
+String Output DiagnosticText
+Numeric QtyAl
+
+Init:
+QtyAl = 0
+DiagnosticCode = 0
+If TS > 5 Then Goto Monitoring
+
+Monitoring:
+If CompressorLockoutStatus = On Then DiagnosticText = "CompressorLockoutStatus"
+If DiagnosticCO2LowLimitSetpointFault = On Then DiagnosticText = "CO2LowLimitSetpointFault"
+If DiagnosticCO2SensorFailure = On Then DiagnosticText = "CO2SensorFailure"
+If DiagnosticCO2SetpointFailure = On Then DiagnosticText = "CO2SetpointFailure"
+If DiagnosticCoilTemperatureSensor1Fail = On Then DiagnosticText = "CoilTemperatureSensor1Fail"
+If DiagnosticCoilTemperatureSensor2Fail = On Then DiagnosticText = "CoilTemperatureSensor2Fail"
+If DiagnosticComp1DisableInputLPC = On Then DiagnosticText = "Comp1DisableInputLPC"
+If DiagnosticComp1ProvingFailAuto = On Then DiagnosticText = "Comp1ProvingFailAuto"
+If DiagnosticComp2DisableInputLPC = On Then DiagnosticText = "Comp2DisableInputLPC"
+If DiagnosticComp2ProvingFailAuto = On Then DiagnosticText = "Comp2ProvingFailAuto"
+If DiagnosticCompressor1LPCLockout = On Then DiagnosticText = "Compressor1LPCLockout"
+If DiagnosticCompressor1ProvingFailManual = On Then DiagnosticText = "Compressor1ProvingFailManual"
+If DiagnosticCompressor2LPCLockout = On Then DiagnosticText = "Compressor2LPCLockout"
+If DiagnosticCompressor2ProvingFailManual = On Then DiagnosticText = "Compressor2ProvingFailManual"
+If DiagnosticCompressor3LockOut = On Then DiagnosticText = "Compressor3LockOut"
+If DiagnosticCompressor3LPCDisable = On Then DiagnosticText = "Compressor3LPCDisable"
+If DiagnosticCompressor3ProvingFailManual = On Then DiagnosticText = "Compressor3ProvingFailManual"
+If DiagnosticCompressorDriveFault = On Then DiagnosticText = "CompressorDriveFault"
+If DiagnosticDCVMinPositionatMinimumFanSpeedFail = On Then DiagnosticText = "DCVMinPositionatMinimumFanSpeedFail"
+If DiagnosticDCVMinPositionSetpointFailFullFanSpeed = On Then DiagnosticText = "DCVMinPositionSetpointFailFullFanSpeed"
+If DiagnosticDefaultDefrostFlageithercircuit = On Then DiagnosticText = "DefaultDefrostFlageithercircuit"
+If DiagnosticDefrostDefaultModeCkt1 = On Then DiagnosticText = "DefrostDefaultModeCkt1"
+If DiagnosticDefrostDefaultModeCkt2 = On Then DiagnosticText = "DefrostDefaultModeCkt2"
+If DiagnosticDehumidSetpointFailure = On Then DiagnosticText = "DehumidSetpointFailure"
+If DiagnosticDemandDefrostFaultAeithercircuit = On Then DiagnosticText = "DemandDefrostFaultAeithercircuit"
+If DiagnosticDemandDefrostFaultACkt1 = On Then DiagnosticText = "DemandDefrostFaultACkt1"
+If DiagnosticDemandDefrostFaultACkt2 = On Then DiagnosticText = "DemandDefrostFaultACkt2"
+If DiagnosticDemandDefrostFaultBeithercircuit = On Then DiagnosticText = "DemandDefrostFaultBeithercircuit"
+If DiagnosticDemandDefrostFaultBCkt1 = On Then DiagnosticText = "DemandDefrostFaultBCkt1"
+If DiagnosticDemandDefrostFaultBCkt2 = On Then DiagnosticText = "DemandDefrostFaultBCkt2"
+If DiagnosticDemandDefrostFaultCeithercircuit = On Then DiagnosticText = "DemandDefrostFaultCeithercircuit"
+If DiagnosticDemandDefrostFaultCCkt1 = On Then DiagnosticText = "DemandDefrostFaultCCkt1"
+If DiagnosticDemandDefrostFaultCCkt2 = On Then DiagnosticText = "DemandDefrostFaultCCkt2"
+If DiagnosticDemandDefrostFaultDeithercircuit = On Then DiagnosticText = "DemandDefrostFaultDeithercircuit"
+If DiagnosticDesignMinPositionatMidpointFanSpeedFail = On Then DiagnosticText = "DesignMinPositionatMidpointFanSpeedFail"
+If DiagnosticDesignMinPositionatMinimumFanSpeedFail = On Then DiagnosticText = "DesignMinPositionatMinimumFanSpeedFail"
+If DiagnosticDesignMinPositionSetpointFailFullFanSpeed = On Then DiagnosticText = "DesignMinPositionSetpointFailFullFanSpeed"
+If DiagnosticDirtyFilter = On Then DiagnosticText = "DirtyFilter"
+If DiagnosticDischargeAirHeatSetpointFailure = On Then DiagnosticText = "DischargeAirHeatSetpointFailure"
+If DiagnosticDrainPanOverflow = On Then DiagnosticText = "DrainPanOverflow"
+If DiagnosticEconomizerActuatorFault = On Then DiagnosticText = "EconomizerActuatorFault"
+If DiagnosticEnteringEvapTempSensorFail = On Then DiagnosticText = "EnteringEvapTempSensorFail"
+If DiagnosticEnthalpySetpointFail = On Then DiagnosticText = "EnthalpySetpointFail"
+If DiagnosticExcessiveOutdoorAir = On Then DiagnosticText = "ExcessiveOutdoorAir"
+If DiagnosticExhaustFanProvingFail = On Then DiagnosticText = "ExhaustFanProvingFail"
+If DiagnosticExhaustFanSetpointFailure = On Then DiagnosticText = "ExhaustFanSetpointFailure"
+If DiagnosticFanFailure = On Then DiagnosticText = "FanFailure"
+If DiagnosticFlameRolloutSwitchOpen = On Then DiagnosticText = "FlameRolloutSwitchOpen"
+If DiagnosticFlameSensedw2FGasValveOff = On Then DiagnosticText = "FlameSensedw2FGasValveOff"
+If DiagnosticFreezestatTripped = On Then DiagnosticText = "FreezestatTripped"
+If DiagnosticFroStatTrip = On Then DiagnosticText = "FroStatTrip"
+If DiagnosticGasHeatModuleFailure = On Then DiagnosticText = "GasHeatModuleFailure"
+If DiagnosticGasHeatSupplyAirflowLimitTrip = On Then DiagnosticText = "GasHeatSupplyAirflowLimitTrip"
+If DiagnosticHeatFailure = On Then DiagnosticText = "HeatFailure"
+If DiagnosticHeatingHighTempLimitOpen = On Then DiagnosticText = "HeatingHighTempLimitOpen"
+If DiagnosticIGN1CommunicationsTimedout = On Then DiagnosticText = "IGN1CommunicationsTimedout"
+If DiagnosticIGN2CommunicationsTimedout = On Then DiagnosticText = "IGN2CommunicationsTimedout"
+If DiagnosticInducerProvingSwitchFail = On Then DiagnosticText = "InducerProvingSwitchFail"
+If DiagnosticLocalCoolSetpointFail = On Then DiagnosticText = "LocalCoolSetpointFail"
+If DiagnosticLocalEmergencyStopInitiated = On Then DiagnosticText = "LocalEmergencyStopInitiated"
+If DiagnosticLocalZoneHeatingSetpointFailed = On Then DiagnosticText = "LocalZoneHeatingSetpointFailed"
+If DiagnosticMaintenanceRequired = On Then DiagnosticText = "MaintenanceRequired"
+If DiagnosticMinOAFlowSetpointFail = On Then DiagnosticText = "MinOAFlowSetpointFail"
+If DiagnosticMixedAirTempLowLimitCycleActive = On Then DiagnosticText = "MixedAirTempLowLimitCycleActive"
+If DiagnosticMixedAirTempSensorFailure = On Then DiagnosticText = "MixedAirTempSensorFailure"
+If DiagnosticModDehumidConfigError = On Then DiagnosticText = "ModDehumidConfigError"
+If DiagnosticMorningWarmupSetpointFail = On Then DiagnosticText = "MorningWarmupSetpointFail"
+If DiagnosticNoFlameSensedonheatcall = On Then DiagnosticText = "NoFlameSensedonheatcall"
+If DiagnosticOutdoorAirDamperNotModulating = On Then DiagnosticText = "OutdoorAirDamperNotModulating"
+If DiagnosticOutdoorAirFlowSensorFail = On Then DiagnosticText = "OutdoorAirFlowSensorFail"
+If DiagnosticOutdoorAirTemperatureSensorFailed = On Then DiagnosticText = "OutdoorAirTemperatureSensorFailed"
+If DiagnosticOutdoorHumiditySensorFailed = On Then DiagnosticText = "OutdoorHumiditySensorFailed"
+If DiagnosticReturnAirHumiditySensorFailed = On Then DiagnosticText = "ReturnAirHumiditySensorFailed"
+If DiagnosticReturnAirTempSensorFail = On Then DiagnosticText = "ReturnAirTempSensorFail"
+If DiagnosticRTAMCommFail = On Then DiagnosticText = "RTAMCommFail"
+If DiagnosticRTDMCommFail = On Then DiagnosticText = "RTDMCommFail"
+If DiagnosticRTEMCommFail = On Then DiagnosticText = "RTEMCommFail"
+If DiagnosticRTOMCommFail = On Then DiagnosticText = "RTOMCommFail"
+If DiagnosticRTVMCommFail = On Then DiagnosticText = "RTVMCommFail"
+If DiagnosticSAHighPressLimit = On Then DiagnosticText = "SAHighPressLimit"
+If DiagnosticSAPressureDeadBandFailure = On Then DiagnosticText = "SAPressureDeadBandFailure"
+If DiagnosticSAPressurePWMFault = On Then DiagnosticText = "SAPressurePWMFault"
+If DiagnosticSAPressureSensorFailure = On Then DiagnosticText = "SAPressureSensorFailure"
+If DiagnosticSAPressureSetpointFailure = On Then DiagnosticText = "SAPressureSetpointFailure"
+If DiagnosticSAReheatSetpointFailure = On Then DiagnosticText = "SAReheatSetpointFailure"
+If DiagnosticSAResetAmountFailure = On Then DiagnosticText = "SAResetAmountFailure"
+If DiagnosticSAResetSetpointFailure = On Then DiagnosticText = "SAResetSetpointFailure"
+If DiagnosticSATempCoolSetpointFail = On Then DiagnosticText = "SATempCoolSetpointFail"
+If DiagnosticSATempHeatSetpointFail = On Then DiagnosticText = "SATempHeatSetpointFail"
+If DiagnosticSmokeDetector = On Then DiagnosticText = "SmokeDetector"
+If DiagnosticSpaceHumiditySensorFail = On Then DiagnosticText = "SpaceHumiditySensorFail"
+If DiagnosticSpacePressDeadbandFail = On Then DiagnosticText = "SpacePressDeadbandFail"
+If DiagnosticSpacePressureSensorFailure = On Then DiagnosticText = "SpacePressureSensorFailure"
+If DiagnosticSpacePressureSetpointFail = On Then DiagnosticText = "SpacePressureSetpointFail"
+If DiagnosticSupplyAirTempSensorFail = On Then DiagnosticText = "SupplyAirTempSensorFail"
+If DiagnosticSupplyAirflowSensorFail = On Then DiagnosticText = "SupplyAirflowSensorFail"
+If DiagnosticTD5CommFail = On Then DiagnosticText = "TD5CommFail"
+If DiagnosticUnitCommunicationsFailure = On Then DiagnosticText = "UnitCommunicationsFailure"
+If DiagnosticUnitEconomizingWhenItShouldNot = On Then DiagnosticText = "UnitEconomizingWhenItShouldNot"
+If DiagnosticUnitNotEconomizingWhenItShouldbe = On Then DiagnosticText = "UnitNotEconomizingWhenItShouldbe"
+If DiagnosticVentOverrideExhaust = On Then DiagnosticText = "VentOverrideExhaust"
+If DiagnosticVentOverridePressurize = On Then DiagnosticText = "VentOverridePressurize"
+If DiagnosticVentOverridePurge = On Then DiagnosticText = "VentOverridePurge"
+If DiagnosticVSMCommFail = On Then DiagnosticText = "VSMCommFail"
+If DiagnosticZoneTemperatureSensorFailed = On Then DiagnosticText = "ZoneTemperatureSensorFailed"
+If CompressorLockoutStatus = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 1
+Endif
+If DiagnosticCO2LowLimitSetpointFault = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 2
+Endif
+If DiagnosticCO2SensorFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 3
+Endif
+If DiagnosticCO2SetpointFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 4
+Endif
+If DiagnosticCoilTemperatureSensor1Fail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 5
+Endif
+If DiagnosticCoilTemperatureSensor2Fail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 6
+Endif
+If DiagnosticComp1DisableInputLPC = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 7
+Endif
+If DiagnosticComp1ProvingFailAuto = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 8
+Endif
+If DiagnosticComp2DisableInputLPC = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 9
+Endif
+If DiagnosticComp2ProvingFailAuto = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 10
+Endif
+If DiagnosticCompressor1LPCLockout = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 11
+Endif
+If DiagnosticCompressor1ProvingFailManual = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 12
+Endif
+If DiagnosticCompressor2LPCLockout = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 13
+Endif
+If DiagnosticCompressor2ProvingFailManual = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 14
+Endif
+If DiagnosticCompressor3LockOut = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 15
+Endif
+If DiagnosticCompressor3LPCDisable = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 16
+Endif
+If DiagnosticCompressor3ProvingFailManual = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 17
+Endif
+If DiagnosticCompressorDriveFault = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 18
+Endif
+If DiagnosticDCVMinPositionatMinimumFanSpeedFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 19
+Endif
+If DiagnosticDCVMinPositionSetpointFailFullFanSpeed = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 20
+Endif
+If DiagnosticDefaultDefrostFlageithercircuit = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 21
+Endif
+If DiagnosticDefrostDefaultModeCkt1 = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 22
+Endif
+If DiagnosticDefrostDefaultModeCkt2 = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 23
+Endif
+If DiagnosticDehumidSetpointFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 24
+Endif
+If DiagnosticDemandDefrostFaultAeithercircuit = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 25
+Endif
+If DiagnosticDemandDefrostFaultACkt1 = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 26
+Endif
+If DiagnosticDemandDefrostFaultACkt2 = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 27
+Endif
+If DiagnosticDemandDefrostFaultBeithercircuit = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 28
+Endif
+If DiagnosticDemandDefrostFaultBCkt1 = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 29
+Endif
+If DiagnosticDemandDefrostFaultBCkt2 = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 30
+Endif
+If DiagnosticDemandDefrostFaultCeithercircuit = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 31
+Endif
+If DiagnosticDemandDefrostFaultCCkt1 = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 32
+Endif
+If DiagnosticDemandDefrostFaultCCkt2 = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 33
+Endif
+If DiagnosticDemandDefrostFaultDeithercircuit = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 34
+Endif
+If DiagnosticDesignMinPositionatMidpointFanSpeedFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 35
+Endif
+If DiagnosticDesignMinPositionatMinimumFanSpeedFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 36
+Endif
+If DiagnosticDesignMinPositionSetpointFailFullFanSpeed = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 37
+Endif
+If DiagnosticDirtyFilter = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 38
+Endif
+If DiagnosticDischargeAirHeatSetpointFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 39
+Endif
+If DiagnosticDrainPanOverflow = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 40
+Endif
+If DiagnosticEconomizerActuatorFault = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 41
+Endif
+If DiagnosticEnteringEvapTempSensorFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 42
+Endif
+If DiagnosticEnthalpySetpointFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 43
+Endif
+If DiagnosticExcessiveOutdoorAir = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 44
+Endif
+If DiagnosticExhaustFanProvingFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 45
+Endif
+If DiagnosticExhaustFanSetpointFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 46
+Endif
+If DiagnosticFanFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 47
+Endif
+If DiagnosticFlameRolloutSwitchOpen = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 48
+Endif
+If DiagnosticFlameSensedw2FGasValveOff = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 49
+Endif
+If DiagnosticFreezestatTripped = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 50
+Endif
+If DiagnosticFroStatTrip = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 51
+Endif
+If DiagnosticGasHeatModuleFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 52
+Endif
+If DiagnosticGasHeatSupplyAirflowLimitTrip = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 53
+Endif
+If DiagnosticHeatFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 54
+Endif
+If DiagnosticHeatingHighTempLimitOpen = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 55
+Endif
+If DiagnosticIGN1CommunicationsTimedout = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 56
+Endif
+If DiagnosticIGN2CommunicationsTimedout = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 57
+Endif
+If DiagnosticInducerProvingSwitchFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 58
+Endif
+If DiagnosticLocalCoolSetpointFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 59
+Endif
+If DiagnosticLocalEmergencyStopInitiated = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 60
+Endif
+If DiagnosticLocalZoneHeatingSetpointFailed = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 61
+Endif
+If DiagnosticMaintenanceRequired = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 62
+Endif
+If DiagnosticMinOAFlowSetpointFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 63
+Endif
+If DiagnosticMixedAirTempLowLimitCycleActive = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 64
+Endif
+If DiagnosticMixedAirTempSensorFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 65
+Endif
+If DiagnosticModDehumidConfigError = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 66
+Endif
+If DiagnosticMorningWarmupSetpointFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 67
+Endif
+If DiagnosticNoFlameSensedonheatcall = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 68
+Endif
+If DiagnosticOutdoorAirDamperNotModulating = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 69
+Endif
+If DiagnosticOutdoorAirFlowSensorFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 70
+Endif
+If DiagnosticOutdoorAirTemperatureSensorFailed = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 71
+Endif
+If DiagnosticOutdoorHumiditySensorFailed = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 72
+Endif
+If DiagnosticReturnAirHumiditySensorFailed = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 73
+Endif
+If DiagnosticReturnAirTempSensorFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 74
+Endif
+If DiagnosticRTAMCommFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 75
+Endif
+If DiagnosticRTDMCommFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 76
+Endif
+If DiagnosticRTEMCommFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 77
+Endif
+If DiagnosticRTOMCommFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 78
+Endif
+If DiagnosticRTVMCommFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 79
+Endif
+If DiagnosticSAHighPressLimit = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 80
+Endif
+If DiagnosticSAPressureDeadBandFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 81
+Endif
+If DiagnosticSAPressurePWMFault = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 82
+Endif
+If DiagnosticSAPressureSensorFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 83
+Endif
+If DiagnosticSAPressureSetpointFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 84
+Endif
+If DiagnosticSAReheatSetpointFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 85
+Endif
+If DiagnosticSAResetAmountFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 86
+Endif
+If DiagnosticSAResetSetpointFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 87
+Endif
+If DiagnosticSATempCoolSetpointFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 88
+Endif
+If DiagnosticSATempHeatSetpointFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 89
+Endif
+If DiagnosticSmokeDetector = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 90
+Endif
+If DiagnosticSpaceHumiditySensorFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 91
+Endif
+If DiagnosticSpacePressDeadbandFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 92
+Endif
+If DiagnosticSpacePressureSensorFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 93
+Endif
+If DiagnosticSpacePressureSetpointFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 94
+Endif
+If DiagnosticSupplyAirTempSensorFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 95
+Endif
+If DiagnosticSupplyAirflowSensorFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 96
+Endif
+If DiagnosticTD5CommFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 97
+Endif
+If DiagnosticUnitCommunicationsFailure = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 98
+Endif
+If DiagnosticUnitEconomizingWhenItShouldNot = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 99
+Endif
+If DiagnosticUnitNotEconomizingWhenItShouldbe = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 100
+Endif
+If DiagnosticVentOverrideExhaust = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 101
+Endif
+If DiagnosticVentOverridePressurize = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 102
+Endif
+If DiagnosticVentOverridePurge = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 103
+Endif
+If DiagnosticVSMCommFail = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 104
+Endif
+If DiagnosticZoneTemperatureSensorFailed = On Then
+  QtyAl = QtyAl + 1
+  DiagnosticCode = 105
+Endif
+QtyDiagAlerts = QtyAl
+If QtyDiagAlerts = 0 Then DiagnosticText = "No Alarms"
+If QtyDiagAlerts > 0 Then DiagnosticAlert = On Else DiagnosticAlert = Off
+Goto Init

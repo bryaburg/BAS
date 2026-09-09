@@ -1,0 +1,108 @@
+' =============================================================================
+' HVAC Zone Control Logic with Error Checking
+' -----------------------------------------------------------------------------
+' Determines a single multistate zone command based on occupancy, room
+' temperature vs. setpoint, room relative humidity, and outside air temperature.
+'
+' Inputs:
+'   RmTmp           - Room temperature (°F)
+'   RmStpt          - Room temperature setpoint when occupied (°F)
+'   UnOccCoolStpt   - Cooling setpoint when unoccupied (°F)
+'   UnOccHeatingStpt- Heating setpoint when unoccupied (°F)
+'   RmRh            - Room relative humidity (%)
+'   RmRhStpt        - Room relative humidity setpoint (%)
+'   OaTmp           - Outside air temperature (°F)
+'   Occ             - Occupancy status (0 = Unoccupied, 1 = Occupied)
+'   DeadBand        - Temperature deadband (°F)
+'
+' Output:
+'   UnitState - Multistate zone command (0-5):
+'     0 = Off              (fan off, nothing active)
+'     1 = Heating           (fan on, heat on)
+'     2 = Cooling           (fan on, mechanical cooling on)
+'     3 = Cooling + Dehum   (fan on, mechanical cooling + dehumidification on)
+'     4 = Economizer        (fan on, free cooling with outside air)
+'     5 = Fan Only          (fan on, occupied deadband - no heat/cool needed)
+' =============================================================================
+
+Numeric Input RmRh, RmRhStpt, OaTmp, Occ, RmTmp, RmStpt, UnOccCoolStpt, UnOccHeatingStpt, DeadBand
+Numeric Output UnitState
+
+Calc:
+    Goto Check_Error
+
+' -----------------------------------------------------------------------------
+' ERROR CHECKING ROUTINE
+' Validates critical inputs before processing control logic
+' -----------------------------------------------------------------------------
+Check_Error:
+    ' Check for valid temperature and setpoint values
+    If RmTmp < -40 Or RmTmp > 150 Then
+        UnitState = 0   ' Invalid room temperature, fail-safe to Off
+        Goto Calc
+    EndIf
+    
+    If RmStpt < 40 Or RmStpt > 90 Then
+        UnitState = 0   ' Invalid occupied setpoint, fail-safe to Off
+        Goto Calc
+    EndIf
+    
+    ' Check occupancy status and branch to appropriate logic
+    If Occ = 0 Then
+        Goto Unocc_Logic
+    Else
+        If Occ = 1 Then
+            Goto Occ_Logic
+        Else
+            UnitState = 0   ' Invalid occupancy value, fail-safe to Off
+            Goto Calc
+        EndIf
+    EndIf
+
+' -----------------------------------------------------------------------------
+' UNOCCUPIED LOGIC
+' Only Heating(1), Cooling(2), or Off(0) - no economizer or dehumidification
+' -----------------------------------------------------------------------------
+Unocc_Logic:
+    If RmTmp < UnOccHeatingStpt Then
+        UnitState = 1   ' Heating
+    Else
+        If RmTmp > UnOccCoolStpt Then
+            UnitState = 2   ' Cooling
+        Else
+            UnitState = 0   ' Off
+        EndIf
+    EndIf
+    Goto Calc
+
+' -----------------------------------------------------------------------------
+' OCCUPIED LOGIC
+' Fan runs continuously (State 5 minimum), full feature set available
+' Cooling + Dehum triggers on high temp OR high humidity
+' -----------------------------------------------------------------------------
+Occ_Logic:
+    ' Heating check first
+    If RmTmp < (RmStpt - DeadBand) Then
+        UnitState = 1   ' Heating
+        Goto Calc
+    EndIf
+    
+    ' Cooling + Dehum on high temperature or high humidity.
+    If RmTmp > (RmStpt + DeadBand) Or RmRh >= RmRhStpt Then
+        UnitState = 3   ' Cooling + Dehum
+        Goto Calc
+    EndIf
+    
+    ' Normal cooling with economizer option (only if temp above deadband, humidity OK)
+    If RmTmp > (RmStpt + DeadBand) Then
+        If OaTmp <= 60 Then
+            UnitState = 4   ' Economizer
+        Else
+            UnitState = 2   ' Cooling
+        EndIf
+        Goto Calc
+    EndIf
+    
+    ' Deadband - occupied
+    UnitState = 5   ' Fan Only
+    Goto Calc

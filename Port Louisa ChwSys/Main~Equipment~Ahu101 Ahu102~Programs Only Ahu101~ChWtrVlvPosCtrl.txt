@@ -1,0 +1,36 @@
+﻿'ClgCtl Program
+'Built by Barbeau
+'Version 2020-07-10 0915
+'Modulates the chilled water valve based upon supply temp and water circulation requirements
+
+Numeric Input SaFlowSts, SaTmp, SaTmpSpt, MechClgEna, Ahu101Cmd
+Numeric Output ChwVlvPos
+Numeric Lerr,Intg,Kp,Ki,Kd,Bias,Resptime
+Function PIDLoopFct 
+
+Line Shutdown
+'Shut valve and initialize values
+Set ChwVlvPos to 0.0
+Set Lerr to 0.0
+Set Intg to 0.0
+Set Resptime to 3
+If SaFlowSts is On and MechClgEna = On and Ahu101Cmd = On and SaTmp > SaTmpSpt + 1 and MechClgEna = On then goto PIDSetup
+
+PIDSetup:
+'Provide initial parameters for PID loop
+Set Kp to 2.5 '50/20 Twenty degrees is the proportional band.
+Set Ki to Kp/100 * Resptime
+Set Kd to Ki/8
+Set Bias to 5
+Goto ValveMod
+
+ValveMod:
+'Run PID loop function and assign result to valve position
+Set ChwVlvPos to PIDLoopFct(SaTmp,SaTmpSpt,Kp,Ki,Kd,Bias,1,Lerr,Intg)
+Goto Checkerror
+
+Checkerror:
+'Stays on this line if PID loop is close to set point. 
+'Goes to shutdown if a parameter changes. Goes to FreezeProtect if freeze alarm is received.
+If abs(SaTmp - SaTmpSpt) >= 0.1 and TS>=Resptime then goto ValveMod
+If SaFlowSts is Off or MechClgEna = Off or Ahu101Cmd = Off or SaTmp < SaTmp - 5 then Goto Shutdown

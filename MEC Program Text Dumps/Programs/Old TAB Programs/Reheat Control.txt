@@ -1,0 +1,60 @@
+'This program controls the MultiState HW Reheat Valve based on Ahu Fan status, Heat/Cool Demand and Valve Runtime.
+
+Numeric Input AhuFanStatus,HeatCoolDemand,ReheatEnable,DischTemp,DischTempSP,HWAvailable
+Numeric Input ValveCmdFdBk,ValveFeedback
+Numeric Output DischCmd,ValveCmdOut,HwValve,HWValvePos
+Numeric Kp,Ki,Kd,Lerr,Intg,Resptime,Runtime,ValveCmd
+Function PidLoop
+
+Line Shutdown
+  If TS<=Runtime or DischTemp>= DischTempSP+5 then
+    Set HwValve to -On
+  Else
+    Set HwValve to Off
+  Endif
+  Set DischCmd to 0.0
+  Set ValveCmdFdBk to 0.0
+  Set ValveFeedback to 0.0
+  Set ValveCmdOut to 0.0
+  Set HwValvePos to ValveFeedback
+  Set Runtime to 180
+  If TS>=Runtime and AhuFanStatus is On and HeatCoolDemand<=ReheatEnable and HWAvailable is On then Goto PIDsetup
+
+Line PIDsetup
+  Set Resptime to 10 
+  Set Kp to 2.5 'Kp=50/20 20 degrees is the proportional range
+  Set Ki to Kp/100 * Resptime
+  Set Kd to Ki/8
+  Set ValveFeedBack to 1
+  Goto CheckError
+
+Line CheckError
+ If (HwValvePos<=1 or HwValvePos>=99) then
+  If HwValvePos<=1 then Set HWValve to -On
+  If HwValvePos>=99 then Set HWValve to On
+  Endif
+  If (HwValvePos>=5 and HwValvePos<=95) then Set HwValve to Off
+  Set ValveCmdFdBk to 0
+  If AhuFanStatus is Off or HeatCoolDemand>ReheatEnable or HWAvailable is Off then Goto Shutdown
+  If abs(DischTemp-DischTempSP)>=(DischTempSP*0.025) and TS>=Resptime then Goto ErrorCalc
+
+Line ErrorCalc
+  Set DischCmd to PidLoop(DischTemp,DischTempSP,Kp,Ki,Kd,10,0,Lerr,Intg)
+  Goto ValvePulse
+
+Line ValvePulse
+Set ValveCmd to (DischCmd-HwValvePos)
+If ValveCmd>0 then Set ValveCmdOut to (DischCmd-HwValvePos) else Set ValveCmdOut to (DischCmd-HwValvePos)
+Goto ValveCmdWait
+
+Line ValveCmdWait
+  Set HWValve to ValveCmdOut
+  If TS>=abs(ValveCmdOut)then
+    Set ValveCmdFdbk to(ValveCmdOut*(100/Runtime))
+    Set ValveFeedBack to(maximum(minimum((ValveCmdFdBk+ValveFeedback),100),0))
+    Set HwValvePos to ValveFeedback
+    Goto CheckError
+  Endif
+
+Line E
+  If TS>=10 then Goto Shutdown

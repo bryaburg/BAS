@@ -1,0 +1,10 @@
+﻿Numeric Input UnOccHighOffSet,UnOccLowOffSet,RmTemp,RmSetPoint
+Numeric Output NightCycle
+
+Line NightCycleOff
+Set NightCycle to Off
+If RmTemp>=(RmSetPoint+UnOccHighOffSet) or RmTemp<=(RmSetPoint-UnOccLowOffSet) then goto NightCycleOn
+
+Line NightCycleOn
+Set NightCycle to On
+If RmTemp<=RmSetPoint+(UnOccHighOffSet-(UnOccHighOffset * .5)) and RmTemp>=(RmSetPoint-(UnOccLowOffset * .5)) then goto NightCycleOff

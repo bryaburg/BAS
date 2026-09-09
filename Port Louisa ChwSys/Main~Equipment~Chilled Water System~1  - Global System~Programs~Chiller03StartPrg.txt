@@ -1,0 +1,51 @@
+﻿'Chiller03StartPrg
+'Built by Barbeau
+'Version 2020-07-02 1412
+'This program controls the Chiller Start/Stop Command.
+
+Numeric Input ChLd1, ChLd2, ChLg, Flowsts
+Numeric Input ChLd1Cmd, ChLd2Cmd, ChLgCmd
+Numeric Output Ch03Start, IsoVlv
+Numeric ChId
+
+Init:
+'''''''''''''''''''''''''''
+'Set ChId equal to the chiller number you are trying to control
+'''''''''''''''''''''''''''
+ChId = 103
+'''''''''''''''''''''''''''
+Goto ChillerOff
+
+ChillerOff:
+Ch03Start = Off
+IsoVlv = Off
+If ChLd1 = ChId and ChLd1Cmd = On then Goto OpenValve
+If ChLd2 = ChId and ChLd2Cmd = On then Goto OpenValve
+If ChLg = ChId and ChLgCmd = On then Goto OpenValve
+
+OpenValve:
+ IsoVlv = On
+ If TS > 10 Then Goto CheckFlow
+
+CheckFlow:
+ If FlowSts = On Then Goto ChillerRunning
+ If ChLd1 = ChId and ChLd1Cmd = Off then Goto DelayOff
+ If ChLd2 = ChId and ChLd2Cmd = Off then Goto DelayOff
+ If ChLg = ChId and ChLgCmd = Off then Goto DelayOff
+
+ChillerRunning:
+Ch03Start = On
+If ChLd1 = ChId and ChLd1Cmd = Off then Goto DelayOff
+If ChLd2 = ChId and ChLd2Cmd = Off then Goto DelayOff
+If ChLg = ChId and ChLgCmd = Off then Goto DelayOff
+If FlowSts = Off Then Goto DelayOff
+
+DelayOff:
+Ch03Start = On
+If ChLd1 = ChId and ChLd1Cmd = On then Goto ChillerRunning
+If ChLd2 = ChId and ChLd2Cmd = On then Goto ChillerRunning
+If ChLg = ChId and ChLgCmd = On then Goto ChillerRunning
+If TS > 5 Then Goto ChillerOff
+
+E:
+If TS >= 10 then Goto ChillerOff

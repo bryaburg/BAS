@@ -1,0 +1,35 @@
+'CfmCalcs
+'Built by Barbeau
+'Version 2023-06-06 1710
+'Sets CFM from Velocity Pressure
+'VelPr below VelPrLoSpt will not be calculated
+'Box size is in inches - we convert this to feet with a numeric
+'Area of a circle = PI * Radius Squared
+'Airflow = 4005 * Square Root of Velocity Pressure * Area(feet)
+'Kfactor is used to balance. If box is within 10% of actual then Kfactor = 1
+'Use a ratio to find a Kfactor that will give accurate flow readings
+
+Numeric Input VelPr, VelPrLoSpt, AhuSts, Kfactor, BoxSize
+Numeric Output AirFl_CFM, AirVel_FPM
+Function InputFilterFct
+Numeric BoxFeet, Area, CFM, FPM
+Numeric Public AvgVelPr
+
+CalculationOff:
+  AirFl_CFM, AirVel_FPM, AvgVelPr = 0
+  If AhuSts = On Then Goto CalculationOn
+
+CalculationOn:
+  BoxFeet = BoxSize / 12
+  If VelPr > VelPrLoSpt Then
+    AvgVelPr = InputFilterFct(VelPr, AvgVelPr, .5)
+    FPM = 4005 * Sqrt(AvgVelPr)
+    AirVel_FPM = InputFilterFct(FPM, AirVel_FPM, .33)
+    Area = (3.1415927 * ((BoxFeet/2)^2))
+    CFM = AirVel_FPM * Area
+    AirFl_CFM = (InputFilterFct(CFM, AirFl_CFM, .33)*Kfactor)
+  Else
+  AirFl_CFM, AirVel_FPM, AvgVelPr = 0
+  Endif
+  If AhuSts = Off Then Goto CalculationOff
+

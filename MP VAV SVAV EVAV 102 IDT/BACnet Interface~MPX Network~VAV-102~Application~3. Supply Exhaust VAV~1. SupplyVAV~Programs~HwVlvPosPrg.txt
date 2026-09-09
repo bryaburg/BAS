@@ -1,0 +1,37 @@
+﻿'Hot Water Valve Position Program
+'Built by JMartinez
+'Version 2023-07-12
+'Controls valve based upon temp versus setpoint
+
+Numeric Input SaTmp, SaTmpSpt, VAVMd, HtgBias, HtgClgDmd, AHU_FanSts, HwVlvFlushCmd
+Numeric Output HwVlvPos
+Function PIDFct
+Numeric Kp, Ki, Kd, Bias, Lerr, PIDOutput, Intg, RespTime
+
+Shutdown:
+  HwVlvPos = 0
+  RespTime = 3
+  Intg = 0
+  If AHU_FanSts = On and HtgClgDmd < HtgBias Then Goto PIDSetup
+  If HwVlvFlushCmd = On Then Goto ValveFlush
+
+PIDSetup:
+  RespTime = 3
+  Kp = 50 / 10 '20 deg is the prop band
+  Ki = (Kp / 100) * RespTime
+  Kd = Ki / 8
+  Bias = .5 ' nominal valve position with no error
+  Goto Modulating
+
+Modulating:
+  HwVlvPos = PIDfct(SaTmp, SaTmpSpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg)
+  Goto CHECKERROR
+
+CHECKERROR:
+  If AHU_FanSts = Off or HtgClgDmd > HtgBias or SaTmp > (SaTmpSpt + 5) Then Goto Shutdown
+  If HwVlvFlushCmd = On Then Goto ValveFlush
+  If (SaTmpSpt - SaTmp) > 0.01 and TS > RespTime then Goto Modulating
+
+ValveFlush:
+  HwVlvPos = 100
+  If HwVlvFlushCmd = Off Then Goto Shutdown

@@ -1,0 +1,37 @@
+﻿'OccOvrCmd
+'Built by Barbeau
+'Version 2023-08-18 1256
+'Sets timed occupancy override
+
+Numeric Input Timer
+Numeric Output OvrCmd
+Numeric Public rud_OrvCmd
+
+Init: 
+  Goto SetOverrideOff
+
+OverrideOff:
+  ReadProperty(Timer)
+	OvrCmd = Off
+	If rud_OrvCmd = On Then Goto SetOverrideOn
+
+OverrideOn:
+	OvrCmd = On
+	If TS/60 >= Timer Then Goto SetOverrideOff
+	If rud_OrvCmd = Off Then Goto SetOverrideOff
+
+SetOverrideOn:
+  rud_OrvCmd = On
+  If TS > 5 Then Goto ReleaseRudOn
+
+SetOverrideOff:
+  rud_OrvCmd = Off
+  If TS > 5 Then Goto ReleaseRudOff
+
+ReleaseRudOn:
+  Relinquish(rud_OrvCmd)
+  If TS > 5 Then Goto OverrideOn
+
+ReleaseRudOff:
+  Relinquish(rud_OrvCmd)
+  If TS > 5 Then Goto OverrideOff

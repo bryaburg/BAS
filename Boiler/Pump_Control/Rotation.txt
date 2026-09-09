@@ -1,0 +1,19 @@
+' Pump rotation control logic: Initializes with Pump 1 as lead, then automatically
+' rotates to Pump 2 every Monday at 6:00 AM to balance runtime wear between pumps.
+' Includes a 60-second delay after each rotation before resuming standby.
+
+Numeric Public Lead_Pump
+
+Waiting_to_Rotate:
+	If Weekday = 2 and TimeOfDay = 0600 Then Goto Rotation
+
+Rotation:
+	If Lead_Pump = 1 Then 
+		Lead_Pump = 2 
+	Else 
+		Lead_Pump = 1
+	Endif
+	Goto Rotation_Delay
+
+Rotation_Delay:
+	If TS > 60 Then Goto Waiting_to_Rotate

@@ -1,0 +1,13 @@
+Point for occupancy override status and changing are the same point in display of the RU.  Pull value out to a priority 10 value.  
+Put that value into a program.  Push out a value from program to priority 10 to another value.  Push that value into the display point for occupancy override.
+
+Also, OccSnsnEna needs priority 16 changed to not enabled or else the VAV will get stuck in standby mode when override is on, occupied occurs while it is on, 
+and then override disengages.  The VAV will not function in standby and will not leave standby until unoccupied command is given.  This part is designed
+for smart stats with occupancy sensors and works fine with that, but not ones without occupancy sensors.  
+
+The override time is set in hours with OvrTmh.
+
+
+
+When importing OccOvr99 folder, usually the binding for OccOvrToRud to the room unit device gets lost and must be rentered
+for each unit.

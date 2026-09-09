@@ -1,0 +1,55 @@
+'SaFanCtrl
+'Built by Barbeau
+'Version 2019-02-18 1755
+'Controls the return air fan on CFM
+
+Numeric Input SaStPrAvg, SaStPrSpt, SaFanSts
+Numeric Output SaFanSpd
+Function PIDLoopFct
+Numeric Kp, Ki, Kd, Lerr, Bias, Intg, PIDOutput, Resptime, FanRampup, Ramptime, LoopResult
+Numeric SaFanSpdMax, SaFanSpdMin
+
+FanOff:
+  SaFanSpdMax = 100
+  SaFanSpdMin = 20
+  Set SaFanSpd to 0
+  Set Resptime to 3
+  Set Ramptime to 15
+  Set FanRampup to 5
+  Set Intg to 0
+  Set Lerr to 0
+  If TS > 20 and SaFanSts is On then Goto Startup
+
+Startup:
+  Set SaFanSpd to SaFanSpdMin
+  If SaFanSts is On and TS>=Ramptime then Goto Biasup
+  If (TS >=(Ramptime + 60)) Or (SaFanSts = Off) then Goto FanOff
+
+Biasup:
+  Set SaFanSpd to (SaFanSpd + FanRampup)
+  Goto Delayup
+
+Delayup:
+  If SaFanSts is Off then Goto Startup
+  If TS>=Ramptime then Goto Biasup
+  If SaStPrAvg>=(SaStPrSpt * 0.9)then Goto Setbias
+  If SaFanSpd>=SaFanSpdMax-5 then Goto Setbias
+
+Setbias:
+  Set Bias to SaFanSpd
+  Goto Staticpid
+
+Staticpid:
+  Set Kp to 25 'Kp=50/2.0 2.0 INW is the proportional range.
+  Set Ki to (Kp/100) * Resptime
+  Set Kd to Ki/8
+  Set LoopResult to Maximum(SaFanSpdMin, PIDLoopFct(SaStPrAvg, SaStPrSpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg))
+  Set SaFanSpd to Minimum(SaFanSpdMax, LoopResult)
+  Goto Checkerror
+
+Checkerror:
+  If SaFanSts is Off then Goto Startup
+  If abs(SaStPrAvg - SaStPrSpt)>=0.01 and TS>=Resptime then Goto Staticpid
+
+E:
+  If TS >= 10 then Goto FanOff

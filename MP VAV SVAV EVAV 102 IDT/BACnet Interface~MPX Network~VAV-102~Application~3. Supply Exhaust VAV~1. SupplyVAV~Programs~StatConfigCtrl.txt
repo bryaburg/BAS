@@ -1,0 +1,20 @@
+﻿' StatConfigCtrl
+' Created by JWeath
+' Version 2023-08-19 1329
+' Program to set Config Settings on Room Stat
+
+Numeric Input RmTmpSptHi, RmTmpSptLo, AllowSptChnges 
+Numeric Output AllowHVACMd, AllowFanCtrl, AllowUnitChnges, HiSpt, LoSpt, SptChnge
+
+SetConfig:
+ AllowHVACMd = Off
+ AllowFanCtrl = Off
+ AllowUnitChnges = Off
+ HiSpt = RmTmpSptHi
+ LoSpt = RmTmpSptLo
+ SptChnge = AllowSptChnges
+ If TS > 20 Then Goto Hold
+
+Hold:
+ If TS > 10 Then Goto SetConfig
+
