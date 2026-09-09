@@ -11,11 +11,6 @@ Numeric Input SaFanSts
 
 Numeric Output RaFanCmd, RaFanSpd
 
-Numeric DbgPidOut
-Numeric DbgError
-Numeric DbgIntgTerm
-Numeric DbgPterm
-
 Function PidLoop
 Numeric Kp, Ki, Kd, Lerr, Bias, Intg
 
@@ -38,12 +33,6 @@ Fan_Off:
 Fan_On:
 	RaFanCmd = 1
 	RaFanSpd = PIDLoop(OaFl, CFMSTPT, Kp, Ki, Kd, Bias, 1, Lerr, Intg)
-
-	' Match the PID function's direct-action error: measured flow minus setpoint.
-	DbgError = OaFl - CFMSTPT
-	DbgPterm = DbgError * Kp
-	DbgIntgTerm = Intg
-	DbgPidOut = RaFanSpd
 	Goto ErrorCheck
 
 ' --- Re-runs PID once CFM error exceeds 5 and at least 30 sec have passed since

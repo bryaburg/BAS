@@ -16,14 +16,8 @@ Function PidLoop
 '     with the SA fan proven on. ---
 Heating_Off:
     HwVlvPosOut = 0
-    ' REVIEW: Kp/Ki here are far smaller than the pattern used in the other PID loops
-    ' in this project (e.g. MaDmpr.txt / Calcs.txt use Ki = (Kp/100) * RespTime, giving
-    ' Ki roughly 1/400th of Kp). Here Ki is 1/100th of Kp instead of the usual ~1/400th,
-    ' and Kp itself (0.05) is two orders of magnitude below the other loops' Kp (5).
-    ' A 10F error would only produce ~0.5% valve movement off bias - confirm this is the
-    ' intended tuning and not a decimal/scaling typo (e.g. meant Kp=5, Ki=0.05).
-    Kp = 0.05
-    Ki = 0.0005
+    Kp = 5
+    Ki = 0.05
     Kd = 0
     Bias = 0
     Lerr = 0

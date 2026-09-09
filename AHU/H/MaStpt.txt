@@ -1,0 +1,5 @@
+Numeric Input SaTmpStpt
+
+Numeric Output MaTmpStpt
+
+MaTmpStpt = SaTmpStpt - 2.1

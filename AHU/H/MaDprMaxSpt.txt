@@ -4,11 +4,11 @@
 ' temperature to support freeze protection.
 '
 ' Inputs:
-Numeric Input MaTmp       : current mixed-air temperature (degF)
-Numeric Input MaDprMinSpt : minimum allowed damper position (0-100%)
+Numeric Input MaTmp
+Numeric Input MaDprMinSpt
 '
 ' Output:
-Numeric Output MaDprMaxSpt : maximum allowed damper position (0-100%)
+Numeric Output MaDprMaxSpt
 '
 ' ResetFct parameters:
 ' - Out_High, Out_Low : output limits
@@ -16,7 +16,7 @@ Numeric Output MaDprMaxSpt : maximum allowed damper position (0-100%)
 ' - Action             : 0 = Reverse, 1 = Direct
 ' - Input              : value being reset
 '
-' Action = 1 (Direct) is used for freeze protection. As MaTmp falls
+' As MaTmp falls
 ' from 40F toward 35F, the maximum permitted OA damper position falls
 ' toward MaDprMinSpt, restricting outside air as mixed air gets colder.
 MaDprMaxSpt = ResetFct(100, MaDprMinSpt, 40, 35, 1, MaTmp)
