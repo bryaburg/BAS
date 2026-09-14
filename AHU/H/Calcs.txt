@@ -7,16 +7,13 @@
 ' limits, derives a mixed-air setpoint from it, and separately resets the OA
 ' damper's maximum allowed position based on mixed air temperature.
 
-Numeric Input RmTmp, RmTmpSpt, RmRh, OaTmp, MaDprMinSpt, MaTmp
+Numeric Input RmTmp, RmTmpSpt
 Numeric Output SaTmpSpt, HtgClgDmd, MaTmpStpt, MaDprMaxSpt
 Function PIDfct, ResetFct
 
-' --- Constants ---
 Numeric Kp, Ki, Kd, Lerr, Intg, Bias, ResetRatio
 Numeric RespTime, SaTmpSpt_Min, SaTmpSpt_Max
 
-' --- One-time setup of PID gains and the SA temperature reset range, then falls
-'     straight through to the control loop. ---
 Initialize:
     RespTime = 3
     Bias = 50
@@ -28,9 +25,6 @@ Initialize:
     Goto CalculatePID
 
 ' --- PID Calculation Section ---
-' REVIEW: RmRh (room RH) and OaTmp are declared as inputs but never referenced below.
-' If humidity/OA temp were meant to influence the SA setpoint reset, that logic is
-' missing here. If they're unused by design, consider removing them to avoid confusion.
 CalculatePID:
     ' Room temp PID produces a 0-100% heating/cooling demand signal (Actn=1: Direct).
     HtgClgDmd = PIDfct(RmTmp, RmTmpSpt, Kp, Ki, Kd, Bias, 1, Lerr, Intg)

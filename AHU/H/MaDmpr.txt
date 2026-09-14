@@ -21,10 +21,7 @@
 '   MinPosition  - Holds minimum ventilation position
 '   MaxDprPosition - Holds maximum position while CO2 is high
 '   TempPID      - Modulates position for economizer temperature control
-'
-' Review note: Shutdown clears Lerr and Intg, and sets MaDprPos to zero on
-' every entry. If this program starts at Shutdown each scan, the PID's stored
-' derivative/integral state and its bias cannot persist between scans.
+
 
 Numeric Input UnitState, MaTmp, MaTmpSpt
 Numeric Input MinDprPosSpt, MaxDprPosSpt

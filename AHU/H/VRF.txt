@@ -3,65 +3,71 @@
 ' Enables the VRF compressor for cooling or heating based on zone UnitState,
 ' with a low-OAT lockout and a condenser alarm interlock. Reversing valve is
 ' de-energized for cooling, energized for heating.
+'
+' UnitState values: 0=Off, 1=Heating, 2=Cooling, 3=Cooling+Dehum, 4=Econ+MechClg
 ' =============================================================================
 
 Numeric Input UnitState, CondAlm, OAT, SaFanSts
 Numeric Output VRFCmd, RevVlvCmd
-Numeric RevVlvDly
 
-' REVIEW: RevVlvDly is assigned below but never used to delay RevVlvCmd or
-' VRFCmd. Confirm whether a reversing-valve transition delay is required before
-' enabling the compressor; otherwise remove the unused variable.
-' REVIEW: This program uses "TM" for its anti-short-cycle timers, while every other
-' program in this set (SaFanControl, MaDmpr, HtgVlvCmd, ReliefFan, Calcs) uses "TS".
-' If TM and TS are different built-in scan timers (e.g. minutes vs. seconds), confirm
-' TM is genuinely what's intended here; if TM was meant to be TS, "TM >= 5" would only
-' be a 5-second compressor lockout rather than 5 minutes, which is not enough for
-' compressor short-cycle/anti-short-cycle protection.
-' REVIEW: No hysteresis on the OAT < 40 cutoff (used in VRF_Off, VRFClg, VRFHtg) -
-' right at 40F this could cycle the unit on/off repeatedly. Consider adding a couple
-' degrees of deadband, e.g. disable below 38F, re-enable above 42F.
-' REVIEW: VRF_Off does not assign RevVlvCmd. After heating, the valve can remain
-' energized while the compressor is off. Set a defined safe valve state in the off
-' state, or confirm that the valve is intentionally allowed to retain its position.
 
-' --- Unit off / idle. Waits for a cooling, heating, or economizer-with-mech-cooling
-'     call, proof of SA fan, no condenser alarm, and OAT above the low-OAT lockout,
-'     plus the anti-short-cycle timer. ---
+
+' --- Constants ---
+Numeric CLG_OAT_LOCKOUT = 40    ' Minimum OAT for compressor operation [°F]
+Numeric ASC_DELAY = 5           ' Anti-short-cycle delay [seconds]
+
+
+' --- Unit off / idle ---
+' Waits for valid call with proof of SA fan, no condenser alarm, OAT above lockout,
+' and anti-short-cycle timer expired.
 VRF_Off:
     VRFCmd = 0
-    RevVlvDly = 0
-    If SaFanSts = 0 Then Goto VRF_Off 
-    If (UnitState = 2 and CondAlm = 0 and OAT >= 40 and TM >= 5) Then Goto VRFClg
-    If (UnitState = 1 and CondAlm = 0 and OAT >= 40 and TM >= 5) Then Goto VRFHtg
-' REVIEW: The UnitState = 3 path does not check CondAlm or OAT here (the earlier
-' common fan check still applies).
-' This can start mechanical cooling during a condenser alarm or below the low-OAT
-' lockout. Align this condition with the cooling path if that is not intentional.
-    If UnitState = 3 and TM >= 5 Then Goto VRFClg    ' Cooling+Dehum also runs mech cooling
+    RevVlvCmd = 0
 
-' --- Cooling mode: reversing valve de-energized, compressor enabled. Drops out on
-'     low OAT, loss of fan status, a mode change away from cooling/dehum, or condenser alarm. ---
+    ' Safety interlocks must be satisfied before any mode
+    If SaFanSts = 0 Then Goto VRF_Off
+    If CondAlm = 1 Then Goto VRF_Off
+    If OAT < CLG_OAT_LOCKOUT Then Goto VRF_Off
+
+    ' Mode selection (cooling and heating+dehum both run mechanical cooling)
+    If UnitState = 1 Then Goto VRFHtg
+    If UnitState = 2 or UnitState = 3 or UnitState = 4 Then Goto VRFClg
+
+' --- Cooling mode ---
+' Reversing valve de-energized, compressor enabled.
+' Drops out on any interlock failure or mode change.
 VRFClg:
     RevVlvCmd = 0
-    If OAT < 40 Then Goto VRF_Off
+
+    ' Immediate safety drops
+    If OAT < CLG_OAT_LOCKOUT Then Goto VRF_Off
     If SaFanSts = 0 Then Goto VRF_Off
-    VRFCmd = 1
-' REVIEW: There is no Goto or loop terminator after the cooling checks. Execution
-' falls through into VRFHtg, which energizes the reversing valve and can then turn
-' the compressor off. Add an explicit return/loop transfer for cooling operation.
-    If (UnitState <> 2 and UnitState <> 3) and TM >= 5 Then Goto VRF_Off
     If CondAlm = 1 Then Goto VRF_Off
 
-' --- Heating mode: reversing valve energized, compressor enabled. Drops out on
-'     low OAT, loss of fan status, a mode change away from heating, or condenser alarm. ---
+    ' Enable compressor
+    VRFCmd = 1
+
+    ' Mode change with anti-short-cycle protection
+    If UnitState <> 2 and UnitState <> 3 and UnitState <> 4 and TM >= ASC_DELAY Then Goto VRF_Off
+
+    Goto VRFClg
+
+
+' --- Heating mode ---
+' Reversing valve energized, compressor enabled.
+' Drops out on any interlock failure or mode change.
 VRFHtg:
     RevVlvCmd = 1
-    If OAT < 40 Then Goto VRF_Off
+
+    ' Immediate safety drops
+    If OAT < CLG_OAT_LOCKOUT Then Goto VRF_Off
     If SaFanSts = 0 Then Goto VRF_Off
+    If CondAlm = 1 Then Goto VRF_Off
+
+    ' Enable compressor
     VRFCmd = 1
-' REVIEW: The TM >= 5 guard delays shutdown after a mode change. Anti-short-cycle
-' timing normally protects restart, while an invalid mode or alarm should drop the
-' command immediately. Confirm this behavior is intentional for the controller.
-    If UnitState <> 1 and TM >= 5 Then Goto VRF_Off
-    If CondAlm =  1 Then Goto VRF_Off
+
+    ' Mode change with anti-short-cycle protection
+    If UnitState <> 1 and TM >= ASC_DELAY Then Goto VRF_Off
+
+    Goto VRFHtg
