@@ -1,0 +1,21 @@
+'PmpAltLdLgPrg
+'Built by Barbeau
+'Version 2020-09-29 1055
+'This program changes the Lead every week on Tuesday at 9:00am.
+
+Numeric Input LgPmpFalm
+Numeric Output ChgLd
+
+CheckStatus:
+  If Weekday = Tuesday and Hourofday > 9 and TD > 1 and LgPmpFalm = Off then Goto ChangeLeadOn
+
+ChangeLeadOn:
+  ChgLd = On
+  If TS > 5 Then Goto ChangeLeadOff
+
+ChangeLeadOff:
+  ChgLd = Off
+  Goto CheckStatus
+
+E:
+  If TS >= 10 then Goto CheckStatus

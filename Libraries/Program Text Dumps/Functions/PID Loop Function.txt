@@ -1,0 +1,24 @@
+'     PID Function Control
+'          The function produces a signal from 0 to 100 representing
+'          0 - 100% of capacity. The output signal required by the
+'          proportional device is configured in the "OBJECT BLOCK".
+'
+Arg 1 Cv 'Controlled variable (sensor)
+Arg 2 Sp 'Setpoint
+Arg 3 Kp 'Proportional gain - constant
+Arg 4 Ki 'Integral gain - constant
+Arg 5 Kd 'Derivative gain - constant
+Arg 6 Bias 'Output value when no error exists
+Arg 7 Actn 'Directional relationship (1=DA , 0=RA)
+Arg 8 Lerr 'Error from previous scan - stored in calling prog.
+Arg 9 Intg 'Integral value - stored in calling program.
+Numeric Err 'Difference between Sp and Cv
+Numeric PIDOutput 'Output capacity (0-100) - return to calling prog
+
+Err = ((Cv - Sp) * (Actn = 1)) + ((Sp - Cv) * (Actn = 0))
+PIDOutput = ((Kp * Err) + (Ki * Intg) + (Kd * ((Err - Lerr) / (Scan+.001))) + Bias)
+PIDOutput = minimum(PIDOutput, 100)
+PIDOutput = maximum(0, PIDOutput)
+Intg = Intg + (Err * Scan * ((PIDOutput < 100) & (PIDOutput > 0)))
+Lerr = Err
+Return PIDOutput

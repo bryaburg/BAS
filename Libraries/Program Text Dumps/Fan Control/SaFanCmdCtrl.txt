@@ -1,0 +1,15 @@
+'SaFanCmdCtrl
+'Built by Barbeau
+'Version 2021-10-19 1113
+'Controls fan command on control parameters
+
+Numeric Input Occ, NightCycle, MornWmUp
+Numric Output SaFanCmd
+
+Shutdown:
+  SaFanCmd = Off
+  If Occ = On or NightCycle = On or MornWmUp = On Then Goto FanOn
+  
+FanOn:
+  SaFanCmd = On
+  If Occ = Off and NightCycle = Off and MornWmUp = Off Then Goto Shutdown

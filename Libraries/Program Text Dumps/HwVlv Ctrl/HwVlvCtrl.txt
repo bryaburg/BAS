@@ -1,0 +1,37 @@
+'HwVlvCtrl
+'Built by Barbeau
+'Version 2020-12-30 1223
+'Controls valve on supply temp setpoint
+
+Numeric Input HtgEna, SaTmp, SaTmpSpt, SaFanSts, TmpLLmt
+Numeric Output HtgVlv
+Function PidFct
+Numeric Kp,Ki,Kd,Bias,Lerr,Intg,Resptime
+
+Shutdown:
+  HtgVlv = 0.0
+  Intg = 0
+  Lerr = 0
+  RespTime = 3
+  If HtgEna = On and SaTmp < SaTmpSpt then Goto PidSetup
+  If TmpLLmt = On then Goto CoilProtect
+
+PIDSetup:
+  Kp = 5
+  Ki = Kp/100 * Resptime
+  Kd = Ki/8
+  Bias = 50
+  Goto Modulating
+
+Modulating:
+  HtgVlv = PIDFct(SaTmp,SaTmpSpt,Kp,Ki,Kd,Bias,0,Lerr,Intg)
+  Goto CheckError
+
+CheckError:
+  If HtgEna = Off or SaTmp > (SaTmpSpt + 10) then Goto Shutdown
+  If TmpLLmt = On then Goto CoilProtect
+  If abs(SaTmp - SaTmpSpt)>=0.1 and TS>=RespTime then Goto Modulating
+  
+CoilProtect:
+  HtgVlv = 100
+  If TmpLLmt = Off Then Goto Shutdown  

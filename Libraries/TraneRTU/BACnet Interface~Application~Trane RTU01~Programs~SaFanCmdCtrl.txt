@@ -1,0 +1,24 @@
+﻿'SaFanCmdCtrl
+'Built by Barbeau
+'Version 2019-11-20 0756
+'Controls supply fan on OSS
+
+Numeric Input OssCmd, DprPos_Avg, DprPctSpt
+Numeric Output SaFanCmd_RTU
+
+CheckStatus:
+If SaFanCmd_RTU = On Then Goto FanOn
+Goto FanOff
+
+FanOff:
+SaFanCmd_RTU = Off
+If TS > 300 and OssCmd = On and DprPos_Avg > DprPctSpt Then Goto FanOn
+
+FanOn:
+SaFanCmd_RTU = On
+If TS > 900 and OssCmd = Off Then Goto FanCheck
+
+FanCheck:
+SaFanCmd_RTU = On
+If OssCmd = On Then Goto FanOn
+If TS > 900 and OssCmd = Off Then Goto FanOff 

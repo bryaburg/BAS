@@ -1,0 +1,17 @@
+
+
+Numeric Input RmTmpSpt_roomunit, LocalRemote
+
+Numeric Output RmTmpSpt_local, AllowSptChanges
+
+HoldLine:
+	If ts > 5 then goto Calculating
+
+Calculating:
+	RmTmpSpt_local = RmTmpSpt_roomunit
+	If LocalRemote = On then
+	  AllowSptChanges = Off 
+	Else 
+		AllowSptChanges = On
+	Endif
+	goto HoldLine

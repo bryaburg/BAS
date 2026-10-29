@@ -1,0 +1,18 @@
+'RnTmCalcs
+'Built by Barbeau
+'Version 2022-07-14 1456
+'Calculates run time
+
+Numeric Input Blr01Sts
+Numeric Public Blr01RnTm
+
+StatusOff:
+If Blr01Sts = On Then Goto StatusOn
+
+StatusOn:
+If TS > 5 Then Goto AddTime
+If Blr01Sts = Off Then Goto StatusOff
+
+AddTime:
+Blr01RnTm = Blr01RnTm + (5/3600)
+Goto StatusOn

@@ -1,0 +1,19 @@
+These are the mulitstate values that are sent from the room unit device when each mode is selected.
+Note that these do not match Hvac Modes.
+
+SmartX stat HVAC mode output values
+1 Auto (When device heating/cool mode has never been changed before)
+2 Heat
+3 Cool
+4 Auto (When device has been changed from heat or cool)
+
+
+HvacSts values
+1 Occupied Cooling
+2 Occupied Heating
+3 Standby Cooling
+4 Standby Heating
+5 Setup
+6 Setback
+7 Off
+8 Fire

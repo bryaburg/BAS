@@ -1,0 +1,70 @@
+'Description: Override Status Program 99
+'Flow Type: Looping
+'Triggers: none
+'This program manages the vo_OccOvrSts signal.
+
+'This program has been modified to work only with a SmartX stat
+'Modified 07/25/19 by Brent Yazel
+
+Numeric Input par_OvrTmh
+Numeric Input pi_OccOvrPb, vi_OccCmd
+Numeric Output vo_OccOvrSts, ruo_AllowOccOvr, po_OccOvrPb
+
+Datetime Output dto_OvrEndTm
+
+Numeric counter
+
+Occupied:
+'Occupied, turn off room unit device occupy override and override signal to AHU
+If vi_OccCmd = 1 then 
+	po_OccOvrPb = Off
+	vo_OccOvrSts = Off
+EndIf
+'Disable room unit device occupy override
+ruo_AllowOccOvr = Off
+'Not occupied, wait for an override signal
+If vi_OccCmd <> On then goto WaitForOvr
+
+WaitForOvr:
+'Wait for an override signal from the room unit device
+If pi_OccOvrPb = On and TS > 30 then
+	'Set signal to room unit device to on to match input
+	po_OccOvrPb = On
+	'Calculate time when override ends
+  dto_OvrEndTm = Date + par_OvrTmh * 3600
+  goto SetOverrideSignal
+Else
+	'Update date variable and turn off override signal and room unit device override
+  dto_OvrEndTm = Date
+	po_OccOvrPb = Off
+	vo_OccOvrSts = Off
+Endif
+'Allow override at room unit device
+ruo_AllowOccOvr = On
+'If occupancy signal comes on, go back to occupied
+If vi_OccCmd = On then goto Occupied
+
+SetOverrideSignal:
+vo_OccOvrSts = On
+ruo_AllowOccOvr = On
+'reset counter
+counter = 0
+'If it has been at least 30 seconds since override was initiated and
+'the override time has expired or override is cancelled on room unit, then stop override
+If TS > 30 And (Date > dto_OvrEndTm Or pi_OccOvrPb = Off) then
+	'Room unit device will only turn off override properly if the signal going to the unit
+  'goes from on to off (off to off does nothing)
+	Repeat
+		'Make sure signal is on
+		po_OccOvrPb = On
+		Wait 5
+		'Turn signal off
+		po_OccOvrPb = Off
+		Wait 5
+		counter = counter + 1
+	'Make sure room unit device is reporting override setting off, else repeat the process
+	'Give up after 5 tries, something is wrong
+	Until pi_OccOvrPb = Off Or counter = 5
+  Turn off vo_OccOvrSts
+  Goto WaitforOvr
+ Endif 

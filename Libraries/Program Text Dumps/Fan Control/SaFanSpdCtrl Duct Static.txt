@@ -1,0 +1,53 @@
+'SaFanCtrl
+'Built by Barbeau
+'Version 2021-10-19 1059
+'Controls fan speed on duct static
+
+Numeric Input SaStPrAvg, SaStPrSpt, SaFanCmd, SaFanSts
+Numeric Output SaFanSpd
+Function PidFct
+Numeric Kp, Ki, Kd, Lerr, Bias, Intg, PIDOutput, Resptime, FanRampup, Ramptime, LoopResult
+Numeric SaFanSpdMax, SaFanSpdMin
+
+Shutdown:
+  SaFanSpdMax = 100
+  SaFanSpdMin = 20
+  SaFanSpd = 0
+  Resptime = 3
+  Ramptime = 15
+  FanRampup = 5
+  Intg = 0
+  Lerr = 0
+  If TS > 20 and SaFanCmd = On Then Goto Startup
+
+Startup:
+  SaFanSpd = SaFanSpdMin
+  If SaFanCmd = Off Then Goto Shutdown
+  If SaFanSts = On and TS>=Ramptime Then Goto Biasup
+
+Biasup:
+  SaFanSpd = (SaFanSpd + FanRampup)
+  Goto Delayup
+
+Delayup:
+  If SaFanSts = Off Then Goto Startup
+  If TS>=Ramptime Then Goto Biasup
+  If SaStPrAvg>=(SaStPrSpt * 0.9)Then Goto Setbias
+  If SaFanSpd>=SaFanSpdMax-5 Then Goto Setbias
+
+Setbias:
+  Bias = SaFanSpd
+  Goto Staticpid
+
+Staticpid:
+  Kp = 20
+  Ki = (Kp/100) * Resptime
+  Kd = Ki/8
+  LoopResult = PidFct(SaStPrAvg, SaStPrSpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg)
+  SaFanSpd = Minimum(SaFanSpdMax, Maximum(LoopResult,SaFanSpdMin))
+  Goto Checkerror
+
+Checkerror:
+  If SaFanSts = Off Then Goto Startup
+  If SaFanCmd = Off Then Goto Shutdown
+  If abs(SaStPrAvg - SaStPrSpt)>=0.01 and TS>=Resptime Then Goto Staticpid

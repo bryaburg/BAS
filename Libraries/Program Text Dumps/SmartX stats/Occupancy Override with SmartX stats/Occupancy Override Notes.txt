@@ -1,0 +1,20 @@
+OccOvr99 folder needs replaced on each TAB.
+Bindings need done for OccOvrFrmRud and OccOvrToRud for each TAB.
+
+Bindings need done from each TAB's OccOvrSts to the inputs of the OccOvr program in the BACnet application layer.
+
+OccOvr value from the OccOvr program needs bound to the appropriate AHU's Occ_Ovr priority 10 in SaFan parameters.
+
+OvrTmh needs set appropriately (time when override expires on room unit device) and needs to be remembered from cold restart
+for each TAB.
+
+CHANGE /Occ99/Parameters/OccSnsrEna to "Not Enabled" for each controller (assuming there is no occupancy sensor) or
+else it might get stuck in Standby mode!
+
+
+
+
+
+
+
+For Hubbell, there is a 1-minute delay before the SaFan will turn on after OccOvr command has been given.

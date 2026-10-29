@@ -1,0 +1,42 @@
+﻿'SaStPrSptCtrl
+'Built by Barbeau
+'Version 2019-02-15 1427
+'Resets Static Pressure on demand
+
+Numeric Input SaFanSts, DprPos_Max, DprPos_QtyMax, SaStPrMaxSpt, SaStPrMinSpt
+Numeric Output SaStPrSpt
+Numeric SaStPrResDnAmt, SaStPrResUpAmt
+
+Init:
+  SaStPrResDnAmt = .05
+  SaStPrResUpAmt = .1
+  Goto FanOff
+
+FanOff:
+  SaStPrSpt = SaStPrMinSpt
+  If SaFanSts is On then Goto ResetDelay
+
+ResetDelay:
+  ReadProperty SaStPrMaxSpt
+  ReadProperty SaStPrMinSpt
+  ReadProperty DprPos_Max
+  ReadProperty DprPos_QtyMax
+  If TS > 300 then Goto ResetCalc
+
+ResetCalc:
+  ReadProperty SaStPrMaxSpt
+  ReadProperty SaStPrMinSpt
+  If TS > 300 then Goto ResetPr
+  If SaFanSts is Off then Goto FanOff
+
+ResetPr:
+If DprPos_QtyMax > 3 Then
+  SaStPrSpt = minimum(SaStPrSpt + (DprPos_QtyMax * SaStPrResUpAmt), SaStPrMaxSpt)
+Else
+  If DprPos_QtyMax > 1 Then
+    SaStPrSpt = minimum(SaStPrSpt + SaStPrResUpAmt, SaStPrMaxSpt)
+  Else
+    If DprPos_QtyMax <= 1 Then SaStPrSpt = minimum(maximum(SaStPrSpt - SaStPrResDnAmt, SaStPrMinSpt),SaStPrMaxSpt)
+  Endif
+Endif
+Goto ResetCalc

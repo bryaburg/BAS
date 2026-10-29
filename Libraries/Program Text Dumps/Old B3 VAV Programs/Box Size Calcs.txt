@@ -1,0 +1,23 @@
+﻿Numeric Input BoxSize,KfactorCorrect
+Numeric Output Kfactor
+Numeric BaseKfactor
+
+'Sets box KFactor based on size and Balancer Correction Factor
+
+Line Calculate
+If Boxsize is 4 then Set BaseKfactor to 248
+If Boxsize is 5 then Set BaseKfactor to 392
+If Boxsize is 6 then Set BaseKfactor to 433
+If Boxsize is 8 then Set BaseKfactor to 841
+If Boxsize is 10 then Set BaseKfactor to 1355
+If Boxsize is 12 then Set BaseKfactor to 1976
+If Boxsize is 14 then Set BaseKfactor to 2750
+If Boxsize is 16 then Set BaseKfactor to 3596
+If Boxsize is 18 then Set BaseKfactor to 4470
+If Boxsize is 19 then Set BaseKfactor to 6377
+If Boxsize is 22 then Set BaseKfactor to 8760
+Set KFactor to BaseKFactor * KFactorCorrect
+Goto Hold
+
+Line Hold
+If TS>=60 then goto Calculate

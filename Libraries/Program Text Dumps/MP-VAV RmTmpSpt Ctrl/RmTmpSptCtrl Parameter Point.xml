@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ObjectSet ExportMode="Standard" Note="TypesFirst" Version="3.2.3.59">
+  <MetaInformation>
+    <ExportMode Value="Standard"/>
+    <RuntimeVersion Value="3.2.3.59"/>
+    <SourceVersion Value="3.2.3.59"/>
+    <ServerFullPath Value="/Centerville Howar Middle School"/>
+  </MetaInformation>
+  <Types>
+      <PropertyType Name        = "udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"
+                    DisplayName = "Custom enumeration"
+                    Description = "Custom enumeration"
+                    Base        = "system.pt.Boolean"
+                    RegExp      = ".*"
+                    Translate   = "1"
+                    EnumType    = "Strict"
+                    Icon        = ""
+                    Abstract    = "0"
+                    >
+                 <Enum Name="Local" Value="0"/>
+                 <Enum Name="Remote" Value="1"/>
+      </PropertyType>
+
+  </Types>
+<ExportedObjects>
+  <OI DESCR="0 = Local 1 = Remote" NAME="LocalRemote" TYPE="bacnet.mpx.value.DigitalValue">
+    <PI Name="ActiveText" Value="Remote"/>
+    <PI Name="BACnetName" Value="LocalRemote"/>
+    <PI Name="ForeignAddress" Value="&lt;binary-value,     164&gt;"/>
+    <PI Name="InactiveText" Value="Local"/>
+    <PI Name="Priority1" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority10" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority11" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority12" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority13" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority14" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority15" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority16" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority2" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority3" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority4" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority5" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority6" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority7" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority8" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Priority9" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="RelinquishDefault" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg"/>
+    <PI Name="Value" RetainLevel="ColdStart" Type="udt.enum.aaaif6amwakxq6dihhhvven5iv.aaaif6amwakxq6dihhhuao5wfg" Value="1"/>
+  </OI>
+</ExportedObjects>
+
+</ObjectSet>

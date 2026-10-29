@@ -1,0 +1,115 @@
+'4 BUTTON SMARTSTAT DRIVER
+
+Line CHECK_STATUS
+  Set LCDDisplay[0] = 0
+  Set UnOvdTstatCall = Off
+  Set UnOvdTstatCancel = Off
+  If AhuSts = Off then LCDIconValue = 0
+  If AhuSts = On and HtgMd = Off and ClgMd = Off then LCDIconValue = 1
+  If AhuSts = On and ClgMd = On then Set LCDIconValue = 4097
+  If AhuSts = On and HtgMd = On then Set LCDIconValue = 8193
+  Goto DISPLAY_RMTMP
+
+Line DISPLAY_RMTMP
+  Set LCDDisplay[1] = RmTmp
+  Set LCDDisplay[2] = 11
+  Set LCDDisplay[7] = LCDIconValue + 1024
+  If TS >= 5 then
+    If UnoOvrd = On then Goto DISPLAY_OVRD_TMR
+    If UnoOvrd = Off then Goto CHECK_STATUS
+  Endif
+  If LCDDisplay[0] = 4 then Goto DISPLAY_AIRFLOW
+  If LCDDisplay[0] = 3 then Goto DISPLAY_HTG_SP
+  If LCDDisplay[0] = 1 then Goto DISPLAY_OVRD_STS
+
+Line DISPLAY_AIRFLOW
+  Set LCDDisplay[1] = CfmAvg
+  Set LCDDisplay[2] = 1
+  Set LCDDisplay[7] = 16384
+  If TS > 30 or LCDDisplay[0] = 4 then Goto CHECK_STATUS
+
+Line DISPLAY_HTG_SP
+  Set LCDDisplay[1] = RmTmpSp_ActHtg
+  Set LCDDisplay[7] = 1024 + 2048 + 8192
+  If LCDDisplay[0] = 3 then Goto DISPLAY_CLG_SP
+  If LCDDisplay[0] = 2 and SmartStatLock = Off then Goto INC_HTG_SP
+  If LCDDisplay[0] = 5 and SmartStatLock = Off then Goto DEC_HTG_SP
+  If TS > 10 or LCDDisplay[0] = 4 or LCDDisplay[0] = 6 then Goto CHECK_STATUS
+
+Line DISPLAY_CLG_SP
+  Set LCDDisplay[1] = RmTmpSp_ActClg
+  Set LCDDisplay[7] = 1024 + 2048 + 4096
+  If LCDDisplay[0] = 3 then Goto DISPLAY_HTG_SP
+  If LCDDisplay[0] = 2 and SmartStatLock = Off then Goto INC_CLG_SP
+  If LCDDisplay[0] = 5 and SmartStatLock = Off then Goto DEC_CLG_SP
+  If TS > 10 or LCDDisplay[0] = 4 or LCDDisplay[0] = 6 then Goto CHECK_STATUS
+
+Line INC_HTG_SP
+  Set LCDDisplay[0] = 0
+  Set RmTmpSp_ActHtg = minimum(RmTmpSp_OccHtg + RmTmpSp_Range, RmTmpSp_ActHtg + 1)
+  Goto DISPLAY_HTG_SP
+
+Line DEC_HTG_SP
+  Set LCDDisplay[0] = 0
+  Set RmTmpSp_ActHtg = maximum(RmTmpSp_OccHtg - RmTmpSp_Range, RmTmpSp_ActHtg - 1)
+  Goto DISPLAY_HTG_SP
+
+Line INC_CLG_SP
+  Set LCDDisplay[0] = 0
+  Set RmTmpSp_ActClg = minimum(RmTmpSp_OccClg + RmTmpSp_Range, RmTmpSp_ActClg + 1)
+  Goto DISPLAY_CLG_SP
+
+Line DEC_CLG_SP
+  Set LCDDisplay[0] = 0
+  Set RmTmpSp_ActClg = maximum(RmTmpSp_OccClg - RmTmpSp_Range, RmTmpSp_ActClg - 1)
+  Goto DISPLAY_CLG_SP
+
+Line DISPLAY_OVRD_STS
+  If UnoOvrd = 1 then Set LCDDisplay[1] = 1 Else Set LCDDisplay[1] = 0
+  Set LCDDisplay[2] = 1
+  Set LCDDisplay[7] = 0
+  If LCDDisplay[0] = 2 then Set UnOvdTstatCall = On
+  If LCDDisplay[0] = 5 then Set UnOvdTstatCancel = On
+  If TS >= 5 then Goto CHECK_STATUS
+
+Line DISPLAY_OVRD_TMR
+  Set LCDDisplay[1] = UnoOvrdTmRem
+  Set LCDDisplay[2] = 1
+  Set LCDDisplay[7] = 0
+  If TS >= 3 then Goto CHECK_STATUS
+
+'KEYPAD DATA:
+'THIS ELEMENT CONTAINS A NUMBER REPRESENTING WHICH KEYPAD BUTTON IS PRESSED
+'LCDDisplay[0] = 1 'UP/INCREASE (Increase setpoint)
+'LCDDisplay[0] = 3 'ON/OFF (Display Airflow)
+'LCDDisplay[0] = 4 'DOWN/DECREASE (Decrease setpoint)
+'LCDDisplay[0] = 6 'DegF (Unoccupied Override)
+
+'DISPLAY NUMERIC AND SYSTEM VARIABLE DATA OPTIONS:
+'LCDDisplay[1] = RmTmp
+'LCDDisplay[1] = RmTmpSp_ActHtg
+'LCDDisplay[1] = RmTmpSp_ActClg
+'LCDDisplay[1] = CfmAvg
+
+'DATA DISPLAY MODE OPTIONS:
+'LCDDisplay[2] = 0 (Blank)
+'LCDDisplay[2] = 1 (####)
+'LCDDisplay[2] = 2 (##:##)
+'LCDDisplay[2] = 3 (Segment Format)
+'LCDDisplay[2] = 11 (###.#)
+'LCDDisplay[2] = 12 (##.##)
+
+'DISPLAY ICONS:
+'LCDDisplay[7] = 1 (Displays FAN Icon)
+'LCDDisplay[7] = 2 (Displays OA Icon)
+'LCDDisplay[7] = 4 (Displays SP Icon)
+'LCDDisplay[7] = 8 (Displays : Icon)
+'LCDDisplay[7] = 64 (Displays DP1 Icon)
+'LCDDisplay[7] = 128 (Displays DP2 Icon)
+'LCDDisplay[7] = 256 (Displays PM Icon)
+'LCDDisplay[7] = 512 (Displays % Icon)
+'LCDDisplay[7] = 1024 (Displays degree symbol Icon)
+'LCDDisplay[7] = 2048 (Displays SETPOINT Icon)
+'LCDDisplay[7] = 4096 (Displays COOL Icon)
+'LCDDisplay[7] = 8192 (Displays HEAT Icon)
+'LCDDisplay[7] = 16384 (Displays CFM Icon)

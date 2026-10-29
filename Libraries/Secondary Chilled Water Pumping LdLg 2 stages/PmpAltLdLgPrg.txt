@@ -1,0 +1,18 @@
+'BlrAltLdLgPrg
+'Built by Barbeau
+'Version 2022-07-14 1456
+'This program changes the Lead every week on Tuesday at 9:00am.
+
+Numeric Input LgBlrFalm
+Numeric Output ChgLd
+
+CheckStatus:
+  If Weekday = Tuesday and Hourofday > 9 and TD > 1 and LgBlrFalm = Off then Goto ChangeLeadOn
+
+ChangeLeadOn:
+  ChgLd = On
+  If TS > 5 Then Goto ChangeLeadOff
+
+ChangeLeadOff:
+  ChgLd = Off
+  Goto CheckStatus

@@ -1,0 +1,159 @@
+'LdLgFlowRates
+'Built by Barbeau
+'Version 2022-06-17 1022
+'Calculates flow rates for operational pumps
+
+Numeric Input Ch01P1gpm, Ch02P1gpm, Ch03P1gpm, Ch04P1gpm, Ch05P1gpm, Ch06P1gpm, Ch07P1gpm
+Numeric Input ChillerSeqWithoutFails
+Numeric Output LdGpm, Lg1Gpm, Lg2Gpm, Lg3Gpm, Lg4Gpm, Lg5Gpm, Lg6Gpm
+Numeric Output PositionCh01, PositionCh02, PositionCh03, PositionCh04, PositionCh05, PositionCh06, PositionCh07
+String Output ChillerStringOutput
+String  ChillerString[8]
+String ChSeq
+Numeric i
+
+Hold:
+If TS > 1 Then Goto SetStringValues
+
+SetStringValues:
+  ChSeq = NumtoStr(ChillerSeqWithoutFails)
+  ChillerStringOutput = ""
+  For i = 1 to 8
+    If MID(ChSeq, i, 1) <> "." Then
+      ChillerString[i] = MID(ChSeq, i, 1)
+      ChillerStringOutput = ChillerStringOutput;ChillerString[i]
+    Endif
+  Next i
+  Goto CalcPositions
+
+CalcPositions:
+  PositionCh01 = Find(ChillerStringOutput,"1")
+  PositionCh02 = Find(ChillerStringOutput,"2")
+  PositionCh03 = Find(ChillerStringOutput,"3")
+  PositionCh04 = Find(ChillerStringOutput,"4")
+  PositionCh05 = Find(ChillerStringOutput,"5")
+  PositionCh06 = Find(ChillerStringOutput,"6")
+  PositionCh07 = Find(ChillerStringOutput,"7")
+  Goto SetLd
+
+SetLd:
+  If PositionCh01 = 0 Then LdGpm = 0
+  If PositionCh02 = 0 Then LdGpm = 0
+  If PositionCh03 = 0 Then LdGpm = 0
+  If PositionCh04 = 0 Then LdGpm = 0
+  If PositionCh05 = 0 Then LdGpm = 0
+  If PositionCh06 = 0 Then LdGpm = 0
+  If PositionCh07 = 0 Then LdGpm = 0
+  If PositionCh01 = 1 Then LdGpm = Ch01P1gpm
+  If PositionCh02 = 1 Then LdGpm = Ch02P1gpm
+  If PositionCh03 = 1 Then LdGpm = Ch03P1gpm
+  If PositionCh04 = 1 Then LdGpm = Ch04P1gpm
+  If PositionCh05 = 1 Then LdGpm = Ch05P1gpm
+  If PositionCh06 = 1 Then LdGpm = Ch06P1gpm
+  If PositionCh07 = 1 Then LdGpm = Ch07P1gpm
+  Goto SetLg1
+
+SetLg1:
+  If PositionCh01 = 0 Then Lg1Gpm = 0
+  If PositionCh02 = 0 Then Lg1Gpm = 0
+  If PositionCh03 = 0 Then Lg1Gpm = 0
+  If PositionCh04 = 0 Then Lg1Gpm = 0
+  If PositionCh05 = 0 Then Lg1Gpm = 0
+  If PositionCh06 = 0 Then Lg1Gpm = 0
+  If PositionCh07 = 0 Then Lg1Gpm = 0
+  If PositionCh01 = 2 Then Lg1Gpm = Ch01P1gpm
+  If PositionCh02 = 2 Then Lg1Gpm = Ch02P1gpm
+  If PositionCh03 = 2 Then Lg1Gpm = Ch03P1gpm
+  If PositionCh04 = 2 Then Lg1Gpm = Ch04P1gpm
+  If PositionCh05 = 2 Then Lg1Gpm = Ch05P1gpm
+  If PositionCh06 = 2 Then Lg1Gpm = Ch06P1gpm
+  If PositionCh07 = 2 Then Lg1Gpm = Ch07P1gpm
+  Goto SetLg2
+
+SetLg2:
+  If PositionCh01 = 0 Then Lg2Gpm = 0
+  If PositionCh02 = 0 Then Lg2Gpm = 0
+  If PositionCh03 = 0 Then Lg2Gpm = 0
+  If PositionCh04 = 0 Then Lg2Gpm = 0
+  If PositionCh05 = 0 Then Lg2Gpm = 0
+  If PositionCh06 = 0 Then Lg2Gpm = 0
+  If PositionCh07 = 0 Then Lg2Gpm = 0
+  If PositionCh01 = 3 Then Lg2Gpm = Ch01P1gpm
+  If PositionCh02 = 3 Then Lg2Gpm = Ch02P1gpm
+  If PositionCh03 = 3 Then Lg2Gpm = Ch03P1gpm
+  If PositionCh04 = 3 Then Lg2Gpm = Ch04P1gpm
+  If PositionCh05 = 3 Then Lg2Gpm = Ch05P1gpm
+  If PositionCh06 = 3 Then Lg2Gpm = Ch06P1gpm
+  If PositionCh07 = 3 Then Lg2Gpm = Ch07P1gpm
+  Goto SetLg3
+
+SetLg3:
+  If PositionCh01 = 0 Then Lg3Gpm = 0
+  If PositionCh02 = 0 Then Lg3Gpm = 0
+  If PositionCh03 = 0 Then Lg3Gpm = 0
+  If PositionCh04 = 0 Then Lg3Gpm = 0
+  If PositionCh05 = 0 Then Lg3Gpm = 0
+  If PositionCh06 = 0 Then Lg3Gpm = 0
+  If PositionCh07 = 0 Then Lg3Gpm = 0
+  If PositionCh01 = 4 Then Lg3Gpm = Ch01P1gpm
+  If PositionCh02 = 4 Then Lg3Gpm = Ch02P1gpm
+  If PositionCh03 = 4 Then Lg3Gpm = Ch03P1gpm
+  If PositionCh04 = 4 Then Lg3Gpm = Ch04P1gpm
+  If PositionCh05 = 4 Then Lg3Gpm = Ch05P1gpm
+  If PositionCh06 = 4 Then Lg3Gpm = Ch06P1gpm
+  If PositionCh07 = 4 Then Lg3Gpm = Ch07P1gpm
+  Goto SetLg4
+
+SetLg4:
+  If PositionCh01 = 0 Then Lg4Gpm = 0
+  If PositionCh02 = 0 Then Lg4Gpm = 0
+  If PositionCh03 = 0 Then Lg4Gpm = 0
+  If PositionCh04 = 0 Then Lg4Gpm = 0
+  If PositionCh05 = 0 Then Lg4Gpm = 0
+  If PositionCh06 = 0 Then Lg4Gpm = 0
+  If PositionCh07 = 0 Then Lg4Gpm = 0
+  If PositionCh01 = 5 Then Lg4Gpm = Ch01P1gpm
+  If PositionCh02 = 5 Then Lg4Gpm = Ch02P1gpm
+  If PositionCh03 = 5 Then Lg4Gpm = Ch03P1gpm
+  If PositionCh04 = 5 Then Lg4Gpm = Ch04P1gpm
+  If PositionCh05 = 5 Then Lg4Gpm = Ch05P1gpm
+  If PositionCh06 = 5 Then Lg4Gpm = Ch06P1gpm
+  If PositionCh07 = 5 Then Lg4Gpm = Ch07P1gpm
+  Goto SetLg5
+
+SetLg5:
+  If PositionCh01 = 0 Then Lg5Gpm = 0
+  If PositionCh02 = 0 Then Lg5Gpm = 0
+  If PositionCh03 = 0 Then Lg5Gpm = 0
+  If PositionCh04 = 0 Then Lg5Gpm = 0
+  If PositionCh05 = 0 Then Lg5Gpm = 0
+  If PositionCh06 = 0 Then Lg5Gpm = 0
+  If PositionCh07 = 0 Then Lg5Gpm = 0
+  If PositionCh01 = 6 Then Lg5Gpm = Ch01P1gpm
+  If PositionCh02 = 6 Then Lg5Gpm = Ch02P1gpm
+  If PositionCh03 = 6 Then Lg5Gpm = Ch03P1gpm
+  If PositionCh04 = 6 Then Lg5Gpm = Ch04P1gpm
+  If PositionCh05 = 6 Then Lg5Gpm = Ch05P1gpm
+  If PositionCh06 = 6 Then Lg5Gpm = Ch06P1gpm
+  If PositionCh07 = 6 Then Lg5Gpm = Ch07P1gpm
+  Goto SetLg6
+
+SetLg6:
+  If PositionCh01 = 0 Then Lg6Gpm = 0
+  If PositionCh02 = 0 Then Lg6Gpm = 0
+  If PositionCh03 = 0 Then Lg6Gpm = 0
+  If PositionCh04 = 0 Then Lg6Gpm = 0
+  If PositionCh05 = 0 Then Lg6Gpm = 0
+  If PositionCh06 = 0 Then Lg6Gpm = 0
+  If PositionCh07 = 0 Then Lg6Gpm = 0
+  If PositionCh01 = 7 Then Lg6Gpm = Ch01P1gpm
+  If PositionCh02 = 7 Then Lg6Gpm = Ch02P1gpm
+  If PositionCh03 = 7 Then Lg6Gpm = Ch03P1gpm
+  If PositionCh04 = 7 Then Lg6Gpm = Ch04P1gpm
+  If PositionCh05 = 7 Then Lg6Gpm = Ch05P1gpm
+  If PositionCh06 = 7 Then Lg6Gpm = Ch06P1gpm
+  If PositionCh07 = 7 Then Lg6Gpm = Ch07P1gpm
+  Goto Hold
+
+
+

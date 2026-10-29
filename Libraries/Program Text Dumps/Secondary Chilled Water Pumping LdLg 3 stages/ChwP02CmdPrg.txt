@@ -1,0 +1,56 @@
+'SecChwP02CmdPrg
+'Built by Barbeau
+'Version 2020-09-29 1055
+'This program controls Heating Water Loop Pump Start/Stop Command.
+
+Numeric Input SecChwP02Md, SecChwPmpLd, SecChwPmpLg1, SecChwPmpLg2, LdPmpEna, Lg1PmpEna, Lg2PmpEna, SecChwPmpSpdSig, SecChwP02Falm, MinSpdSpt
+Numeric Output SecChwP02Cmd, SecChwP02Spd
+Numeric RmpUp, RmpTm, StgDnSpd
+
+Init:
+RmpUp = 5
+RmpTm = 20
+Goto CheckStatus
+
+CheckStatus:
+If SecChwP02Cmd = On and SecChwP02Spd > 0 and SecChwP02Falm = Off and (SecChwP02Md = 1 or SecChwP02Md = 3) Then Goto Modulating
+Goto PumpOff
+
+PumpOff:
+SecChwP02Spd = 0
+SecChwP02Cmd = Off
+If SecChwPmpLd = 2 and LdPmpEna = On and SecChwP02Falm = Off and SecChwP02Md = 3 Then Goto Ramp
+If SecChwPmpLg1 = 2 and Lg1PmpEna = On and SecChwP02Falm = Off and SecChwP02Md = 3 Then Goto Ramp
+If SecChwPmpLg2 = 2 and Lg2PmpEna = On and SecChwP02Falm = Off and SecChwP02Md = 3 Then Goto Ramp
+If SecChwP02Md = 1 Then Goto Ramp
+
+Ramp:
+SecChwP02Cmd = On
+SecChwP02Spd = Minimum(Maximum(MinSpdSpt,TS),SecChwPmpSpdSig)
+StgDnSpd = SecChwPmpSpdSig
+If SecChwP02Falm = On or SecChwP02Md = 2 Then Goto PumpOff
+If SecChwPmpLd = 2 and LdPmpEna = Off and SecChwP02Md <> 1 Then Goto DelayOff
+If SecChwPmpLg1 = 2 and Lg1PmpEna = Off and SecChwP02Md <> 1 Then Goto DelayOff
+If SecChwPmpLg2 = 2 and Lg2PmpEna = Off and SecChwP02Md <> 1 Then Goto DelayOff
+If TS > 100 Then Goto Modulating
+
+Modulating:
+SecChwP02Cmd = On
+SecChwP02Spd = SecChwPmpSpdSig
+StgDnSpd = SecChwPmpSpdSig
+If SecChwP02Falm = On or SecChwP02Md = 2 Then Goto PumpOff
+If SecChwPmpLd = 2 and LdPmpEna = Off and SecChwP02Md <> 1 Then Goto DelayOff
+If SecChwPmpLg1 = 2 and Lg1PmpEna = Off and SecChwP02Md <> 1 Then Goto DelayOff
+If SecChwPmpLg2 = 2 and Lg2PmpEna = Off and SecChwP02Md <> 1 Then Goto DelayOff
+
+DelayOff:
+SecChwP02Cmd = On
+SecChwP02Spd = Maximum((StgDnSpd - TS), MinSpdSpt)
+If SecChwP02Falm = On or SecChwP02Md = 2 Then Goto PumpOff
+If SecChwPmpLd = 2 and LdPmpEna = On and (SecChwP02Md = 1 or SecChwP02Md = 3) Then Goto Modulating
+If SecChwPmpLg1 = 2 and Lg1PmpEna = On and (SecChwP02Md = 1 or SecChwP02Md = 3) Then Goto Modulating
+If SecChwPmpLg2 = 2 and Lg2PmpEna = On and (SecChwP02Md = 1 or SecChwP02Md = 3) Then Goto Modulating
+If TS > 20 Then Goto PumpOff
+
+E:
+If TS > 10 Then Goto PumpOff

@@ -1,0 +1,34 @@
+﻿'ChlrLdLgPrg
+'Built by Barbeau
+'Version 2019-08-08 1544
+'This program controls the Chiller Lead Lag Command.
+
+Numeric Input ChwSysEna, Stg
+Numeric Output ChLdEna, ChLgEna
+
+CheckStatus:
+If ChwSysEna = Off Then Goto Shutdown
+If ChLgEna = On Then Goto LagEnable
+If ChLdEna = On Then Goto LeadEnable
+Goto Shutdown
+
+Shutdown:
+ChLdEna = Off
+ChLgEna = Off
+If ChwSysEna = On and Stg > 0 Then Goto LeadEnable
+
+LeadEnable:
+ChLdEna = On
+ChLgEna = Off
+If ChwSysEna = Off Then Goto DelayOff
+If TS > 30 and Stg > 1 Then Goto LagEnable
+
+LagEnable:
+ChLdEna = On
+ChLgEna = On
+If ChwSysEna = Off Then Goto DelayOff
+If TS > 30 and Stg < 2 Then Goto LeadEnable
+
+DelayOff:
+If ChwSysEna = On Then Goto LeadEnable
+If TS > 10 Then Goto Shutdown

@@ -1,0 +1,64 @@
+'SmPmpSpdSigCtrl
+'Built by Barbeau
+'Version 2021-10-06 1013
+'Controls pump speed on pressure  
+
+Numeric Input SmEna, SmP01Sts, SmP02Sts, MinSpdSpt
+Numeric Input ChwDifPr, ChwDifPrSpt, SmDiffPr, SmDifPrSpt
+Numeric Output SmPmpSpdSig
+Numeric Lerr, Intg, Kp, Ki, Kd, Bias, RespTime, RampTime, PIDOutput, RmpSpdSpt
+Function PIDFct
+
+CheckStatus:
+ If SmPmpSpdSig >= 15 Then
+   RampTime = 30
+   RespTime = 3
+   Goto PIDSetup
+ Else
+   Goto Shutdown
+ Endif
+
+Shutdown:
+  RmpSpdSpt = 5
+  SmPmpSpdSig = 0
+  Bias = 0
+  RampTime = 30
+  RespTime = 3
+  Intg = 0
+  Lerr = 0
+  If TS > 10 and SmEna = On Then Goto StartUp
+
+StartUp:
+  SmPmpSpdSig = MinSpdSpt
+  If (SmP01Sts = On or SmP02Sts = On) and TS > 10 Then Goto DelayUp
+  If SmEna = Off Then Goto Shutdown
+
+BiasUp:
+  SmPmpSpdSig = SmPmpSpdSig + RmpSpdSpt
+  Goto DelayUp
+
+DelayUp:
+  If (SmP01Sts = Off and SmP02Sts = Off) Then Goto Shutdown
+  If TS > RampTime Then Goto BiasUp
+  If SmDiffPr > (SmDifPrSpt * 0.9) Then Goto PIDSetup
+  If SmPmpSpdSig > 95 Then Goto PIDSetup
+
+PIDSetup:
+  Kp = 5
+  Ki = Kp/100 * Resptime
+  Kd = Ki/8
+  Bias = SmPmpSpdSig
+  Intg = 0
+  Lerr = 0
+  RespTime = 3
+  Goto Modulating
+
+Modulating:
+  PIDOutput = PidFct(SmDiffPr, SmDifPrSpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg)
+  SmPmpSpdSig = maximum(PIDOutput, MinSpdSpt)
+  Goto CheckError
+
+CheckError:
+  If SmEna = Off Then Goto Shutdown
+  If SmP01Sts = Off and SmP02Sts = Off Then Goto StartUp
+  If TS > RespTime and ABS(SmDiffPr - SmDifPrSpt) > 0.1 Then Goto Modulating

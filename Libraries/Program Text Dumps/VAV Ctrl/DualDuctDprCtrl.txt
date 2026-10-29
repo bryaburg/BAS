@@ -1,0 +1,31 @@
+'DualDuctDprCtrl
+'Built by Barbeau
+'Version 2020-12-30 1223
+'Controls Damper on supply temp setpoint
+
+Numeric Input SaTmp,SaTmpSpt,SaFanSts
+Numeric Output DprPos
+Function PidLoop
+Numeric Kp,Ki,Kd,Bias,Lerr,Intg,Resptime
+
+Shutdown:
+  DprPos = 50.0
+  Intg = 0
+  Lerr = 0
+  RespTime = 3
+  If SaFanSts = On then Goto PidSetup
+
+PIDSetup:
+  Kp = 5
+  Ki = Kp/100 * Resptime
+  Kd = Ki/8
+  Bias = 50
+  Goto Modulating
+
+Modulating:
+  DprPos = PIDLoop(SaTmp,SaTmpSpt,Kp,Ki,Kd,Bias,0,Lerr,Intg)
+  Goto CheckError
+
+CheckError:
+  If SaFanSts = Off then Goto Shutdown
+  If abs(SaTmp - SaTmpSpt)>=0.1 and TS>=RespTime then Goto Modulating

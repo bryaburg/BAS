@@ -1,0 +1,70 @@
+﻿'Cooling-Only Vav Box Damper Control 
+
+Numeric Input MaxCFM,MinCFM,AhuFanStatus,AvgAirFlow,HeatCoolDemand
+Numeric Input VavPressurize,DamperError,VavStaticErrorSP
+Numeric Output AirflowSetpoint,Damper,AirFlowPerCentSP
+Function PidLoop
+Numeric Kp,Ki,Kd,Lerr,Intg,Resptime'Function Arguments
+Numeric Runtime'Belimo Damper Actuator Travel Time (SECONDS) 
+Numeric RatioMult,ResetPerCent,Bias
+
+Line Shutdown
+  Set AirflowSetpoint to MinCFM
+  Set AirflowPerCentSP to 0
+  Set Damper to 0
+  Set Runtime to 180
+  Set Resptime to 3
+  If MaxCFM>=3000 then Set Kp to 0.010
+  If MaxCFM>=2500 and MaxCFM < 3000 then Set Kp to 0.010
+  If MaxCFM>=1500 and MaxCFM < 2500 then Set Kp to 0.015
+  If MaxCFM>=1000 and MaxCFM < 1500 then Set Kp to 0.025
+  If MaxCFM>=500 and MaxCFM < 1000 then Set Kp to 0.035
+  If MaxCFM>=250 and MaxCFM < 500 then Set Kp to .025
+  If MaxCFM<250 then Set Kp to .1
+  Set Ki to(Kp/50)*Resptime
+  Set Kd to(Ki/8)
+  Set Lerr to 0
+  Set Intg to 0
+  If AhuFanStatus is On then Goto AirflowCheck
+
+Line AirflowCheck
+  If AhuFanStatus is Off then Goto Shutdown
+  If MinCFM<=1 then Set MinCFM to 1
+  Set RatioMult to (MaxCFM-MinCFM)/MaxCFM
+  If RatioMult is 0 then Set RatioMult to 0.01
+  Set ResetPerCent to 100/RatioMult
+  If AirflowSetpoint>=MaxCFM *.5 then set AirflowPerCentSP to (AvgAirFlow/AirflowSetpoint)*100 else Set AirFlowPerCentSP to VavStaticErrorSP
+  If VavPressurize is On then Set AirflowSetpoint to MaxCFM
+  If VavPressurize is Off then Set AirflowSetpoint to MaxCFM *(HeatCoolDemand/ResetPerCent)+ MinCFM
+  If abs(AvgAirflow-AirflowSetpoint)>=maximum((AirflowSetpoint*0.01),10) and TS>=Resptime then Goto ErrorCalc
+
+Line ErrorCalc
+  If AirflowSetpoint>=MaxCFM *.5 then set AirflowPerCentSP to (AvgAirFlow/AirflowSetpoint)*100 else Set AirFlowPerCentSP to VavStaticErrorSP
+  Set DamperError to PIDLoop(AvgAirflow,AirflowSetpoint,Kp,Ki,Kd,Bias,0,Lerr,Intg)
+  Goto ErrorCheck
+
+Line ErrorCheck
+  If DamperError is 0 or DamperError is 100 then Goto DamperPulse
+  If abs(AirFlowSetpoint-AvgAirflow)<=10 then Goto AirflowCheck
+  Goto DamperPulse
+
+Line DamperPulse
+If DamperError is 0 or DamperError is 100 then
+   If (DamperError is 0) then Set Damper to -(Runtime/10)
+   If (DamperError is 100) then Set Damper to (Runtime/10)
+Endif
+If ((DamperError>0) and (DamperError<100))then
+     If AvgAirflow<AirflowSetpoint then Set Damper to minimum(DamperError,10)
+     If AvgAirflow>AirflowSetpoint then Set Damper to -minimum(DamperError,10)
+ Endif
+ Goto DamperCmdWait
+
+Line DamperCmdWait
+  If AirflowSetpoint>=MaxCFM *.5 then set AirflowPerCentSP to (AvgAirFlow/AirflowSetpoint)*100 else Set AirFlowPerCentSP to VavStaticErrorSP
+  If TS>=abs(Damper)or TS>=Runtime then
+    Set Damper to 0
+    Goto AirflowCheck
+  Endif
+
+Line E
+  If TS>=10 then Goto Shutdown

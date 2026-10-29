@@ -1,0 +1,29 @@
+Numeric Input LocalRemoteSelect,LocalRmSetpoint,RemoteRmSetpoint,RmTemp,GlobalHWAvail,Ahu1_2FanStatus
+Numeric Output HwValvePos,RmSetpoint,HeatCoolDemand,AhuFanStatus,HWAvailable
+Numeric Input ReheatEnable,AhuDAT 'Reheat Box Only
+Numeric Output ReheatStart,DischTempSP,DischTempLow,DischTempHigh 'Reheat Box Only
+Function PidLoop
+Numeric Lerr,Intg,TempMult,ReheatOffset
+
+Line Calculate
+Set HeatCoolDemand to PIDLoop(RmTemp,RmSetpoint,5,0.15,0.01875,50,1,Lerr,Intg)
+Goto UpdateStats
+
+Line UpdateStats
+ Set AhuFanStatus to Ahu1_2FanStatus
+ Set HWAvailable to GlobalHWAvail
+ If LocalRemoteSelect is False then Set RmSetpoint to LocalRmSetpoint else Set RmSetpoint to RemoteRmSetpoint
+ Set DischTempLow to AhuDAT
+ Set DischTempHigh to minimum(AhuDAT+45,85)
+  If HeatCoolDemand<=ReheatEnable and HWAvailable is On then
+    Set TempMult to (DischTempHigh-DischTempLow)/100
+    Set ReheatOffset to (100/ReheatEnable)
+    Set ReheatStart to minimum(100,(HeatCoolDemand*ReheatOffset))
+    Set DischTempSP to DischTempHigh-(TempMult*ReheatStart)
+  Else
+    Set DischTempSP to DischTempLow
+  Endif
+  If TS>=3 and abs(RmTemp-RmSetpoint)>=0.1 then Goto Calculate
+
+Line E
+  If TS>=10 then Goto Calculate

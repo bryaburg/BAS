@@ -1,0 +1,121 @@
+'RmTmpSptCtrl
+'Built by Barbeau
+'Version 2022-03-22 1022
+'Sets room temp setpoint based upon parameters
+
+Numeric Input HvacSts ' [1 = OccCool] [2 = OccHeat] [5 = Setup] [6 = Setback]
+Numeric Input RmTmpSpt_local 'Setpoint from wall stat
+Numeric Input RmTmpSpt_remote 'Setpoint from BAS
+Numeric Input RmTmpCsptLlmt 'Room Temp Cooling Setpoint Low Limit
+Numeric Input RmTmpHsptHlmt 'Room Temp Heating Setpoint High Limit
+Numeric Input RmTmpSuSpt 'Room Temp Set Up Setpoint
+Numeric Input RmTmpSbSpt 'Room Temp Setback Setpoint
+Numeric Input RmTmpSptAdjRng 'Room Temp Setpoint Adjust Range
+Numeric Input RmTmpSptDif ' Room Temp Setpoint Differential
+Numeric Input RmTmpStbyOfs 'Room Temp Standby Offset
+Numeric Input LocalRemote '0 = Local, 1 = Remote
+
+Numeric Output RmTmpSpt, RmTmpCSpt, RmTmpHSpt
+
+Numeric LocSptFlag, RemSptFlag, LocRemFlag, LlmtFlag, HlmtFlag, SptDifFlag, AdjRngFlag, HvacFlag
+Numeric Public HtgSptLow, HtgSptHigh, ClgSptLow, ClgSptHigh
+
+Init:
+  HtgSptLow = RmTmpHsptHlmt - RmTmpSptAdjRng
+  HtgSptHigh = RmTmpHsptHlmt
+  ClgSptLow = RmTmpCsptLlmt
+  ClgSptHigh = RmTmpCsptLlmt + RmTmpSptAdjRng
+
+  If LocalRemote = Off Then				'Local Setpoint
+    If HvacSts = 1 Then						'OccCool
+      If RmTmpSpt_local >= ClgSptLow and RmTmpSpt_local <= ClgSptHigh Then
+        RmTmpSpt = RmTmpSpt_local
+      Else
+        If RmTmpSpt_local < ClgSptLow Then RmTmpSpt = ClgSptLow
+        If RmTmpSpt_local > ClgSptHigh Then RmTmpSpt = ClgSptHigh
+      Endif
+    Endif
+     If HvacSts = 2 Then						'OccHeat
+      If RmTmpSpt_local >= HtgSptLow and RmTmpSpt_local <= HtgSptHigh Then
+        RmTmpSpt = RmTmpSpt_local
+      Else
+        If RmTmpSpt_local < HtgSptLow Then RmTmpSpt = HtgSptLow
+        If RmTmpSpt_local > HtgSptHigh Then RmTmpSpt = HtgSptHigh
+      Endif
+    Endif
+  Endif
+
+  If LocalRemote = On Then				'Remote Setpoint
+    If HvacSts = 1 Then						'OccCool
+      If RmTmpSpt_remote >= ClgSptLow and RmTmpSpt_remote <= ClgSptHigh Then
+        RmTmpSpt = RmTmpSpt_remote
+      Else
+        If RmTmpSpt_remote < ClgSptLow Then RmTmpSpt = ClgSptLow
+        If RmTmpSpt_remote > ClgSptHigh Then RmTmpSpt = ClgSptHigh
+      Endif
+	Endif
+    If HvacSts = 2 Then						'OccHeat
+      If RmTmpSpt_remote >= HtgSptLow and RmTmpSpt_remote <= HtgSptHigh Then
+        RmTmpSpt = RmTmpSpt_remote
+      Else
+        If RmTmpSpt_remote < HtgSptLow Then RmTmpSpt = HtgSptLow
+        If RmTmpSpt_remote > HtgSptHigh Then RmTmpSpt = HtgSptHigh
+      Endif
+    Endif
+  Endif
+
+'Set Setpoints based upon HvacSts
+If HvacSts = 1 Then
+  RmTmpCSpt = RmTmpSpt
+  RmTmpHSpt = RmTmpSpt - (RmTmpSptDif/2)
+Endif
+If HvacSts = 2 Then
+  RmTmpCSpt = RmTmpSpt + (RmTmpSptDif/2)
+  RmTmpHSpt = RmTmpSpt
+Endif
+If HvacSts = 5 Then
+  RmTmpSpt = RmTmpSuSpt
+  RmTmpCSpt = RmTmpSpt
+  RmTmpHSpt = RmTmpSbSpt
+Endif
+If HvacSts = 6 Then
+  RmTmpSpt = RmTmpSbSpt
+  RmTmpCSpt = RmTmpSuSpt
+  RmTmpHSpt = RmTmpSpt
+ Endif
+
+'Set Flags
+  LocSptFlag = RmTmpSpt_local
+  RemSptFlag = RmTmpSpt_remote
+  LocRemFlag = LocalRemote
+  LlmtFlag = RmTmpCsptLlmt
+  HlmtFlag = RmTmpHsptHlmt
+  SptDifFlag = RmTmpSptDif
+  AdjRngFlag = RmTmpSptAdjRng
+  HvacFlag = HvacSts
+
+  If LocalRemote = Off Then Goto LocalControl Else Goto RemoteControl
+
+LocalControl:
+	If TS > 30 Then
+  If LocSptFlag <> RmTmpSpt_local Then Goto Init
+  If RemSptFlag <> RmTmpSpt_remote Then Goto Init
+  If LocRemFlag <> LocalRemote Then Goto Init
+  If LlmtFlag <> RmTmpCsptLlmt Then Goto Init
+  If HlmtFlag <> RmTmpHsptHlmt Then Goto Init
+  If SptDifFlag <> RmTmpSptDif Then Goto Init
+  If AdjRngFlag <> RmTmpSptAdjRng Then Goto Init
+  If HvacFlag <> HvacSts Then Goto Init
+  Endif
+
+RemoteControl:
+	If TS > 30 Then
+  If LocSptFlag <> RmTmpSpt_local Then Goto Init
+  If RemSptFlag <> RmTmpSpt_remote Then Goto Init
+  If LocRemFlag <> LocalRemote Then Goto Init
+  If LlmtFlag <> RmTmpCsptLlmt Then Goto Init
+  If HlmtFlag <> RmTmpHsptHlmt Then Goto Init
+  If SptDifFlag <> RmTmpSptDif Then Goto Init
+  If AdjRngFlag <> RmTmpSptAdjRng Then Goto Init
+  If HvacFlag <> HvacSts Then Goto Init
+  Endif

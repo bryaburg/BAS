@@ -1,0 +1,15 @@
+﻿'EconoCtrl
+'Built by Barbeau
+'Version 2019-04-25 1059
+'Controls Econimizer on outdoor air temp
+
+Numeric Input OaTmp, EconoOaTmpEnaSpt
+Numeric Output EconoEna
+
+EconoOff:
+EconoEna = Off
+If TS > 120 and OaTmp < (EconoOaTmpEnaSpt - 1) Then Goto EconoOn
+
+EconoOn:
+EconoEna = On
+If TS > 120 and OaTmp > (EconoOaTmpEnaSpt + 1) Then Goto EconoOff

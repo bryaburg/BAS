@@ -1,0 +1,91 @@
+'LWPmpSpdCtrlPrg
+'Built by Barbeau
+'Version 2020-02-27 1019
+'Controls pump speed on loop pressure  
+
+Numeric Input SecChwP01Cmd, SecChwP02Cmd, SecChwP03Cmd, SecChwP01Sts, SecChwP02Sts, SecChwP03Sts, MinSpdSpt, SpdTmpOfst
+Numeric Input ChwDifPr, ChwDifPrSpt, Stg, SecCHWLoopPressO, SecCHWLpPressSP
+Numeric Output SecChwPmpSpdSig
+Numeric Lerr, Intg, Kp, Ki, Kd, Bias, RespTime, RampTime, PIDOutput, RmpSpdSpt, WatchStg
+Function PIDFct
+
+CheckStatus:
+ If SecChwPmpSpdSig >= 15 Then
+   RampTime = 30
+   RespTime = 3
+   Goto PIDSetup
+ Else
+   Goto Shutdown
+ Endif
+
+Shutdown:
+  RmpSpdSpt = 5
+  SecChwPmpSpdSig = 0
+  Bias = 0
+  RampTime = 30
+  RespTime = 3
+  Intg = 0
+  Lerr = 0
+  If TS > 10 and (SecChwP01Cmd = On or SecChwP02Cmd = On or SecChwP03Cmd = On) Then Goto StartUp
+
+StartUp:
+  SecChwPmpSpdSig = MinSpdSpt
+  If (SecChwP01Sts = On or SecChwP02Sts = On or SecChwP03Sts = On) and TS > 10 Then Goto DelayUp
+  If SecChwP01Cmd = Off and SecChwP02Cmd = Off and SecChwP03Cmd = Off Then Goto Shutdown
+
+BiasUp:
+  SecChwPmpSpdSig = SecChwPmpSpdSig + RmpSpdSpt
+  Goto DelayUp
+
+DelayUp:
+  If (SecChwP01Sts = Off and SecChwP02Sts = Off and SecChwP03Sts = Off) Then Goto Shutdown
+  If TS > RampTime Then Goto BiasUp
+'  If ChwDifPr > (ChwDifPrSpt * 0.9) Then Goto PIDSetup
+  If SecCHWLoopPressO > (SecCHWLpPressSP * 0.9) Then Goto PIDSetup
+  If SecChwPmpSpdSig > 95 Then Goto PIDSetup
+
+PIDSetup:
+  If Stg=1 then
+    Kp=1.7
+'    Ki=0.51
+    Ki=0.4
+'    Kd=Ki/8
+'    Kd=0.055
+'    Kd=0.06
+'    Kd=0.065
+'    Kd=0.07
+    Kd=0.075
+  Else
+    Kp=1.25
+'    Ki=0.1
+    Ki=0.15
+'    Kd=0.015
+'    Kd=0.0125
+'    Kd=0.013
+'    Kd=0.012
+    Kd=0.01
+'    Kd=0.011
+  Endif
+  Bias = SecChwPmpSpdSig
+  Intg = 0
+  Lerr = 0
+  RespTime = 3
+  WatchStg = Stg
+  Goto Modulating
+
+Modulating:
+'  PIDOutput = PidFct(ChwDifPr, ChwDifPrSpt, Kp, Ki, Kd, Bias, 0, Lerr, Intg)
+  PIDOutput = PidFct(SecCHWLoopPressO, SecCHWLpPressSP, Kp, Ki, Kd, Bias, 0, Lerr, Intg)
+  SecChwPmpSpdSig = maximum(PIDOutput, MinSpdSpt)
+  Goto CheckError
+
+CheckError:
+  If SecChwP01Cmd = Off and SecChwP02Cmd = Off and SecChwP03Cmd = Off Then Goto Shutdown
+  If SecChwP01Sts = Off and SecChwP02Sts = Off and SecChwP03Sts = Off Then Goto StartUp
+  If (SecChwPmpSpdSig = MinSpdSpt) and (SecCHWLoopPressO <= (SecCHWLpPressSP - (2 * RmpSpdSpt))) then goto BiasUp
+  If WatchStg <> Stg Then Goto PIDSetup
+'  If TS > RespTime and ABS(ChwDifPr - ChwDifPrSpt) > 0.1 Then Goto Modulating
+  If TS > RespTime and ABS(SecCHWLoopPressO - SecCHWLpPressSP) > 0.1 Then Goto Modulating
+
+E:
+  If TS > 30 Then Goto Shutdown

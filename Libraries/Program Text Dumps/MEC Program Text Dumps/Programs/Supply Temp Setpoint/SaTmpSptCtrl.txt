@@ -1,0 +1,66 @@
+'SaTmpSptCtrl
+'Built by Barbeau
+'Version 2019-02-14 1653
+'Calculates supply air temperature set point 
+
+Numeric Input SaFanSts, TabMaxDprPos, OaTmp, RaRh, RaRhSpt, HVACmd, OssSaTmpHtgSpt, OssSaTmpClgSpt
+Numeric Input OaTmpMaxSaTmpMinSpt, OaTmpMinSaTmpMaxSpt, SaTmpOaTmpMaxSpt, SaTmpOaTmpMinSpt
+Numeric Output SaTmpSpt
+Function RstFct
+
+Shutdown:
+SaTmpSpt = OaTmpMaxSaTmpMinSpt
+If SaFanSts = On and OaTmp > SaTmpOaTmpMaxSpt Then Goto MaxOaTmpCtrl 
+If SaFanSts = On and OaTmp < SaTmpOaTmpMinSpt Then Goto MinOaTmpCtrl
+If SaFanSts = On and (OaTmp >= SaTmpOaTmpMinSpt and OaTmp <= SaTmpOaTmpMaxSpt) Then Goto Monitoring
+If SaFanSts = On and RaRh > RaRhSpt Then Goto HumidityCtrl
+If SaFanSts = On and HVACmd = 3 Then Goto WarmupCtrl
+If SaFanSts = On and HVACmd = 5 Then Goto PurgeCtrl
+
+HumidityCtrl:
+SaTmpSpt = OaTmpMaxSaTmpMinSpt
+If SaFanSts = Off or (TS > 600 and RaRh < (RaRhSpt - 5)) Then Goto Shutdown
+If SaFanSts = On and HVACmd = 3 Then Goto WarmupCtrl
+If SaFanSts = On and HVACmd = 5 Then Goto PurgeCtrl
+
+MinOaTmpCtrl:
+SaTmpSpt = OaTmpMinSaTmpMaxSpt
+If SaFanSts = On and OaTmp > SaTmpOaTmpMaxSpt Then Goto MaxOaTmpCtrl
+If SaFanSts = On and (OaTmp >= SaTmpOaTmpMinSpt and OaTmp <= SaTmpOaTmpMaxSpt) Then Goto Monitoring
+If SaFanSts = On and HVACmd = 3 Then Goto WarmupCtrl
+If SaFanSts = On and HVACmd = 5 Then Goto PurgeCtrl
+
+MaxOaTmpCtrl:
+SaTmpSpt = OaTmpMaxSaTmpMinSpt
+If SaFanSts = On and OaTmp < SaTmpOaTmpMinSpt Then Goto MinOaTmpCtrl
+If SaFanSts = On and (OaTmp >= SaTmpOaTmpMinSpt and OaTmp <= SaTmpOaTmpMaxSpt) Then Goto Monitoring
+If SaFanSts = On and HVACmd = 3 Then Goto WarmupCtrl
+If SaFanSts = On and HVACmd = 5 Then Goto PurgeCtrl
+
+Monitoring:
+If TS > 600 and TabMaxDprPos < 90 Then Goto BumpUp
+If TS > 600 and TabMaxDprPos > 90 Then Goto BumpDn
+If SaFanSts = On and OaTmp > SaTmpOaTmpMaxSpt Then Goto MaxOaTmpCtrl 
+If SaFanSts = On and OaTmp < SaTmpOaTmpMinSpt Then Goto MinOaTmpCtrl
+If SaFanSts = On and RaRh > RaRhSpt Then Goto HumidityCtrl
+If SaFanSts = On and HVACmd = 3 Then Goto WarmupCtrl
+If SaFanSts = On and HVACmd = 5 Then Goto PurgeCtrl
+If SaFanSts = Off Then Goto Shutdown
+
+BumpUp:
+SaTmpSpt = Minimum(SaTmpSpt + 1, OaTmpMinSaTmpMaxSpt)
+Goto Monitoring
+
+BumpDn:
+SaTmpSpt = Maximum(SaTmpSpt - 1, OaTmpMaxSaTmpMinSpt)
+Goto Monitoring
+
+WarmupCtrl:
+SaTmpSpt = OssSaTmpHtgSpt
+If HVACmd <> 3 Then Goto Monitoring
+If SaFanSts = Off Then Goto Shutdown
+
+PurgeCtrl:
+SaTmpSpt = OssSaTmpClgSpt
+If HVACmd <> 5 Then Goto Monitoring
+If SaFanSts = Off Then Goto Shutdown

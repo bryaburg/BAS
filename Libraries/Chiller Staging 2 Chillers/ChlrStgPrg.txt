@@ -1,0 +1,27 @@
+﻿'ChlrStgPrg
+'Built by Barbeau
+'Version 2019-08-08 1543
+'Stages Chillers on Capacity and Lead Failure
+
+Numeric Input ChwSysEna, ChLdFalm, LdChlrCapacity, LgChlrCapacity
+Numeric Output Stg
+
+CheckStatus:
+If ChwSysEna = Off Then Goto Shutdown
+If Stg = 2 Then Goto Stage2
+If Stg = 1 Then Goto Stage1
+Goto Shutdown
+
+Shutdown:
+Stg = 0
+If ChwSysEna = On Then Goto Stage1
+
+Stage1:
+Stg = 1
+If TS > 600 and (ChLdFalm = On or LdChlrCapacity > 90) Then Goto Stage2
+If ChwSysEna = Off Then Goto Shutdown
+
+Stage2:
+Stg = 2
+If TS > 600 and (ChLdFalm = Off and (LdChlrCapacity < 40 and LgChlrCapacity < 40)) Then Goto Stage1
+If ChwSysEna = Off Then Goto Shutdown

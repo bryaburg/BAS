@@ -1,0 +1,23 @@
+'SaTmpSptCalcs - Supply Air Temp Set Point Calculations
+'Built by Barbeau
+'Version 2015-04-15
+'Calculates supply temperature set point based upon room temp and set point
+
+Numeric Input RmTmpAvg, RmTmpSpt, SaTmpMinSpt, SaTmpMaxSpt, ClgMd
+Numeric Output SaTmpSpt, HtgClgDmd
+Function PIDFunction
+Numeric Lerr,Intg,DischResetRatio
+
+Hold:
+If TS > 5 Then Goto Calculating
+
+Calculating:
+If ClgMd is Off Then 
+Set HtgClgDmd to PIDFunction(RmTmpAvg,RmTmpSpt,5,.05,.00625,50,1,Lerr,Intg)
+Set DischResetRatio to (SaTmpMaxSpt-SaTmpMinSpt)/100
+Set SaTmpSpt to SaTmpMaxSpt - (HtgClgDmd * DischResetRatio) 
+Else 
+Set SaTmpSpt to SaTmpMinSpt
+Endif
+
+Goto Hold

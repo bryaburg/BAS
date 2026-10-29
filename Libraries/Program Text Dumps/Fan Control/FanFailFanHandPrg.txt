@@ -1,0 +1,29 @@
+'FailAlarmAlarmPrg
+'Built by Barbeau
+'Version 2022-11-07 1133
+'Sets fan fail and fan in hand values
+
+Numeric Input FanCmd, FanSts
+Numeric Output FailAlarm, HandAlarm
+
+AlarmOff:
+  FailAlarm = Off
+  HandAlarm = Off
+  If FanCmd <> FanSts Then Goto Monitoring
+
+Monitoring:
+  If FanCmd = FanSts Then Goto AlarmOff
+  If TS > 20 Then
+    If FanCmd = On and FanSts = Off Then Goto FailAlarmAlarm
+    If FanCmd = Off and FanSts = On Then Goto HandAlarmAlarm
+  Endif
+
+FailAlarmAlarm:
+  If FanCmd = FanSts Then Goto AlarmOff
+  FailAlarm = On
+  HandAlarm = Off
+
+HandAlarmAlarm:
+  If FanCmd = FanSts Then Goto AlarmOff
+  FailAlarm = Off
+  HandAlarm = On

@@ -1,0 +1,49 @@
+﻿'DxCtrl
+'Built by Barbeau
+'Version 2021-02-24 0819
+'Controls DX based upon setpoint
+
+Numeric Input SaFanSts, SaTmp, SaTmpSpt, DxStartDlyTm, DxStgDnTs, DxStgUpTs, DxMd
+Numeric Output ClgStg1Cmd, ClgStg2Cmd, ClgStg3Cmd, ClgStg4Cmd
+
+Shutdown:
+  ClgStg1Cmd = Off
+	ClgStg2Cmd = Off
+	ClgStg3Cmd = Off
+  ClgStg4Cmd = Off
+  If TS > DxStartDlyTm and SaFanSts = On and DxMd = On and SaTmp > (SaTmpSpt + 2) Then Goto Stg1
+
+Stg1:
+  ClgStg1Cmd = On
+	ClgStg2Cmd = Off
+	ClgStg3Cmd = Off
+  ClgStg4Cmd = Off
+  If (TS > 60 and DxMd = Off) or SaFanSts = Off Then Goto Shutdown
+  If TS > DxStgDnTs and SaTmp < (SaTmpSpt - 2) Then Goto Shutdown
+  If TS > DxStgUpTs and SaTmp > (SaTmpSpt + 2) Then Goto Stg2
+  
+Stg2:
+  ClgStg1Cmd = On
+	ClgStg2Cmd = On
+	ClgStg3Cmd = Off
+  ClgStg4Cmd = Off
+  If (TS > 60 and DxMd = Off) or SaFanSts = Off Then Goto Shutdown
+  If TS > DxStgDnTs and SaTmp < (SaTmpSpt - 2) Then Goto Stg1
+  If TS > DxStgUpTs and SaTmp > (SaTmpSpt + 2) Then Goto Stg3
+  
+Stg3:
+  ClgStg1Cmd = On
+	ClgStg2Cmd = On
+	ClgStg3Cmd = On
+  ClgStg4Cmd = Off
+  If (TS > 60 and DxMd = Off) or SaFanSts = Off Then Goto Shutdown
+  If TS > DxStgDnTs and SaTmp < (SaTmpSpt - 2) Then Goto Stg2
+  If TS > DxStgUpTs and SaTmp > (SaTmpSpt + 2) Then Goto Stg4
+  
+Stg4:
+  ClgStg1Cmd = On
+	ClgStg2Cmd = On
+	ClgStg3Cmd = On
+  ClgStg4Cmd = On
+  If (TS > 60 and DxMd = Off) or SaFanSts = Off Then Goto Shutdown
+  If TS > DxStgDnTs and SaTmp < (SaTmpSpt - 2) Then Goto Stg3

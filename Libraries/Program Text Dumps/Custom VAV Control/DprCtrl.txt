@@ -1,0 +1,31 @@
+'DprCtrl
+'Built by Barbeau
+'Version 2023-01-07 1007
+'Sets damper position based upon CFM setpoint 
+
+Numeric Input AirFl_CFM, CfmSpt, AhuSts
+Numeric Output DprPos
+Function PIDLoop
+Numeric Kp,Ki,Kd,Bias,Lerr,Intg,Resptime
+
+Shutdown:
+  DprPos = 100
+  Intg = 0
+  Lerr = 0
+  RespTime = 3
+  If TS > 5 and AhuSts = On then Goto PidSetup
+
+PIDSetup:
+  Kp = .62
+  Ki = Kp/100 * Resptime
+  Kd = Ki/8
+  Bias = 50
+  Goto Modulating
+
+Modulating:
+  DprPos = PIDLoop(AirFl_CFM,CfmSpt,Kp,Ki,Kd,Bias,0,Lerr,Intg)
+  Goto CheckError
+
+CheckError:
+  If AhuSts = Off then Goto Shutdown
+  If abs(AirFl_CFM - CfmSpt)>5 and TS>=RespTime then Goto Modulating

@@ -1,0 +1,47 @@
+'PmpLdLgPrg
+'Built by Barbeau
+'Version 2020-09-29 1055
+'This program controls the Loop Lead Lag Command.
+
+Numeric Input ChwsCmd, Stg, LdPmpFalm, Lg1PmpFalm, Lg2PmpFalm
+Numeric Output LdPmpEna, Lg1PmpEna, Lg2PmpEna
+
+'CheckStatus:
+'If Lg1PmpEna = On Then Goto Stage2
+'If LdPmpEna = On Then Goto Stage1
+'Goto Shutdown
+
+Shutdown:
+LdPmpEna = Off
+Lg1PmpEna = Off
+Lg2PmpEna = Off
+If ChwsCmd = On and Stg > 0 Then Goto Stage1
+
+Stage1:
+LdPmpEna = On
+Lg1PmpEna = Off
+Lg2PmpEna = Off
+If ChwsCmd = Off Then Goto DelayOff
+If TS > 30 and (Stg > 1 or LdPmpFalm = On) Then Goto Stage2
+
+Stage2:
+LdPmpEna = On
+Lg1PmpEna = On
+Lg2PmpEna = Off
+If ChwsCmd = Off Then Goto DelayOff
+If TS > 30 and (Stg < 2 and LdPmpFalm = Off) Then Goto Stage1
+If TS > 30 and (Stg > 2 or Lg1PmpFalm = On) Then Goto Stage3
+
+Stage3:
+LdPmpEna = On
+Lg1PmpEna = On
+Lg2PmpEna = On
+If ChwsCmd = Off Then Goto DelayOff
+If TS > 30 and (Stg < 3 and LdPmpFalm = Off and Lg1PmpFalm = Off) Then Goto Stage2
+
+DelayOff:
+If ChwsCmd = On Then Goto Stage1
+If TS > 30 Then Goto Shutdown
+
+E:
+If TS >= 10 Then Goto Shutdown

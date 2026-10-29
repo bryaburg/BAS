@@ -1,0 +1,17 @@
+﻿Numeric Input LocalRemoteSelect,LocalRmSetpoint,RemoteRmSetpoint,RmTemp,Ahu3FanStatus, Ahu3SaTmp
+Numeric Output RmSetpoint,HeatCoolDemand,AhuFanStatus, AhuSaTmp
+Function PidLoop
+Numeric Lerr,Intg
+
+Line Calculate
+Set HeatCoolDemand to PIDLoop(RmTemp,RmSetpoint,5,0.15,0.01875,50,1,Lerr,Intg)
+Goto UpdateStats
+
+Line UpdateStats
+Set AhuFanStatus to Ahu3FanStatus
+Set AhuSaTmp to Ahu3SaTmp
+If LocalRemoteSelect is False then Set RmSetpoint to LocalRmSetpoint else Set RmSetpoint to RemoteRmSetpoint
+If TS>=3 and abs(RmTemp-RmSetpoint)>=0.1 then Goto Calculate
+
+Line E
+  If TS>=10 then Goto Calculate
