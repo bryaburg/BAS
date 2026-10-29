@@ -1,1 +1,125 @@
-' =============================================================================' HVAC Zone Control Logic' -----------------------------------------------------------------------------' Determines a single multistate zone command based on occupancy, room' temperature vs. setpoint, room relative humidity, and outside air temperature.'' Inputs:'   RmTmp           - Room temperature (°F)'   RmStpt          - Room temperature setpoint when occupied (°F)'   UnOccCoolStpt   - Cooling setpoint when unoccupied (°F)'   UnOccHeatingStpt- Heating setpoint when unoccupied (°F)'   RmRh            - Room relative humidity (%)'   OaTmp           - Outside air temperature (°F)'   Occ             - Occupancy status (0 = Unoccupied, 1 = Occupied)'' Output:'   UnitState - Multistate zone command (0-5):'     0 = Off              (fan off, nothing active)'     1 = Heating           (fan on, heat on)'     2 = Cooling           (fan on, mechanical cooling on)'     3 = Cooling + Dehum   (fan on, mechanical cooling + dehumidification on)'     4 = Economizer        (fan on, free cooling with outside air)'     5 = Fan Only          (fan on, occupied deadband - no heat/cool needed)'' Logic summary:'   - Unoccupied (Occ = 0): Only Heating(1), Cooling(2), or Off(0) - no'     economizer or dehumidification is used, and the fan runs only when'     actively heating or cooling.'       - Heating when RmTmp < UnOccHeatingStpt'       - Cooling when RmTmp > UnOccCoolStpt'       - Off when between setpoints'   - Occupied (Occ = 1): Fan runs continuously (State 5 minimum).'       - Heating when RmTmp < (RmStpt - 2°F deadband)'       - On a call for cool (RmTmp > RmStpt + 2°F), room humidity is checked:'           - If humidity is high (RmRh >= 55%) -> State 3 (Cooling + Dehum).'             Economizer is locked out here since outside air alone'             wouldn't help control humidity.'           - Otherwise, if outside air is cool enough (<= 60°F) ->'             State 4 (Economizer / free cooling).'           - If outside air is too warm -> State 2 (Cooling).'       - In the deadband (±2°F of setpoint) -> State 5 (Fan Only).'   - Any other occupancy value -> State 0 (Off), fail-safe.' =============================================================================Numeric Input RmRh, RmRhStpt, OaTmp, Occ, RmTmp, RmStpt, UnOccCoolStpt, UnOccHeatingStpt, DeadBandNumeric Output UnitStateSelect Case OccCase 0  ' UNOCCUPIED    Select Case RmTmp    Case RmTmp < UnOccHeatingStpt        UnitState = 1   ' Heating    Case RmTmp > UnOccCoolStpt        UnitState = 2   ' Cooling    Case Else        UnitState = 0   ' Off    EndSelectCase 1  ' OCCUPIED    Select Case RmTmp    Case RmTmp < (RmStpt - DeadBand)        UnitState = 1   ' Heating    Case RmTmp > (RmStpt + DeadBand)        Select Case RmRh        Case RmRh >= RmRhStpt            UnitState = 3   ' Cooling + Dehum        Case Else            Select Case OaTmp            Case OaTmp <= 60                UnitState = 4   ' Economizer            Case Else                UnitState = 2   ' Cooling            EndSelect        EndSelect    Case Else        UnitState = 5   ' Fan Only (deadband, occupied)    EndSelectCase Else  ' FAIL-SAFE    UnitState = 0   ' OffEndSelect
+' PURPOSE
+'   Compute one multistate zone command (UnitState) from occupancy, room
+'   conditions, and outdoor air.
+'
+' INPUTS
+'   RmRh           Room relative humidity (%)
+'   RmRhStpt       Occupied humidity setpoint (%)
+'   OaTmp          Outside air temperature (°F)
+'   Occ            Occupancy (0 = Unoccupied, 1 = Occupied)
+'   RmTmp          Room temperature (°F)
+'   RmStpt         Occupied temperature setpoint (°F)
+'   UnOccCoolStpt  Unoccupied cooling setpoint (°F)
+'   UnOccHeatingStpt Unoccupied heating setpoint (°F)
+'   DeadBand       Occupied temperature deadband (°F) - must be > 0
+'   OverrideMode   Manual override state 0-5 (0 = off; 1-5 forces that state)
+'   EconEnable     1 = allow economizer/free cooling; 0 = lock to mechanical
+'   DehumEnable    1 = allow dehumidification; 0 = mechanical cooling only
+'
+' OUTPUT
+'   UnitState - Multistate zone command (0-5):
+'     0 = Off           1 = Heating
+'     2 = Cooling       3 = Cooling + Dehum
+'     4 = Economizer    5 = Fan Only (occupied deadband)
+'
+' LOGIC SUMMARY
+'   Occupied (Occ = 1): fan runs continuously (State 5 minimum).
+'     - RmTmp < RmStpt - DeadBand  -> Heating (1)
+'     - Above the band:
+'         RmRh >= RmRhStpt and DehumEnable -> Cooling + Dehum (3)
+'         otherwise OaTmp <= 60 and EconEnable -> Economizer (4)
+'         otherwise -> Cooling (2)
+'     - In the band -> Fan Only (5)
+'   Unoccupied (Occ = 0): only Heating/Cooling/Off; no economizer or dehum.
+'   Any other occupancy value: fail-safe Off.
+'
+'
+Numeric Input RmRh, OaTmp, RmTmp,
+Numeric Public RmStpt, RmRhStpt, Occ, UnOccCoolStpt, UnOccHeatingStpt, DeadBand, EconEnable, DehumEnable, ValidInputs
+Numeric Output UnitState
+
+CheckError:
+    ValidInputs = 1
+
+    If OaTmp < -40 Or OaTmp > 150 Then
+        UnitState = 0
+        ValidInputs = 0
+    EndIf
+
+    If RmTmp < -40 Or RmTmp > 150 Then
+        UnitState = 0
+        ValidInputs = 0
+    EndIf
+
+    If RmRh < 0 Or RmRh > 100 Then
+        UnitState = 0
+        ValidInputs = 0
+    EndIf
+
+    If RmStpt < 40 Or RmStpt > 90 Then
+        RmStpt = 72
+    EndIf
+
+    If UnOccHeatingStpt > UnOccCoolStpt Then
+        UnOccCoolStpt = 80
+        UnOccHeatingStpt = 60
+    EndIf
+
+    If RmRhStpt < 0 Or RmRhStpt > 100 Then
+        RmRhStpt = 65
+    EndIf
+
+    If EconEnable < 0 Or EconEnable > 1 Then
+        EconEnable = 0
+    EndIf
+
+    If DehumEnable < 0 Or DehumEnable > 1 Then
+        DehumEnable = 0
+    EndIf
+
+    If Occ < 0 Or Occ > 1 Then
+        Occ = 0
+    EndIf
+
+    If ValidInputs = 1 Then
+        Goto Case_Check
+    EndIf
+
+Case_Check:
+    Select Case Occ
+    Case 0  ' UNOCCUPIED
+        Select Case RmTmp
+        Case RmTmp < UnOccHeatingStpt
+            UnitState = 1   ' Heating
+        Case RmTmp > UnOccCoolStpt
+            UnitState = 2   ' Cooling
+        Case Else
+            UnitState = 0   ' Off
+        EndSelect
+    Case 1  ' OCCUPIED
+        Select Case RmTmp
+        Case RmTmp < (RmStpt - DeadBand)
+            UnitState = 1   ' Heating
+        Case RmTmp > (RmStpt + DeadBand)
+            Select Case RmRh
+            Case RmRh >= RmRhStpt
+                If DehumEnable Then
+                    UnitState = 3   ' Cooling + Dehum
+                Else
+                    UnitState = 2   ' Cooling
+                EndIf
+            Case Else
+                If OaTmp <= 60 And EconEnable Then
+                    UnitState = 4   ' Economizer
+                Else
+                    UnitState = 2   ' Cooling
+                EndIf
+            EndSelect
+        Case Else
+            UnitState = 5   ' Fan Only (occupied deadband)
+        EndSelect
+    Case Else  ' FAIL-SAFE
+        UnitState = 0   ' Off
+    EndSelect
+    Goto CheckError
+

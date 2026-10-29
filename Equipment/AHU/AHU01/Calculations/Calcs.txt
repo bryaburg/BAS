@@ -1,3 +1,13 @@
+' ============================================================================
+' NOTE: SE script (EcoStruxure Building Operation) text-based language file.
+'       Help/syntax reference: EcoStruxure Building Operation - Plain English
+'       and Script Difference Guide, 04-40002-01-en (Dec 2021), Section 4
+'       "Program Language Differences". Native delay/wait keyword is
+'       "Wait <seconds>" (alias "Delay"); there is no literal "checkwait".
+'       System constants: True, False, On, Off. System variables: Date,
+'       Hour, Month, Year.
+' ============================================================================
+'
 ' ============================================================
 ' AHU Discharge Air Temperature Reset / PID Control Program
 ' Separated into PID calculation and error checking sections
@@ -38,10 +48,18 @@ CalculatePID:
 
 ' --- Error Checking Section ---
 ' Re-runs the PID/reset calculation whenever room temp has drifted off setpoint
-' by more than 0.1 degrees, on the RespTime scan interval; otherwise idles here.
-ErrorCheck:
-    If TS > RespTime and abs(RmTmp - RmTmpSpt) > 0.1 Then 
+' by more than 0.1 deg on the RespTime scan interval; otherwise idles here.
+'
+' STANDARD GUARD (check-wait before recalculation)
+'   1) Only re-run when the response interval (RespTime) has elapsed AND
+'      room temperature is off setpoint by more than 0.1 deg.
+'   2) Idle: nothing to re-run yet. "Wait <seconds>" (alias "Delay") yields the
+'      program until the next interval so it is not stuck busy-looping in this
+'      spot when not needed. (In SE script the native delay keyword is "Wait";
+'      "TS" checks elapsed seconds in the Plain-English style.)
+    If TS > RespTime and abs(RmTmp - RmTmpSpt) > 0.1 Then
         Goto CalculatePID
-    Else
-        Goto ErrorCheck
     Endif
+    ' Idle: wait (yield) until the next check interval before looping back.
+    Wait RespTime
+    Goto ErrorCheck

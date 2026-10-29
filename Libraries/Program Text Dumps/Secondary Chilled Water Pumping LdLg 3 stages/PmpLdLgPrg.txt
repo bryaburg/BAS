@@ -1,3 +1,33 @@
+' ============================================================================
+
+
+' NOTE: SE script (EcoStruxure Building Operation) text-based language file.
+
+
+'       Help/syntax reference: EcoStruxure Building Operation - Plain English
+
+
+'       and Script Difference Guide, 04-40002-01-en (Dec 2021), Section 4
+
+
+'       "Program Language Differences". Native delay/wait keyword is
+
+
+'       "Wait <seconds>" (alias "Delay"); there is no literal "checkwait".
+
+
+'       System constants: True, False, On, Off. System variables: Date,
+
+
+'       Hour, Month, Year.
+
+
+' ============================================================================
+
+
+'
+
+
 'PmpLdLgPrg
 'Built by Barbeau
 'Version 2020-09-29 1055
