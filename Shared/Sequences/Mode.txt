@@ -33,14 +33,21 @@
 '   Unoccupied (Occ = 0): only Heating/Cooling/Off; no economizer or dehum.
 '   Any other occupancy value: fail-safe Off.
 '
-'
+
 Numeric Input RmRh, OaTmp, RmTmp,
 Numeric Public RmStpt, RmRhStpt, Occ, UnOccCoolStpt, UnOccHeatingStpt, DeadBand, EconEnable, DehumEnable, ValidInputs
 Numeric Output UnitState
 
+' ============================================================================
+' REFACTORED: Select Case converted to nested If statements.
+' Flow: CheckError (validation) -> ModeSelection (logic) -> CheckError (revalidate)
+' ============================================================================
+
 CheckError:
+    ' Initialize validation flag
     ValidInputs = 1
 
+    ' SAFETY CHECKS: Validate all input ranges first
     If OaTmp < -40 Or OaTmp > 150 Then
         UnitState = 0
         ValidInputs = 0
@@ -56,6 +63,7 @@ CheckError:
         ValidInputs = 0
     EndIf
 
+    ' Set safe defaults for invalid inputs
     If RmStpt < 40 Or RmStpt > 90 Then
         RmStpt = 72
     EndIf
@@ -81,45 +89,76 @@ CheckError:
         Occ = 0
     EndIf
 
+    ' After all safety checks, proceed to mode selection if valid inputs
     If ValidInputs = 1 Then
-        Goto Case_Check
+        Goto ModeSelection
+    Else
+        UnitState = 0   ' Off if invalid inputs
     EndIf
 
-Case_Check:
-    Select Case Occ
-    Case 0  ' UNOCCUPIED
-        Select Case RmTmp
-        Case RmTmp < UnOccHeatingStpt
+ModeSelection:
+    ' -------------------------------------------------------------------
+    ' OCCUPIED MODE (Occ = 1)
+    ' Fan runs continuously (State 5 minimum when in deadband)
+    ' -------------------------------------------------------------------
+    If Occ = 1 Then
+        ' HEATING: Below occupied deadband
+        If RmTmp < (RmStpt - DeadBand) Then
             UnitState = 1   ' Heating
-        Case RmTmp > UnOccCoolStpt
-            UnitState = 2   ' Cooling
-        Case Else
-            UnitState = 0   ' Off
-        EndSelect
-    Case 1  ' OCCUPIED
-        Select Case RmTmp
-        Case RmTmp < (RmStpt - DeadBand)
-            UnitState = 1   ' Heating
-        Case RmTmp > (RmStpt + DeadBand)
-            Select Case RmRh
-            Case RmRh >= RmRhStpt
+
+        ' COOLING: Above occupied deadband
+        ElseIf RmTmp > (RmStpt + DeadBand) Then
+            ' DEHUMIDIFICATION CHECK
+            If RmRh >= RmRhStpt Then
                 If DehumEnable Then
                     UnitState = 3   ' Cooling + Dehum
                 Else
                     UnitState = 2   ' Cooling
                 EndIf
-            Case Else
+            ' ECONOMIZER CHECK
+            Else
                 If OaTmp <= 60 And EconEnable Then
                     UnitState = 4   ' Economizer
                 Else
                     UnitState = 2   ' Cooling
                 EndIf
-            EndSelect
-        Case Else
-            UnitState = 5   ' Fan Only (occupied deadband)
-        EndSelect
-    Case Else  ' FAIL-SAFE
-        UnitState = 0   ' Off
-    EndSelect
-    Goto CheckError
+            EndIf
 
+        ' FAN ONLY: In the band
+        Else
+            UnitState = 5   ' Fan Only (occupied deadband)
+        EndIf
+
+        ' After occupied mode selected, return to CheckError for revalidation
+        Goto CheckError
+
+    ' -------------------------------------------------------------------
+    ' UNOCCUPIED MODE (Occ = 0)
+    ' Only Heating/Cooling/Off; no economizer or dehum
+    ' -------------------------------------------------------------------
+    ElseIf Occ = 0 Then
+        ' HEATING: Below unoccupied heating setpoint
+        If RmTmp < UnOccHeatingStpt Then
+            UnitState = 1   ' Heating
+
+        ' COOLING: Above unoccupied cooling setpoint
+        ElseIf RmTmp > UnOccCoolStpt Then
+            UnitState = 2   ' Cooling
+
+        ' OFF: In between setpoints
+        Else
+            UnitState = 0   ' Off
+        EndIf
+
+        ' After unoccupied mode selected, return to CheckError for revalidation
+        Goto CheckError
+
+    ' -------------------------------------------------------------------
+    ' FAIL-SAFE: Any other occupancy value
+    ' -------------------------------------------------------------------
+    Else
+        UnitState = 0   ' Off (fail-safe)
+    EndIf
+
+    ' Return to CheckError for input validation on next cycle
+    Goto CheckError
